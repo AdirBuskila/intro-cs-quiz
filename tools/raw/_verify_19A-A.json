@@ -2,13 +2,71 @@
  "items": {
   "Q5": {
    "verdict": "agree",
-   "note": "only the signature line differs from the printed official code (adds int d, as the body needs); 200k random tests vs brute force 0 diffs; one merge_sort + n binary searches = O(n log n), timing scales n log n"
+   "note": "only the signature line differs from the printed official code (adds int d, as the body needs); 200k random tests vs brute force 0 diffs; one merge_sort + n binary searches = O(n log n), timing scales n log n",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
   },
   "Q6": {
    "verdict": "agree",
-   "note": "only the inner column loop header differs (j++ -> i++); exhaustive N=1..4 (3,256,19683,65536 matrices) 0 diffs vs brute force; O(N^2) by inspection"
+   "note": "only the inner column loop header differs (j++ -> i++); exhaustive N=1..4 (3,256,19683,65536 matrices) 0 diffs vs brute force; O(N^2) by inspection",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
+  },
+  "Q1": {
+   "verdict": "agree",
+   "steps": {
+    "verdict": "agree",
+    "count": 3,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
+  },
+  "Q2": {
+   "verdict": "agree",
+   "steps": {
+    "verdict": "agree",
+    "count": 4,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
+  },
+  "Q3a": {
+   "verdict": "agree",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
+  },
+  "Q3b": {
+   "verdict": "agree",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
+  },
+  "Q4": {
+   "verdict": "agree",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
   }
  },
  "examCode": "19A-A",
- "by": "refuter (own clang harnesses tools/verify/19A-A/refute_*)"
+ "by": "refuter (own clang harnesses tools/verify/19A-A/refute_*)",
+ "stepsBy": "refuter (refute_steps.py, refute_values.c)"
 }

@@ -2,21 +2,46 @@
  "items": {
   "Q1": {
    "verdict": "agree",
-   "note": "300k random + both examples (size 3 {2,4,6}; empty -> {0}, size 1); linear timing"
+   "note": "300k random + both examples (size 3 {2,4,6}; empty -> {0}, size 1); linear timing",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex. SOFT: step3 order: swapping 'free(seen); *newSize=count;' before the fill loop is a use-after-free; it differs only through UB (heap metadata overwrites seen[0..]), not a defined output. Consider merging the fill loop with the free line or accept."
+   }
   },
   "Q2": {
    "verdict": "agree",
-   "note": "500k random strings vs pair-count argmax with smallest tie; all six examples match; strings shorter than 2 digits unspecified (returns 0)"
+   "note": "500k random strings vs pair-count argmax with smallest tie; all six examples match; strings shorter than 2 digits unspecified (returns 0)",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
   },
   "Q3": {
    "verdict": "agree",
-   "note": "500k random sorted pos/neg arrays vs double loop, 0 diffs; both examples match; O(n+m)"
+   "note": "500k random sorted pos/neg arrays vs double loop, 0 diffs; both examples match; O(n+m)",
+   "steps": {
+    "verdict": "agree",
+    "count": 4,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
   },
   "Q4": {
    "verdict": "agree",
-   "note": "500k random arrays vs counting, 0 diffs; example gives 6; merge_sort is in the exam black-box list; n log n timing"
+   "note": "500k random arrays vs counting, 0 diffs; example gives 6; merge_sort is in the exam black-box list; n log n timing",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
   }
  },
  "examCode": "24A-B",
- "by": "refuter (own clang harnesses tools/verify/24A-B/refute_*)"
+ "by": "refuter (own clang harnesses tools/verify/24A-B/refute_*)",
+ "stepsBy": "refuter (refute_steps.py, refute_values.c)"
 }

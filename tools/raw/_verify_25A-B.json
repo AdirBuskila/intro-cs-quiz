@@ -2,21 +2,46 @@
  "items": {
   "Q1": {
    "verdict": "agree",
-   "note": "300k random tests incl. negatives vs parity-count; examples 0 and 2"
+   "note": "300k random tests incl. negatives vs parity-count; examples 0 and 2",
+   "steps": {
+    "verdict": "agree",
+    "count": 4,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
   },
   "Q2": {
    "verdict": "unclear",
-   "note": "correct only if the black-box binary_search returns 1/0 (the handwritten note in the student answer, 0 diffs in that case); with the index/-1 semantics used in 19A-A, every test fails (200000/200000). The exam page lists only signatures, so the assumption is not given by the sitting. Flag the semantics assumption in the solution text"
+   "note": "correct only if the black-box binary_search returns 1/0 (the handwritten note in the student answer, 0 diffs in that case); with the index/-1 semantics used in 19A-A, every test fails (200000/200000). The exam page lists only signatures, so the assumption is not given by the sitting. Flag the semantics assumption in the solution text",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex. SOFT: all steps depend on the assumption binary_search returns 1/0 (stated in solution); step1 sum=4 holds regardless."
+   }
   },
   "Q3": {
    "verdict": "agree",
-   "note": "500k random tests vs per-letter count, 0 diffs. EXAM DEFECT (transcription faithful to page 12): the printed example claims \"glue\" -> 1 for text=\"intelligence\", but the text has no letter u, so the correct result is 0"
+   "note": "500k random tests vs per-letter count, 0 diffs. EXAM DEFECT (transcription faithful to page 12): the printed example claims \"glue\" -> 1 for text=\"intelligence\", but the text has no letter u, so the correct result is 0",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex. SOFT: printed example 'glue' impossible for 'intelligence' (known exam defect); steps use only 'inciting'/'e' count which are correct."
+   }
   },
   "Q4": {
    "verdict": "agree",
-   "note": "exhaustive N=3,4,5 (512; 65536; 33.5M matrices) and 500k random N=6 vs an independent prefix-sum reference, 0 diffs; the sample gives 4; O(N^2)"
+   "note": "exhaustive N=3,4,5 (512; 65536; 33.5M matrices) and 500k random N=6 vs an independent prefix-sum reference, 0 diffs; the sample gives 4; O(N^2)",
+   "steps": {
+    "verdict": "agree",
+    "count": 5,
+    "rubric_sum_matches_points": true,
+    "note": "all numeric/choice/text values recomputed in clang (tools/verify/refute_values.c); every fillblank option, every order permutation and every findbug variant compiled and run (tools/verify/refute_steps.py): correct option unique, all distractors/permutations/bug variants fail observably; findbug differs from the correct code in exactly bugIndex."
+   }
   }
  },
  "examCode": "25A-B",
- "by": "refuter (own clang harnesses tools/verify/25A-B/refute_*)"
+ "by": "refuter (own clang harnesses tools/verify/25A-B/refute_*)",
+ "stepsBy": "refuter (refute_steps.py, refute_values.c)"
 }
