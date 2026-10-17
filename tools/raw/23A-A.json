@@ -42,10 +42,10 @@
      "points": 6
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "להשתמש במערך עזר או למיין מחדש ($O(n \\log n)$), בניגוד להוראות השאלה.",
-    "להחליף את `a[i]` עם `a[size-1-i]` לכל `i`: זה מחזיר את הזוגות למקומם ההתחלתי ולא מצמיד אותם.",
+    "להחליף את `a[i]` עם `a[size-1-i]` לכל `i < size/2`: זה הופך את סדר המערך (`9,8,7,3,2,1` עבור הדוגמה) ואינו מצמיד זוגות שסכומם שווה.",
     "לרוץ על כל האינדקסים (`i < size`) ולהחליף כל זוג פעמיים, כך שההחלפות מבטלות זו את זו."
    ],
    "steps": [
@@ -123,7 +123,7 @@
      "explain": "מספר ההחלפות הוא `size/4` וכל אחת עולה זמן קבוע, ולכן $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 2,
@@ -157,7 +157,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "להעתיק תו בכל פעם שהמונה שלו 3 בלי לאפס אותו, כך שהוא יופיע שלוש פעמים בתוצאה.",
     "לשכוח לכתוב `'\\0'` בסוף, והמחרוזת נשארת עם תווים ישנים מימין.",
@@ -224,7 +224,7 @@
       {
        "id": "b",
        "type": "text",
-       "value": "count[str[i] - 'a']--;"
+       "value": "count[str[i] - 'a'] = pos;"
       },
       {
        "id": "c",
@@ -247,18 +247,9 @@
      "lines": [
       "void squeeze(char* str)",
       "{",
-      "    int i, pos = 0;",
-      "    int count[26] = { 0 };",
-      "    int len = strlen(str);",
-      "    for (i = 0; i < len; ++i)",
-      "        count[str[i] - 'a']++;",
-      "    for (i = 0; i < len; ++i){",
-      "        if (count[str[i] - 'a'] == 3)",
-      "        {",
-      "            str[pos++] = str[i];",
-      "            count[str[i] - 'a'] = 0;",
-      "        }",
-      "    }",
+      "    int i, pos = 0, count[26] = { 0 }, len = strlen(str);",
+      "    for (i = 0; i < len; ++i) count[str[i] - 'a']++;",
+      "    for (i = 0; i < len; ++i) if (count[str[i] - 'a'] == 3) { str[pos++] = str[i]; count[str[i] - 'a'] = 0; }",
       "    str[pos] = '\\0';",
       "}"
      ],
@@ -299,7 +290,7 @@
      "explain": "שתי סריקות של המחרוזת ומערך מונים בגודל קבוע, ולכן $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 3,
@@ -333,7 +324,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "למיין לפי מרחק (`qsort`) ולקבל $O(n \\log n)$ במקום $O(n)$.",
     "להשתמש ב-`>` במקום ב-`>=`: במרחק שווה האיבר הקטן ייכנס לסוף והסדר ההפוך יתקבל.",
@@ -428,16 +419,13 @@
      "lines": [
       "int* distsort(int* a, int n, int num)",
       "{",
-      "    int first = 0, last = n - 1, new_position = n - 1;",
-      "    int* new_sort = (int*)malloc(n * sizeof(int));",
+      "    int first = 0, last = n - 1, new_position = n - 1, *new_sort = (int*)malloc(n * sizeof(int));",
       "    assert(new_sort);",
-      "    while (first <= last) {",
-      "        if (a[last] - num >= num - a[first]) {",
+      "    while (first <= last)",
+      "        if (a[last] - num >= num - a[first])",
       "            new_sort[new_position--] = a[last--];",
-      "        }",
       "        else",
       "            new_sort[new_position--] = a[first++];",
-      "    }",
       "    return new_sort;",
       "}"
      ],
@@ -467,7 +455,7 @@
      "explain": "עם `>` האיבר השמאלי נכנס לסוף כשהמרחקים שווים, ועבור `{1,2,3}` והערך `2` מתקבל `2, 3, 1` (ריצה אמיתית)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 4,
@@ -502,7 +490,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לשכוח לסמן את האזור, כך שהרקורסיה חוזרת ללא סוף בין שני אזורים שכנים.",
     "לבדוק `cloudH < valley[...]` במקום `<=`: אזור בגובה הענן עצמו אינו מוצף.",
@@ -572,15 +560,10 @@
      "code": true,
      "lines": [
       "int waterfill(int valley[R][C], int cloudR, int cloudC, int cloudH) {",
-      "    if (cloudH <= valley[cloudR][cloudC])",
-      "        return 0;",
-      "    int fill = cloudH - valley[cloudR][cloudC];",
-      "    valley[cloudR][cloudC] = 255; //Mark not to return",
+      "    if (cloudH <= valley[cloudR][cloudC]) return 0;",
+      "    int fill = cloudH - valley[cloudR][cloudC]; valley[cloudR][cloudC] = 255;",
       "    return fill +",
-      "        waterfill(valley, cloudR - 1, cloudC, cloudH) +",
-      "        waterfill(valley, cloudR + 1, cloudC, cloudH) +",
-      "        waterfill(valley, cloudR, cloudC - 1, cloudH) +",
-      "        waterfill(valley, cloudR, cloudC + 1, cloudH);",
+      "        waterfill(valley, cloudR - 1, cloudC, cloudH) + waterfill(valley, cloudR + 1, cloudC, cloudH) + waterfill(valley, cloudR, cloudC - 1, cloudH) + waterfill(valley, cloudR, cloudC + 1, cloudH);",
       "}"
      ],
      "explain": "תנאי עצירה, חישוב `fill`, סימון, ואז סכום ארבע הקריאות לשכנים."
@@ -606,7 +589,7 @@
      "explain": "הקריאה האחרונה פונה שמאלה במקום ימינה, כך שהמים אינם מגיעים לשכן הימני: בעמק הדוגמה עם ענן בגובה 6 מתקבל 5 במקום 6 (ריצה אמיתית)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   }
  ]
 }

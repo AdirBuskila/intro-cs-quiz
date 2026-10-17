@@ -195,6 +195,23 @@ S1 = lines_of(SOL1)
 b1, i1 = swap(SOL1, "return abs(a*b/gcd(a,b));", "return abs(a*b*gcd(a,b));")
 f1, j1 = blank(S1, "return abs(a*b/gcd(a,b));")
 S2 = lines_of(SOL2)
+# order steps work on logical blocks (checked with tools/verify/24A-A/fix_check.py: every pair swap changes the output)
+O2 = ["int str_chardist(char* str) {",
+      "   int dists[26]={0}, i, len=strlen(str), maxdist=0;",
+      "   for (i=0;i<len-1;i++) dists[abs(str[i]-str[i+1])]++;",
+      "   for (i=1;i<26;i++) if (dists[i]>dists[maxdist]) maxdist = i;",
+      "   return maxdist;", "}"]
+O4 = ["int bin_search_mixed(int key, int* a, int n) { //assume: n is even",
+      "       int low = 0, high = n - 1, mid = 0;",
+      "       while (low <= high) {",
+      "              mid = (low + high) / 2;",
+      "              mid = mid - (mid % 2); // mid is even index",
+      "              if (key == a[mid]) return mid; if (key == a[mid + 1]) return mid + 1;",
+      "              else if (key < a[mid])",
+      "                     high = mid - 1;",
+      "              else",
+      "                     low = mid + 2; }",
+      "       return -1;", "}"]
 b2, i2 = swap(SOL2, "if (dists[i]>dists[maxdist]) maxdist = i;", "if (dists[i]<dists[maxdist]) maxdist = i;")
 f2, j2 = blank(S2, "dists[abs(str[i]-str[i+1])]++;")
 S3 = lines_of(SOL3A)
@@ -208,7 +225,7 @@ add(1,
     rubric=rub(("שימוש ב-`gcd`: הכפולה המשותפת המינימלית היא `a*b/gcd(a,b)`", 14),
                ("טיפול בסימן באמצעות `abs`, כדי שהתוצאה תהיה חיובית גם כשאחד המספרים שלילי", 8),
                ("הנמקה קצרה: המכפלה `a*b` שווה ל-`gcd` כפול הכפולה המשותפת, ולכן החילוק נותן אותה", 5)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["להחזיר `a*b/gcd(a,b)` בלי `abs`: עבור `-4` ו-`6` מתקבל `-12` שאינו חיובי.",
               "להכפיל ב-`gcd` במקום לחלק בו, וכך לקבל מספר גדול בהרבה (עבור `4` ו-`6`: `48`).",
               "לחפש כפולה בלולאה מ-`1` ומעלה: עובד אך איטי, והשאלה מציעה את `gcd` כקופסה שחורה."],
@@ -230,7 +247,7 @@ add(1,
          "lines": b1, "bugIndex": i1,
          "explain": "הכפלה ב-`gcd` במקום חילוק נותנת `48` במקום `12` עבור `4` ו-`6` (ריצה אמיתית)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(2,
     rubric=rub(("מערך מונים בגודל 26 למרחקים האפשריים `0..25`, מאותחל באפסים", 5),
@@ -238,7 +255,7 @@ add(2,
                ("מציאת המרחק השכיח ביותר: סריקת המונים ושמירת האינדקס של המקסימום", 8),
                ("הימנעות מחריגה מגבולות המחרוזת והמערך", 3),
                ("סריקה אחת של המחרוזת ועוד סריקה של 26 תאים, כלומר $O(n)$", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["להשוות כל אות לכל האותיות האחרות ($O(n^2)$) במקום מערך מונים.",
               "לרוץ עד `i < len` ולקרוא את תו הסיום `'\\0'`, מה שנותן אינדקס מחוץ לגבולות המערך.",
               "לבלבל בין המרחק השכיח לבין מספר המופעים שלו: מחזירים את המרחק, לא את המונה."],
@@ -251,7 +268,7 @@ add(2,
          "options": opts("dists[abs(str[i]-str[i+1])]++;", "dists[str[i]-str[i+1]]++;", "dists[i]++;", "dists[abs(str[i]-str[i+1])] = i;"),
          "correctId": "a",
          "explain": "מונים את המרחק `abs(str[i]-str[i+1])` שבין התו הנוכחי לבא אחריו; `abs` נדרש כדי לקבל אינדקס אי-שלילי."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `str_chardist`.", "code": True, "lines": S2,
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `str_chardist`.", "code": True, "lines": O2,
          "explain": "הגדרות ואיפוס, חישוב אורך, לולאת הספירה, לולאת המקסימום, והחזרה."},
         {"type": "findbug", "prompt": "שורה אחת שונתה והפונקציה מחזירה תוצאה שגויה. מצאו אותה.", "code": True,
          "lines": b2, "bugIndex": i2,
@@ -260,14 +277,14 @@ add(2,
          "accept": ["O(n)"], "normalize": "complexity",
          "explain": "סריקה אחת של המחרוזת וסריקה קבועה של 26 מונים, כלומר $O(n)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(3,
     rubric=rub(("תנאי עצירה: כאשר `num` הוא `0` (או `1`) הרקורסיה מסתיימת", 7),
                ("הביט האחרון נספר באמצעות `num%2`", 7),
                ("קריאה רקורסיבית על `num/2`, כלומר הסרת הביט האחרון", 8),
                ("חיבור התוצאות וקבלת מספר האחדות בייצוג הבינארי", 4)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["להשתמש בחילוק ב-`10` במקום ב-`2`: מקבלים ספרות עשרוניות ולא ביטים.",
               "לשכוח את תנאי העצירה. בגרסה שבה מקרה הבסיס הוא `num==1` הקריאה עם `0` אינה מסתיימת (השאלה עוסקת במספר טבעי).",
               "לשכוח להוסיף את הביט הנוכחי (`num%2`) ולהחזיר רק את התוצאה של שאר המספר."],
@@ -290,7 +307,7 @@ add(3,
          "lines": b3, "bugIndex": i3,
          "explain": "חילוק ב-`10` מוריד ספרה עשרונית ולא ביט: `num_of_ones(6)` מחזירה `0` במקום `2` (ריצה אמיתית)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(4,
     rubric=rub(("בחירת אינדקס זוגי (`mid = mid - mid%2`) כדי שהזוג `(mid, mid+1)` יהיה שלם", 7),
@@ -298,7 +315,7 @@ add(4,
                ("אם `key < a[mid]` ממשיכים שמאלה: `high = mid - 1`", 5),
                ("אחרת ממשיכים ימינה: `low = mid + 2`, מעבר לזוג שנבדק", 5),
                ("זמן ריצה $O(\\log size)$ כי כל איטרציה חוצה את התחום", 3)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["חיפוש בינארי רגיל על המערך: הזוגות ההפוכים שוברים את הסדר ועלולים לגרום לפספוס איבר.",
               "`low = mid + 1` במקום `mid + 2`, או שכחת הקטנת `mid` לאינדקס זוגי, ואז בודקים זוג חצוי.",
               "מיון המערך מחדש לפני החיפוש: $O(n \\log n)$ ולא $O(\\log n)$, ושינוי מיותר של המערך."],
@@ -308,10 +325,10 @@ add(4,
          "explain": "`mid=(0+9)/2=4`, זוגי, ו-`a[4]=11`. `90>11` ולכן `low = mid + 2 = 6` (ריצה אמיתית)."},
         {"type": "fillblank", "prompt": "השלימו את השורה החסרה בפונקציה.", "code": True,
          "lines": f4, "blankIndex": j4,
-         "options": opts("mid = mid - (mid % 2); // mid is even index", "mid = mid + (mid % 2); // mid is even index",
+         "options": opts("mid = mid - (mid % 2); // mid is even index", "mid = mid | 1; // mid is even index",
                          "mid = mid / 2; // mid is even index", "mid = mid - 1; // mid is even index"), "correctId": "a",
          "explain": "מקטינים את `mid` לאינדקס הזוגי הקרוב, כך ש-`a[mid]` ו-`a[mid+1]` הם זוג שלם."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `bin_search_mixed`.", "code": True, "lines": S4,
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `bin_search_mixed`.", "code": True, "lines": O4,
          "explain": "אתחול גבולות, לולאה, חישוב `mid` זוגי, בדיקת הזוג, והתאמת הגבולות; בסוף `-1`."},
         {"type": "findbug", "prompt": "שורה אחת שונתה והחיפוש הולך לכיוון הלא נכון. מצאו אותה.", "code": True,
          "lines": b4, "bugIndex": i4,
@@ -320,7 +337,7 @@ add(4,
          "accept": ["O(log n)", "O(logn)", "O(log size)", "O(logsize)"], "normalize": "complexity",
          "explain": "כל איטרציה חוצה את התחום לחצי, לכן $O(\\log size)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 exam = {
     "examCode": "24A-A",

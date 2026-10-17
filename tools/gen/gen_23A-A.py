@@ -273,6 +273,22 @@ def add(num, **kw):
 S1 = lines_of(SOL1A)
 b1, i1 = swap(SOL1A, "for (i = 1; i < size/2 ; i += 2)", "for (i = 1; i < size ; i += 2)")
 S2 = lines_of(SOL2A)
+# order steps work on logical blocks (checked with tools/verify/23A-A/fix_check.py: every pair swap changes the output)
+O2 = ["void squeeze(char* str)", "{", "    int i, pos = 0, count[26] = { 0 }, len = strlen(str);",
+      "    for (i = 0; i < len; ++i) count[str[i] - 'a']++;",
+      "    for (i = 0; i < len; ++i) if (count[str[i] - 'a'] == 3) { str[pos++] = str[i]; count[str[i] - 'a'] = 0; }",
+      "    str[pos] = '\\0';", "}"]
+O3 = ["int* distsort(int* a, int n, int num)", "{",
+      "    int first = 0, last = n - 1, new_position = n - 1, *new_sort = (int*)malloc(n * sizeof(int));",
+      "    assert(new_sort);", "    while (first <= last)", "        if (a[last] - num >= num - a[first])",
+      "            new_sort[new_position--] = a[last--];", "        else", "            new_sort[new_position--] = a[first++];",
+      "    return new_sort;", "}"]
+O4 = ["int waterfill(int valley[R][C], int cloudR, int cloudC, int cloudH) {",
+      "    if (cloudH <= valley[cloudR][cloudC]) return 0;",
+      "    int fill = cloudH - valley[cloudR][cloudC]; valley[cloudR][cloudC] = 255;",
+      "    return fill +",
+      "        waterfill(valley, cloudR - 1, cloudC, cloudH) + waterfill(valley, cloudR + 1, cloudC, cloudH) + waterfill(valley, cloudR, cloudC - 1, cloudH) + waterfill(valley, cloudR, cloudC + 1, cloudH);",
+      "}"]
 b2, i2 = swap(SOL2A, "if (count[str[i] - 'a'] == 3)", "if (count[str[i] - 'a'] == 2)")
 f2, j2 = blank(S2, "count[str[i] - 'a'] = 0;")
 S3 = lines_of(SOL3B)
@@ -288,9 +304,9 @@ add(1,
                ("לולאה על אינדקסים אי-זוגיים (`i = 1, 3, ...` עד `size/2`) עם `swap(a + i, a + size - i)`", 10),
                ("עבודה במקום באמצעות `swap`, בלי מערך עזר", 4),
                ("סידור כל המערך ב-`size/4` החלפות בלבד, כלומר זמן ריצה $O(n)$", 6)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["להשתמש במערך עזר או למיין מחדש ($O(n \\log n)$), בניגוד להוראות השאלה.",
-              "להחליף את `a[i]` עם `a[size-1-i]` לכל `i`: זה מחזיר את הזוגות למקומם ההתחלתי ולא מצמיד אותם.",
+              "להחליף את `a[i]` עם `a[size-1-i]` לכל `i < size/2`: זה הופך את סדר המערך (`9,8,7,3,2,1` עבור הדוגמה) ואינו מצמיד זוגות שסכומם שווה.",
               "לרוץ על כל האינדקסים (`i < size`) ולהחליף כל זוג פעמיים, כך שההחלפות מבטלות זו את זו."],
     steps=[
         {"type": "choice", "prompt": "מה תוכן המערך `{1, 2, 3, 7, 8, 9}` אחרי הרצת `sortpairs` (הפתרון הרשמי)?",
@@ -308,7 +324,7 @@ add(1,
          "accept": ["O(n)"], "normalize": "complexity",
          "explain": "מספר ההחלפות הוא `size/4` וכל אחת עולה זמן קבוע, ולכן $O(n)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(2,
     rubric=rub(("מערך מונים בגודל 26 ומילויו בסריקה אחת של המחרוזת", 7),
@@ -316,7 +332,7 @@ add(2,
                ("איפוס המונה אחרי ההעתקה, כדי שהתו יופיע פעם אחת בלבד", 6),
                ("סיום המחרוזת ב-`'\\0'` במקום `pos`", 3),
                ("שתי סריקות לינאריות ומערך עזר אחד בלבד, כלומר $O(n)$", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["להעתיק תו בכל פעם שהמונה שלו 3 בלי לאפס אותו, כך שהוא יופיע שלוש פעמים בתוצאה.",
               "לשכוח לכתוב `'\\0'` בסוף, והמחרוזת נשארת עם תווים ישנים מימין.",
               "לספור ולבדוק באותה סריקה: המונה עדיין לא סופי כשמגיעים למופע הראשון."],
@@ -326,10 +342,10 @@ add(2,
          "explain": "התווים `d`, `c`, `a` מופיעים בדיוק שלוש פעמים כל אחד (`b` מופיע ארבע פעמים ו-`f` פעם אחת), והסדר לפי המופע הראשון הוא `dca` (ריצה אמיתית)."},
         {"type": "fillblank", "prompt": "השלימו את השורה החסרה בפונקציה.", "code": True,
          "lines": f2, "blankIndex": j2,
-         "options": opts("count[str[i] - 'a'] = 0;", "count[str[i] - 'a']--;", "count[str[i] - 'a'] = 3;", "pos++;"),
+         "options": opts("count[str[i] - 'a'] = 0;", "count[str[i] - 'a'] = pos;", "count[str[i] - 'a'] = 3;", "pos++;"),
          "correctId": "a",
          "explain": "אחרי העתקת התו מאפסים את המונה שלו כדי שמופעיו הבאים לא יועתקו שוב."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `squeeze` (הפתרון הרשמי עם אינדקסים).", "code": True, "lines": S2,
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `squeeze` (הפתרון הרשמי עם אינדקסים).", "code": True, "lines": O2,
          "explain": "הגדרות, ספירה, סריקה שנייה שמעתיקה ומאפסת, ובסוף `'\\0'`."},
         {"type": "findbug", "prompt": "שורה אחת שונתה בגרסה הבאה. איזו?", "code": True,
          "lines": b2, "bugIndex": i2,
@@ -338,7 +354,7 @@ add(2,
          "accept": ["O(n)"], "normalize": "complexity",
          "explain": "שתי סריקות של המחרוזת ומערך מונים בגודל קבוע, ולכן $O(n)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(3,
     rubric=rub(("הקצאת מערך חדש בגודל `n`, בדיקת ההקצאה והחזרתו", 3),
@@ -346,7 +362,7 @@ add(3,
                ("השוואת המרחקים `a[last] - num >= num - a[first]`: במרחק שווה הגדול נכנס ראשון לסוף, כדי שהקטן יופיע לפניו בתוצאה", 9),
                ("הצבת האיבר הרחוק יותר והתקדמות המצביע המתאים (`last--` או `first++`)", 6),
                ("מעבר יחיד על המערך, כלומר $O(n)$", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["למיין לפי מרחק (`qsort`) ולקבל $O(n \\log n)$ במקום $O(n)$.",
               "להשתמש ב-`>` במקום ב-`>=`: במרחק שווה האיבר הקטן ייכנס לסוף והסדר ההפוך יתקבל.",
               "להתחיל מהמיקום של `num` ולמזג החוצה (נכון), אך לשכוח לרוקן את הצד שנשאר אחרי שהצד השני נגמר."],
@@ -362,13 +378,13 @@ add(3,
          "options": opts("new_sort[new_position--] = a[last--];", "new_sort[new_position++] = a[last--];",
                          "new_sort[new_position--] = a[first++];", "new_sort[0] = a[last--];"), "correctId": "a",
          "explain": "כאשר האיבר הימני רחוק יותר או שווה, הוא נכנס לסוף המערך החדש והמצביע `last` זז שמאלה."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `distsort`.", "code": True, "lines": S3,
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `distsort`.", "code": True, "lines": O3,
          "explain": "אתחול מצביעים והקצאה, לולאה, תנאי ההשוואה, ההצבה בכל ענף, והחזרת המערך."},
         {"type": "findbug", "prompt": "שורה אחת שונתה בגרסה הבאה והסדר במרחק שווה התהפך. מצאו אותה.", "code": True,
          "lines": b3, "bugIndex": i3,
          "explain": "עם `>` האיבר השמאלי נכנס לסוף כשהמרחקים שווים, ועבור `{1,2,3}` והערך `2` מתקבל `2, 3, 1` (ריצה אמיתית)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(4,
     rubric=rub(("תנאי עצירה: אם `cloudH <= valley[cloudR][cloudC]` מחזירים `0`", 6),
@@ -376,7 +392,7 @@ add(4,
                ("סימון האזור ב-`255` כדי שלא ייספר פעם נוספת (ושהרקורסיה תסתיים)", 7),
                ("קריאות רקורסיביות לארבעת השכנים (בלי אלכסונים)", 6),
                ("החזרת `fill` ועוד סכום הקריאות", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לשכוח לסמן את האזור, כך שהרקורסיה חוזרת ללא סוף בין שני אזורים שכנים.",
               "לבדוק `cloudH < valley[...]` במקום `<=`: אזור בגובה הענן עצמו אינו מוצף.",
               "לכלול שכנים באלכסון, בניגוד לכלל שמים זורמים רק דרך צלע משותפת."],
@@ -392,13 +408,13 @@ add(4,
          "options": opts("if (cloudH <= valley[cloudR][cloudC])", "if (cloudH < valley[cloudR][cloudC])",
                          "if (cloudH >= valley[cloudR][cloudC])", "if (valley[cloudR][cloudC] == 255)"), "correctId": "a",
          "explain": "אזור שגובהו לפחות גובה הענן (כולל החומה `255` והאזורים שכבר סומנו) אינו מוצף ונותן `0`."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `waterfill` (הפתרון הרשמי).", "code": True, "lines": S4,
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `waterfill` (הפתרון הרשמי).", "code": True, "lines": O4,
          "explain": "תנאי עצירה, חישוב `fill`, סימון, ואז סכום ארבע הקריאות לשכנים."},
         {"type": "findbug", "prompt": "בגרסה הבאה שורה אחת שונתה. מצאו אותה.", "code": True,
          "lines": b4, "bugIndex": i4,
          "explain": "הקריאה האחרונה פונה שמאלה במקום ימינה, כך שהמים אינם מגיעים לשכן הימני: בעמק הדוגמה עם ענן בגובה 6 מתקבל 5 במקום 6 (ריצה אמיתית)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 exam = {
     "examCode": "23A-A",
