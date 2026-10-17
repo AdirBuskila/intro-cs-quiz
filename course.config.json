@@ -1,0 +1,95 @@
+{
+  "slug": "intro-cs",
+  "titleHe": "מבוא למדעי המחשב",
+  "descriptionHe": "תרגול מבחנים - מבוא למדעי המחשב",
+  "accent": "#4ade80",
+  "accent2": "#7c3aed",
+  "sourceFolder": "C:/Users/Adir/Desktop/BSC/שנה א/סמסטר א/מבוא למדמ''ח",
+  "topics": [
+    [
+      "basics_io",
+      "משתנים, קלט/פלט וביטויים"
+    ],
+    [
+      "conditionals_loops",
+      "תנאים ולולאות"
+    ],
+    [
+      "functions",
+      "פונקציות"
+    ],
+    [
+      "recursion",
+      "רקורסיה"
+    ],
+    [
+      "arrays",
+      "מערכים ויעילות"
+    ],
+    [
+      "pointers_memory",
+      "מצביעים וזיכרון דינמי"
+    ],
+    [
+      "strings",
+      "מחרוזות"
+    ],
+    [
+      "binary_search",
+      "חיפוש בינארי"
+    ],
+    [
+      "sorting_merge",
+      "מיון ומיזוג"
+    ],
+    [
+      "matrices",
+      "מטריצות"
+    ],
+    [
+      "number_theory",
+      "gcd, lcm ומחלקים"
+    ],
+    [
+      "complexity",
+      "סדר גודל"
+    ],
+    [
+      "structs",
+      "מבנים"
+    ]
+  ],
+  "briefs": [],
+  "needHelp": [
+    {
+      "id": "recursion",
+      "titleHe": "רקורסיה",
+      "icon": "🔁",
+      "topic": "recursion",
+      "entryLabelHe": "צריך עזרה ברקורסיה?"
+    },
+    {
+      "id": "c_strings",
+      "titleHe": "מחרוזות ב-C",
+      "icon": "🔤",
+      "topic": "strings",
+      "entryLabelHe": "צריך עזרה במחרוזות?"
+    },
+    {
+      "id": "matrices",
+      "titleHe": "מטריצות ומערכים דו-ממדיים",
+      "icon": "🔲",
+      "topic": "matrices",
+      "entryLabelHe": "צריך עזרה במטריצות?"
+    },
+    {
+      "id": "array_algos",
+      "titleHe": "אלגוריתמי מערכים יעילים וסדר גודל",
+      "icon": "⚡",
+      "topic": "arrays",
+      "entryLabelHe": "צריך עזרה באלגוריתמים יעילים על מערכים?"
+    }
+  ],
+  "storePrefix": "intro-cs",
+  "includeDrafts": false
+}
