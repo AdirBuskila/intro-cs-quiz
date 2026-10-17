@@ -288,7 +288,9 @@ console.log("7. exam simulation");
 }
 
 /* 8. guided "צריך עזרה?" courses (course-ui.js + courses.js), any needHelp list */
-const NH = CFG.needHelp || [];
+// a configured course is hidden until it has >= 1 built level (phase 5b writes them); only built courses are checked
+const NH_CFG = (CFG.needHelp || []).length;
+const NH = (() => { const W = boot().window; return (CFG.needHelp || []).filter(c => (((W.COURSES || {})[c.id] || {}).levels || []).length > 0); })();
   const KEY = id => `${CFG.storePrefix}_course_${id}_v1`;
   const bankOf = A => A.window.OPEN_BANK.questions;
   const textOf = (A, h) => { const d = A.doc.createElement("div"); d.innerHTML = h; return d.textContent.replace(/\s+/g, ""); };
@@ -350,9 +352,10 @@ console.log("8. guided courses");
 {
   if (!NH.length) {
     const A = boot();
-    assert(A.$("#helpEntry").style.display === "none", "course: header entry hidden (needHelp is empty)");
-    assert(A.$$("#helpCards .crs-promo").length === 0, "course: no start-screen cards (needHelp is empty)");
-    assert(A.$("#helpCards").classList.contains("hidden"), "course: card container hidden (needHelp is empty)");
+    assert(A.$("#helpEntry").style.display === "none", "course: header entry hidden (no course has levels)");
+    assert(A.$$("#helpCards .crs-promo").length === 0, "course: no start-screen cards (no course has levels)");
+    assert(A.$("#helpCards").classList.contains("hidden"), "course: card container hidden (no course has levels)");
+    if (NH_CFG) console.log("guided courses: none built yet (skipped)");
     assert(A.errors.length === 0, "course: no errors: " + A.errors.join(" | "));
   } else {
     const A = boot();
@@ -478,8 +481,7 @@ else {
     assert(/10\s*\/\s*10/.test(A.$(".rubric-total").textContent), "live total shown: " + A.$(".rubric-total").textContent.trim());
     assert(A.progress().perQ[q.id].max === 10, "DEMO-A-Q1 is worth 10");
   }
-  const NH = CFG.needHelp || [];
-  const C = NH.find(c => c.id === "DEMO");
+  const C = NH.find(c => c.id === "DEMO");  // NH = configured courses that have built levels
   if (C) {
     const A = boot();
     const cl = A.window.COURSES.DEMO.levels;
