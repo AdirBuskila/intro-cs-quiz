@@ -12,4 +12,8 @@ int main(void){
   printf("empty -> %d (expect 0)\n",sum_chars("",'a'));
   printf("banana,a -> %d (expect 3)\n",sum_chars("banana",'a'));
   printf("xyz,q -> %d (expect 0)\n",sum_chars("xyz",'q'));
+  
+  /* steps: values and call count */
+  printf("step aXa,a=%d aaaa,a=%d street,e=%d street,z=%d\n",sum_chars("aXa",'a'),sum_chars("aaaa",'a'),sum_chars("street",'e'),sum_chars("street",'z'));
+  {const char*s="street"; int calls=1; for(const char*p=s;*p;p++)calls++; printf("calls for street (chars+base)=%d\n",calls);}
   return 0;}
