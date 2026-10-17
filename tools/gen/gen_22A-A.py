@@ -194,6 +194,170 @@ questions = [
       points=30, confidence="med"),
 ]
 
+IDS = "abcdef"
+
+
+def opts(*vals):
+    return [{"id": IDS[i], "type": "text", "value": v} for i, v in enumerate(vals)]
+
+
+def rub(*items):
+    return [{"text": t, "points": p} for t, p in items]
+
+
+def lines_of(src):
+    return [ln for ln in src.strip("\n").expandtabs(4).split("\n") if ln.strip() and not ln.strip().startswith("//")]
+
+
+def swap(src, old, new):
+    """Return the code lines with exactly one line changed (asserted)."""
+    ls = lines_of(src)
+    idx = [i for i, ln in enumerate(ls) if ln.strip() == old.strip()]
+    assert len(idx) == 1, old
+    ls[idx[0]] = ls[idx[0]].replace(old.strip(), new.strip())
+    return ls, idx[0]
+
+
+def blank(lines, target):
+    idx = [i for i, ln in enumerate(lines) if ln.strip() == target]
+    assert len(idx) == 1, target
+    return [("___" if i == idx[0] else ln) for i, ln in enumerate(lines)], idx[0]
+
+
+def add(num, **kw):
+    for q in questions:
+        if q["num"] == num:
+            q.update(kw)
+            return
+    raise KeyError(num)
+
+
+# ---- rubric / pitfalls / steps (ai-draft); expected values come from real clang runs of tools/verify/22A-A/steps.c.
+# Steps use the first official version of Q3 (the second indexes with 'A', see the note in the solution) and
+# question4_version2 of Q4 (version 1 does not answer the question). ----
+CMP = "if(pSArray[i].numerator * max_result.denominator>max_result.numerator*pSArray[i].denominator)"
+S1 = lines_of(SOL1)
+b1, i1 = swap(SOL1, "if (pSArray[i].num > max_result.num)", "if (pSArray[i].num < max_result.num)")
+f1, j1 = blank(S1, CMP)
+S2 = lines_of(SOL2)
+b2, i2 = swap(SOL2, "if (a[0] < a[1])", "if (a[0] <= a[1])")
+f2, j2 = blank(S2, "return 1 + incr_subarray(a + 1, n - 1);")
+S3 = lines_of(SOL3A)
+b3, i3 = swap(SOL3A, "count[(*str) - 'a']=1;", "count[(*str) - 'a']=0;")
+f3, j3 = blank(S3, "if (count[(*str) - 'a'] == 0)")
+S4 = lines_of(SOL4B)
+f4, j4 = blank(S4, "high = mid - 1;")
+
+add(1,
+    rubric=rub(("אתחול המקסימום באיבר הראשון וסריקה אחת מהאיבר השני עד הסוף", 6),
+               ("השוואת החלק השלם `num`: איבר עם חלק שלם גדול יותר הופך למקסימום", 6),
+               ("כשהחלקים השלמים שווים: השוואת השברים בכפל צולב `numerator * denominator` בלי חילוק", 8),
+               ("החזרת המבנה המקסימלי; סריקה אחת בלבד, כלומר $O(n)$", 5)),
+    rubricSource="ai-draft",
+    pitfalls=["להשוות רק את `num` ולהתעלם משברים כשהחלק השלם שווה.",
+              "להשוות מונים בלבד (`numerator`) או מכפלות `numerator * denominator`: שתי ההשוואות שגויות בין מכנים שונים.",
+              "לחשב שברים עשרוניים עם חילוק שלם (`numerator / denominator` נותן 0)."],
+    steps=[
+        {"type": "choice", "prompt": "מה מחזירה הפונקציה על המערך $[2\\frac{3}{4},5\\frac{3}{4},3\\frac{1}{5},2\\frac{7}{8},5\\frac{1}{2}]$?",
+         "options": opts("`5 3/4`", "`5 1/2`", "`3 1/5`", "`2 7/8`"), "correctId": "a",
+         "explain": "שני האיברים עם החלק השלם 5 מושווים בכפל צולב: $3\\cdot2>1\\cdot4$, ולכן $5\\frac{3}{4}$ (ריצה אמיתית: 5 3/4)."},
+        {"type": "numeric",
+         "prompt": "משווים $1\\frac{2}{3}$ (`pSArray[i]`) מול $1\\frac{1}{2}$ (המקסימום הנוכחי). מהו `pSArray[i].numerator * max_result.denominator`?",
+         "answer": 4, "tol": 0,
+         "explain": "$2\\cdot2=4$ מול $1\\cdot3=3$ בצד השני, ולכן $1\\frac{2}{3}$ גדול יותר (ריצה אמיתית: 1 2/3 נבחר)."},
+        {"type": "fillblank", "prompt": "השלימו את תנאי ההשוואה בין שני מספרים עם אותו חלק שלם.", "code": True,
+         "lines": f1, "blankIndex": j1,
+         "options": opts(CMP, "if(pSArray[i].numerator * max_result.denominator<max_result.numerator*pSArray[i].denominator)",
+                         "if(pSArray[i].numerator>max_result.numerator)",
+                         "if(pSArray[i].numerator * pSArray[i].denominator>max_result.numerator*max_result.denominator)"),
+         "correctId": "a",
+         "explain": "כפל צולב משווה שברים. `<` בוחר את הקטן יותר (שגוי ב-8830 מ-20000 זוגות אקראיים), "
+                    "מונים בלבד שגוי כשהמכנים שונים (950), ומכפלת מונה כפול מכנה שגויה (1533)."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `findBiggest` (בלי שורות ההערה).", "code": True, "lines": S1,
+         "explain": "אתחול, לולאה, השוואת חלק שלם, ובמקרה שוויון כפל צולב."},
+        {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b1, "bugIndex": i1,
+         "explain": "עם `<` נבחר החלק השלם הקטן יותר: על מערך הדוגמה מוחזר $2\\frac{7}{8}$ במקום $5\\frac{3}{4}$ (ריצה אמיתית: 2 7/8)."},
+    ],
+    stepsSource="ai-draft")
+
+add(2,
+    rubric=rub(("מקרה בסיס: `n == 1` מחזיר `1`", 5),
+               ("השוואה ממש בין שני האיברים הראשונים: `a[0] < a[1]`", 8),
+               ("כשהרצף ממשיך: `1 + incr_subarray(a + 1, n - 1)`", 8),
+               ("אחרת הרצף נעצר ומחזירים `1`", 4)),
+    rubricSource="ai-draft",
+    pitfalls=["להשתמש ב-`<=` במקום `<`: הרצף חייב להיות עולה **ממש**.",
+              "לשכוח את מקרה הבסיס ולגשת ל-`a[1]` מעבר לסוף המערך.",
+              "להחזיר את הקריאה הרקורסיבית בלי `1 +`, או לקרוא עם `a` במקום `a + 1`."],
+    steps=[
+        {"type": "numeric", "prompt": "מה מחזירה `incr_subarray` על `-5,-2,12,12,25,34,40` (`n = 7`)?", "answer": 3, "tol": 0,
+         "explain": "`-5 < -2 < 12`, ואז `12 < 12` שקר: אורך 3 (ריצה אמיתית: 3)."},
+        {"type": "numeric", "prompt": "מה מחזירה על `1,2,3,4,5,5` (`n = 6`)?", "answer": 5, "tol": 0,
+         "explain": "חמש הצעדים הראשונים עולים ממש, והזוג `5,5` עוצר את הרצף (ריצה אמיתית: 5)."},
+        {"type": "fillblank", "prompt": "השלימו את הענף שבו הרצף ממשיך.", "code": True, "lines": f2, "blankIndex": j2,
+         "options": opts("return 1 + incr_subarray(a + 1, n - 1);", "return incr_subarray(a + 1, n - 1);",
+                         "return 1 + incr_subarray(a, n - 1);", "return 1 + incr_subarray(a + 1, n);"), "correctId": "a",
+         "explain": "מוסיפים 1 על האיבר הנוכחי וממשיכים מהאיבר הבא עם מערך קצר באחד."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `incr_subarray`.", "code": True, "lines": S2,
+         "explain": "מקרה בסיס, בדיקת העלייה, המשך הרצף ואחרת עצירה."},
+        {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b2, "bugIndex": i2,
+         "explain": "עם `<=` זוג שווה נחשב כעלייה: על `-5,-5,12,10,...` מוחזר 3 במקום 1 (ריצה אמיתית: 3)."},
+    ],
+    stepsSource="ai-draft")
+
+add(3,
+    rubric=rub(("מערך עזר של 26 מונים שמסמן אילו אותיות כבר נראו", 5),
+               ("סריקה אחת של המחרוזת ובדיקה `count[...] == 0` לפני הכתיבה", 7),
+               ("כתיבה לאחור עם מצביע `last` שמתקדם רק כשנשמרת אות, ועדכון המונה", 7),
+               ("סגירת המחרוזת עם `'\\0'` בסוף", 4),
+               ("זמן $O(n)$ וללא מערך נוסף בגודל המחרוזת", 2)),
+    rubricSource="ai-draft",
+    pitfalls=["חיפוש האות בכל פעם במחרוזת שנבנתה עד כה: זמן $O(n^2)$ ולא $O(n)$.",
+              "לשכוח את `'\\0'` בסוף ולהשאיר זנב של אותיות ישנות.",
+              "אינדקס `*str - 'A'` עבור אותיות קטנות יוצא מגבולות המערך בגודל 26."],
+    steps=[
+        {"type": "text", "prompt": "מה תהיה המחרוזת אחרי `removeDuplicates` על `\"aabbcab\"`?", "accept": ["abc"], "normalize": "none",
+         "explain": "נשמרות ההופעות הראשונות של `a`, `b`, `c` (ריצה אמיתית: abc)."},
+        {"type": "fillblank", "prompt": "השלימו את התנאי לשמירת אות.", "code": True, "lines": f3, "blankIndex": j3,
+         "options": opts("if (count[(*str) - 'a'] == 0)", "if (count[(*str) - 'a'] == 1)", "if (count[(*str) - 'a'] != 0)",
+                         "if (count[(*str) - 'a'] > 1)"), "correctId": "a",
+         "explain": "שומרים אות רק כשהיא טרם נראתה, כלומר המונה שלה 0."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `removeDuplicates`.", "code": True, "lines": S3,
+         "explain": "מצביע כתיבה ומונים, לולאה, בדיקה, סימון וכתיבה, ובסוף `'\\0'`."},
+        {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b3, "bugIndex": i3,
+         "explain": "אם המונה נשאר 0 האות לא מסומנת כנראית: `\"aa\"` נשארת `\"aa\"` (ריצה אמיתית)."},
+        {"type": "text", "prompt": "מהי סיבוכיות הזמן? (למשל `O(n)`)", "accept": ["O(n)"], "normalize": "complexity",
+         "explain": "סריקה אחת עם עבודה קבועה לכל תו: $O(n)$."},
+    ],
+    stepsSource="ai-draft")
+
+add(4,
+    rubric=rub(("חיפוש בינארי עם `low`, `high`, `mid` ולולאה `while (low <= high)`", 8),
+               ("כש-`a[mid] >= k`: שומרים אותו כמועמד וממשיכים שמאלה (`high = mid - 1`)", 10),
+               ("אחרת ממשיכים ימינה (`low = mid + 1`)", 6),
+               ("אתחול `min = a[n-1]` למקרה שכל האיברים קטנים מ-`k`, והחזרת `min`", 3),
+               ("זמן ריצה $O(\\log n)$", 3)),
+    rubricSource="ai-draft",
+    pitfalls=["לעבור על המערך בלולאה לינארית: $O(n)$ ולא $O(\\log n)$.",
+              "להחזיר את הערך הגדול ביותר שקטן או שווה ל-`k` במקום הקטן ביותר שגדול או שווה ל-`k`.",
+              "לא לשמור את המועמד לפני שממשיכים שמאלה ולאבד אותו."],
+    steps=[
+        {"type": "numeric", "prompt": "על `a = {-5,-2,-1,0,2,4,4,9}` (`n = 8`) והממוצע $k=1.375$: מהו `mid` באיטרציה הראשונה?",
+         "answer": 3, "tol": 0, "explain": "`mid = (0+7)/2 = 3` ו-`a[3] = 0` (ריצה אמיתית)."},
+        {"type": "choice", "prompt": "בהמשך: `a[3] = 0 < 1.375`. מה הפונקציה עושה?",
+         "options": opts("`low = mid + 1`: הולכת ימינה", "`high = mid - 1`: הולכת שמאלה", "מחזירה `0`", "מעדכנת `min = a[mid]`"),
+         "correctId": "a",
+         "explain": "אין טעם להסתכל באיברים הקטנים מ-`k`; ממשיכים ימינה. סך הכול 3 איטרציות והתוצאה 2 (ריצה אמיתית)."},
+        {"type": "fillblank", "prompt": "השלימו את הפקודה אחרי ששמרנו מועמד.", "code": True, "lines": f4, "blankIndex": j4,
+         "options": opts("high = mid - 1;", "high = mid;", "low = mid + 1;", "low = mid;"), "correctId": "a",
+         "explain": "המועמד נשמר ב-`min`, וכדי למצוא קטן ממנו שעדיין גדול או שווה ל-`k` מחפשים משמאלו."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `question4_version2`.", "code": True, "lines": S4,
+         "explain": "אתחול, לולאה, חישוב `mid`, שני הענפים, ובסוף החזרת `min`."},
+        {"type": "text", "prompt": "מהי סיבוכיות הזמן? (למשל `O(n)`)", "accept": ["O(log n)"], "normalize": "complexity",
+         "explain": "כל איטרציה חוצה את התחום: $O(\\log n)$."},
+    ],
+    stepsSource="ai-draft")
+
 exam = {
     "examCode": "22A-A",
     "examLabel": "מבוא למדעי המחשב, סמסטר א' תשפ\"ב, מועד א (2022)",
