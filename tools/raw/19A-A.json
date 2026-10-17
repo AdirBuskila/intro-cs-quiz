@@ -68,7 +68,10 @@
    "kind": "code",
    "topic": "binary_search",
    "question": "(חלק 2: יש לענות רק על שאלה אחת, 5 או 6.)\nנתונים שני מערכים $a$ ו-$b$ בגודל $n$ כל אחד. המערכים מכילים מספרים שלמים.\nכתבו פונקציה **יעילה** שמקבלת את שני המערכים ומספר שלם $d$, ומחזירה `1` אם קיים מספר $x$ במערך $a$ ומספר $y$ במערך $b$ כך ש-$x+y=d$. אחרת על הפונקציה להחזיר `0`.\nלדוגמא, עבור המערכים הבאים:\n`a = {12,2,14,2}`, `b = {15,11,2,8}`\nהפונקציה תחזיר `1` אם `d=23` (`12+11=23`) ותחזיר `0` אם `d=5`.\nעל הפונקציה לרוץ בסדר גודל של $n\\log n$.\nניתן להשתמש במערך עזר.\nמותר לפונקציה שאתם כותבים לשנות את הסדר שבו מופיעים האיברים בכל אחד ממערכי הקלט.\n(במבחן אפשר להיעזר בפונקציות הבאות כקופסה שחורה: `merge_sort`, `quick_sort`, `binary_search`, `binary_search_right`, `swap`, `partition`, `merge_arrays`.)",
-   "hold": "official key does not compile as printed (is_sum signature lacks the parameter d that the body uses); see ASK_ADIR 19A-A Q5",
+   "solution": "הפתרון הרשמי עם תיקון שגיאת הקלדה: בחתימה המודפסת `is_sum (int* a, int* b, int n)` חסר הפרמטר `d` שהגוף משתמש בו, ולכן נוסף `int d` כפרמטר רביעי. שאר הקוד כפי שהודפס (19A-A עמ' 4).\n```c\nint is_sum (int* a, int* b, int n, int d)\n{\n  int i;\n  merge_sort(b, 0, n-1);\n  for(i=0; i<n; i++)\n  {\n    if(binary_search(b, n, d-a[i]) >=0 )\n     return 1;\n  }\n  return 0;\n}\n```\nממיינים את `b` עם `merge_sort` בזמן $O(n\\log n)$. לכל `a[i]` מחפשים ב-`b` הממוין את `d-a[i]` בחיפוש בינארי, $O(\\log n)$ לכל חיפוש ו-$O(n\\log n)$ לכל $n$ החיפושים. אם נמצא, אז `a[i]+b[j]==d` ומחזירים `1`.\nסה\"כ $O(n\\log n)$.",
+   "solutionSource": "solved",
+   "official": false,
+   "confidence": "high",
    "points": 20
   },
   {
@@ -76,7 +79,10 @@
    "kind": "code",
    "topic": "matrices",
    "question": "(חלק 2: יש לענות רק על שאלה אחת, 5 או 6.)\nנאמר שמטריצה ריבועית היא **כמעט ריבוע קסם** אם היא מכילה מספרים שלמים כך שסכום האיברים בכל שורה, בכל עמודה ובשני האלכסונים הוא זהה.\nלדוגמא:\n```\n12 19 14\n17 15 13\n16 11 18\n```\nכתבו פונקציה **יעילה** שמקבלת מטריצה ריבועית $A$ בגודל $N\\times N$ של מספרים שלמים.\nעל הפונקציה להחזיר `1` כאשר מטריצה היא \"כמעט ריבוע קסם\" ו-`0` אחרת.\nהחישוב חייב להיות בזמן שסדר הגודל שלו $N^2$.\n(במבחן אפשר להיעזר בפונקציות הבאות כקופסה שחורה: `merge_sort`, `quick_sort`, `binary_search`, `binary_search_right`, `swap`, `partition`, `merge_arrays`.)",
-   "hold": "official key CheckMagic has an infinite-loop bug in the column check (for (i=0; i<N; j++)); see ASK_ADIR 19A-A Q6",
+   "solution": "הפתרון הרשמי עם תיקון שגיאת הקלדה: בלולאה הפנימית של בדיקת העמודות הודפס `for (i=0; i<N; j++)`, כך ש-`i` לא מתקדם והלולאה לא נעצרת; תוקן ל-`for (i=0; i<N; i++)`. שאר הקוד כפי שהודפס (19A-A עמ' 5).\n```c\nint CheckMagic(int A[N][N])\n{\n      int i, j, sum=0, curr_sum;\n      //first row\n      for (j=0; j<N; j++)\n            sum += A[0][j];\n      //check rows\n      for (i=1; i<N; i++)\n      {\n            curr_sum = 0;\n            for (j=0; j<N; j++)\n                  curr_sum += A[i][j];\n            if (curr_sum != sum)\n                  return 0;\n      }\n      //check columns\n      for (j=0; j<N; j++)\n      {\n            curr_sum = 0;\n            for (i=0; i<N; i++)\n                  curr_sum += A[i][j];\n            if (curr_sum != sum)\n                  return 0;\n      }\n      //check main diagonal\n      curr_sum = 0;\n      for (i=0; i<N; i++)\n            curr_sum += A[i][i];\n      if (curr_sum != sum)\n            return 0;\n      //check secondary diagonal\n      curr_sum = 0;\n      for (i=0; i<N; i++)\n            curr_sum += A[i][N-i-1];\n      if (curr_sum != sum)\n            return 0;\n\n      return 1;\n}\n```\nמחשבים את סכום השורה הראשונה, ומשווים אליו את סכום כל שורה, כל עמודה ושני האלכסונים. בהפרש הראשון מחזירים `0`.\nבדיקת השורות והעמודות עוברת על $N^2$ תאים כל אחת, והאלכסונים על $N$ תאים כל אחד: סה\"כ $O(N^2)$.",
+   "solutionSource": "solved",
+   "official": false,
+   "confidence": "high",
    "points": 20
   }
  ]

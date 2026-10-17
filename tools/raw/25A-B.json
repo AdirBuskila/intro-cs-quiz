@@ -53,7 +53,10 @@
    "points": 27,
    "contextId": "c4",
    "question": "נתון מערך ריבועי דו-ממדי בגודל $N\\times N$, המכיל רק את הערכים `0` ו-`1` (מטריצה בינארית).\nיש לכתוב פונקציה יעילה שמקבלת את המערך ומחזירה את מספר תת-המערכים בגודל $3\\times 3$ שבהם כל הערכים הם `1`.\nלדוגמא:\nעבור המערך הבא (ראו למעלה) הפונקציה תחזיר `4`.\nחתימת הפונקציה היא:\n`int number_squares (int matrix[N][N]);`\nעל הפונקציה לרוץ בסדר גודל של $N*N$",
-   "hold": "no-key: the only source is a student answer graded 22/27 (defective), no full-mark key"
+   "solution": "**פתרון הפותר** (המקור היחיד הוא פתרון סטודנט שקיבל 22/27 ושגוי: הלולאה השלישית שלו רצה עד `c` במקום עד `r`, ולכן הוא לא מוצג כאן):\n```c\nint number_squares(int matrix[N][N])\n{\n   int i, j, a, b, all_ones, count = 0;\n   for (i = 0; i + 2 < N; i++)            // (i, j) = top-left corner of a 3x3 square\n      for (j = 0; j + 2 < N; j++)\n      {\n         all_ones = 1;\n         for (a = i; a < i + 3; a++)      // fixed 9 cells per square\n            for (b = j; b < j + 3; b++)\n               if (matrix[a][b] == 0)\n                  all_ones = 0;\n         count += all_ones;\n      }\n   return count;\n}\n```\nעוברים על כל פינה שמאלית-עליונה `(i, j)` של ריבוע $3\\times 3$ שנכנס כולו במטריצה (`i+2<N` וגם `j+2<N`), ובודקים את 9 התאים שלו. אם כולם `1` מוסיפים 1 למונה.\nיש פחות מ-$N^2$ פינות, ולכל אחת מספר קבוע (9) של בדיקות, ולכן הזמן $O(N^2)$. בדוגמה המודפסת מוחזר `4`.",
+   "solutionSource": "solved",
+   "official": false,
+   "confidence": "high"
   }
  ]
 }

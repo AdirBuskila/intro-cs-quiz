@@ -16,9 +16,11 @@ Transcription notes
   Harness uses stand-in sort/search with that assumed semantics: example output matches.
 - Q3 example as printed is inconsistent: "glue" needs a letter u, which "intelligence" lacks, yet the example says 1.
   The student answer was graded 26 regardless. Printed text kept verbatim.
-- Q4: held. The only source is the student answer, graded 22/27. Its third loop in is_sub_square runs `i<c` instead of
+- Q4: the only source is the student answer, graded 22/27. Its third loop in is_sub_square runs `i<c` instead of
   `i<r`; compiled, it returns 6 on the printed example (expected 4) and differs from a reference on 1106/2000 random 6x6.
-  No full-mark key exists, so no key is shipped (ASK_ADIR 25A-B Q4).
+  The student code is NOT shipped. The solver wrote a solution (solutionSource "solved", official false), pending the
+  refuter: tools/verify/25A-B/solve_q4.c (clang -Wall -Wextra, no warnings): printed example -> 4; 20000 random
+  6x6 and 20000 random 9x9 (-DN=9) 0/1 matrices vs an independent bottom-right-corner reference: 0 mismatches.
 """
 import json, pathlib
 
@@ -73,6 +75,22 @@ CTX4 = r"""int image[6][6] = {
    {1, 1, 0, 1, 1, 1},
    {1, 1, 1, 1, 1, 1}
 };"""
+
+SOL4 = r"""int number_squares(int matrix[N][N])
+{
+   int i, j, a, b, all_ones, count = 0;
+   for (i = 0; i + 2 < N; i++)            // (i, j) = top-left corner of a 3x3 square
+      for (j = 0; j + 2 < N; j++)
+      {
+         all_ones = 1;
+         for (a = i; a < i + 3; a++)      // fixed 9 cells per square
+            for (b = j; b < j + 3; b++)
+               if (matrix[a][b] == 0)
+                  all_ones = 0;
+         count += all_ones;
+      }
+   return count;
+}"""
 
 STU = "**פתרון סטודנט** (25A-B, ציון מלא על שאלה זו), הועתק כלשונו:\n"
 
@@ -142,7 +160,13 @@ questions = [
       "חתימת הפונקציה היא:\n"
       "`int number_squares (int matrix[N][N]);`\n"
       "על הפונקציה לרוץ בסדר גודל של $N*N$",
-      "hold": "no-key: the only source is a student answer graded 22/27 (defective), no full-mark key"},
+      "solution":
+      "**פתרון הפותר** (המקור היחיד הוא פתרון סטודנט שקיבל 22/27 ושגוי: הלולאה השלישית שלו רצה עד `c` במקום עד `r`, "
+      "ולכן הוא לא מוצג כאן):\n" + code_block(SOL4) + "\n"
+      "עוברים על כל פינה שמאלית-עליונה `(i, j)` של ריבוע $3\\times 3$ שנכנס כולו במטריצה (`i+2<N` וגם `j+2<N`), "
+      "ובודקים את 9 התאים שלו. אם כולם `1` מוסיפים 1 למונה.\n"
+      "יש פחות מ-$N^2$ פינות, ולכל אחת מספר קבוע (9) של בדיקות, ולכן הזמן $O(N^2)$. בדוגמה המודפסת מוחזר `4`.",
+      "solutionSource": "solved", "official": False, "confidence": "high"},
 ]
 
 exam = {

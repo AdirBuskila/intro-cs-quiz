@@ -20,11 +20,19 @@ Compile-and-run (clang, harnesses in tools/verify/19A-A/, -Wall -Wextra):
   vs an independent backtracking palindrome builder; bonus vs brute-force search of the minimal additions
   (n<=5). 0 mismatches. OK.
 - Q4 check_if_different_elements: 200000 random sorted pairs vs O(n^2) reference. OK.
-- Q5 is_sum: HELD. The official code's signature is is_sum(int* a, int* b, int n) but the body uses d
-  (undeclared): clang error. With d added the logic is right (100000 random cases) but the key as printed
-  does not compile.
-- Q6 CheckMagic: HELD. The column loop is `for (i=0; i<N; j++)` (i never advances): the official code
-  crashes/loops on the exam's own magic square (segfault in the run).
+- Q5 is_sum: the official code's signature is is_sum(int* a, int* b, int n) but the body uses d
+  (undeclared): clang error (q5_is_sum_official_verbatim.c).
+- Q6 CheckMagic: the column loop is `for (i=0; i<N; j++)` (i never advances): the official code
+  crashes/loops on the exam's own magic square (q6_magic.c, segfault in the run).
+
+Orchestrator ruling on Q5/Q6: ship the official code with the minimal typo fix, solutionSource "solved",
+official false, solution prefixed with "הפתרון הרשמי עם תיקון שגיאת הקלדה: ..." naming the change. Solver
+verification (diff against the verbatim harnesses = exactly the one fixed line each):
+- Q5 (solve_q5.c): `int d` added as 4th parameter. Example d=23 -> 1, d=5 -> 0; 20000 random cases (n 1..10,
+  values -10..10) vs O(n^2) brute force: 0 mismatches.
+- Q6 (solve_q6.c): column loop `j++` -> `i++`. Example -> 1; 20000 cases each at N=3, 4, 5 (magic squares under
+  symmetry/scaling, row-and-column-preserving perturbations that break a diagonal, single-cell changes, random
+  0..2 matrices) vs an independent all-line-sums reference: 0 mismatches.
 """
 import json, pathlib
 
@@ -97,6 +105,60 @@ SOL4 = r"""int check_if_different_elements(int *a, int *b, int n)
     }
      return 1;
 }"""
+
+SOL5 = r"""int is_sum (int* a, int* b, int n, int d)
+{
+  int i;
+  merge_sort(b, 0, n-1);
+  for(i=0; i<n; i++)
+  {
+    if(binary_search(b, n, d-a[i]) >=0 )
+     return 1;
+  }
+  return 0;
+}"""
+
+SOL6 = r"""int CheckMagic(int A[N][N])
+{
+      int i, j, sum=0, curr_sum;
+      //first row
+      for (j=0; j<N; j++)
+            sum += A[0][j];
+      //check rows
+      for (i=1; i<N; i++)
+      {
+            curr_sum = 0;
+            for (j=0; j<N; j++)
+                  curr_sum += A[i][j];
+            if (curr_sum != sum)
+                  return 0;
+      }
+      //check columns
+      for (j=0; j<N; j++)
+      {
+            curr_sum = 0;
+            for (i=0; i<N; i++)
+                  curr_sum += A[i][j];
+            if (curr_sum != sum)
+                  return 0;
+      }
+      //check main diagonal
+      curr_sum = 0;
+      for (i=0; i<N; i++)
+            curr_sum += A[i][i];
+      if (curr_sum != sum)
+            return 0;
+      //check secondary diagonal
+      curr_sum = 0;
+      for (i=0; i<N; i++)
+            curr_sum += A[i][N-i-1];
+      if (curr_sum != sum)
+            return 0;
+
+      return 1;
+}"""
+
+FIXED = dict(solutionSource="solved", official=False)
 
 questions = [
     Q(1, "computation", "recursion",
@@ -197,9 +259,12 @@ questions = [
       "מותר לפונקציה שאתם כותבים לשנות את הסדר שבו מופיעים האיברים בכל אחד ממערכי הקלט.\n"
       "(במבחן אפשר להיעזר בפונקציות הבאות כקופסה שחורה: `merge_sort`, `quick_sort`, `binary_search`, "
       "`binary_search_right`, `swap`, `partition`, `merge_arrays`.)",
-      None,
-      hold="official key does not compile as printed (is_sum signature lacks the parameter d that the body uses); see ASK_ADIR 19A-A Q5",
-      points=20),
+      "הפתרון הרשמי עם תיקון שגיאת הקלדה: בחתימה המודפסת `is_sum (int* a, int* b, int n)` חסר הפרמטר `d` "
+      "שהגוף משתמש בו, ולכן נוסף `int d` כפרמטר רביעי. שאר הקוד כפי שהודפס (19A-A עמ' 4).\n" + code_block(SOL5) + "\n"
+      "ממיינים את `b` עם `merge_sort` בזמן $O(n\\log n)$. לכל `a[i]` מחפשים ב-`b` הממוין את `d-a[i]` בחיפוש בינארי, "
+      "$O(\\log n)$ לכל חיפוש ו-$O(n\\log n)$ לכל $n$ החיפושים. אם נמצא, אז `a[i]+b[j]==d` ומחזירים `1`.\n"
+      "סה\"כ $O(n\\log n)$.",
+      points=20, **FIXED),
 
     Q(6, "code", "matrices",
       "(חלק 2: יש לענות רק על שאלה אחת, 5 או 6.)\n"
@@ -216,9 +281,12 @@ questions = [
       "החישוב חייב להיות בזמן שסדר הגודל שלו $N^2$.\n"
       "(במבחן אפשר להיעזר בפונקציות הבאות כקופסה שחורה: `merge_sort`, `quick_sort`, `binary_search`, "
       "`binary_search_right`, `swap`, `partition`, `merge_arrays`.)",
-      None,
-      hold="official key CheckMagic has an infinite-loop bug in the column check (for (i=0; i<N; j++)); see ASK_ADIR 19A-A Q6",
-      points=20),
+      "הפתרון הרשמי עם תיקון שגיאת הקלדה: בלולאה הפנימית של בדיקת העמודות הודפס `for (i=0; i<N; j++)`, כך ש-`i` "
+      "לא מתקדם והלולאה לא נעצרת; תוקן ל-`for (i=0; i<N; i++)`. שאר הקוד כפי שהודפס (19A-A עמ' 5).\n"
+      + code_block(SOL6) + "\n"
+      "מחשבים את סכום השורה הראשונה, ומשווים אליו את סכום כל שורה, כל עמודה ושני האלכסונים. בהפרש הראשון מחזירים `0`.\n"
+      "בדיקת השורות והעמודות עוברת על $N^2$ תאים כל אחת, והאלכסונים על $N$ תאים כל אחד: סה\"כ $O(N^2)$.",
+      points=20, **FIXED),
 ]
 
 # held items carry no solution/official fields
