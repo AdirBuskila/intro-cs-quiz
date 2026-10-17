@@ -28,7 +28,151 @@
    "official": true,
    "confidence": "high",
    "part": "א",
-   "contextId": "c1a"
+   "contextId": "c1a",
+   "rubric": [
+    {
+     "text": "לולאה חיצונית על השורות `i`, ולולאה פנימית שמסכמת את כל השורה",
+     "points": 4
+    },
+    {
+     "text": "איפוס `sum = 0` בתחילת כל שורה",
+     "points": 2
+    },
+    {
+     "text": "הבדיקה `sum - M[i][i] != M[i][i]` והחזרת `0` בכישלון",
+     "points": 4
+    },
+    {
+     "text": "`return 1` אחרי שכל השורות עברו, וקריאה של כל תא פעם אחת בלבד",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "להשוות את `sum` ל-`M[i][i]` בלי להחסיר את איבר האלכסון מהסכום.",
+    "לשכוח לאפס את `sum` בין שורות, ולצבור סכומים מכל השורות.",
+    "להחזיר `1` או `0` בתוך הלולאה אחרי השורה הראשונה במקום לבדוק את כולן."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "במטריצה הראשונה (שמחזירה 1): מהו סכום השורה השנייה (`i = 1`) ללא איבר האלכסון?",
+     "answer": 7,
+     "tol": 0,
+     "explain": "$2+(-1)+6=7$, ושווה ל-`M[1][1] = 7` (ריצה אמיתית: 7)."
+    },
+    {
+     "type": "choice",
+     "prompt": "מה מחזירה הפונקציה על המטריצה הראשונה ועל המטריצה השנייה, לפי הסדר?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`1` ואז `0`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`0` ואז `1`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`1` ואז `1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`0` ואז `0`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "במטריצה השנייה בשורה 2 מתקבל $2+(-1)+5=6\\ne7$ (ריצה אמיתית: 1 ו-0)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הבדיקה בסוף כל שורה.",
+     "code": true,
+     "lines": [
+      "int f_1(int M[][N]) {",
+      "    int i, j, sum;",
+      "    for (i = 0; i < N; i++) {",
+      "        sum = 0;",
+      "        for (j = 0; j < N; j++) {",
+      "            sum += M[i][j];",
+      "        }",
+      "___",
+      "    }",
+      "    return 1;",
+      "}"
+     ],
+     "blankIndex": 7,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "if (sum - M[i][i] != M[i][i]) return 0;"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "if (sum != M[i][i]) return 0;"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "if (sum - M[i][i] == M[i][i]) return 0;"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "if (sum + M[i][i] != M[i][i]) return 0;"
+      }
+     ],
+     "correctId": "a",
+     "explain": "הסכום כולל את האלכסון, ולכן מחסירים אותו לפני ההשוואה. שלוש האפשרויות האחרות מחזירות 0 גם על המטריצה החוקית (ריצה אמיתית)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `f_1`.",
+     "code": true,
+     "lines": [
+      "int f_1(int M[][N]) {",
+      "    int i, j, sum;",
+      "    for (i = 0; i < N; i++) {",
+      "        sum = 0;",
+      "        for (j = 0; j < N; j++) {",
+      "            sum += M[i][j];",
+      "        }",
+      "        if (sum - M[i][i] != M[i][i]) return 0;",
+      "    }",
+      "    return 1;",
+      "}"
+     ],
+     "explain": "לכל שורה: איפוס, סכום, בדיקה; ובסוף `return 1`."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int f_1(int M[][N]) {",
+      "    int i, j, sum;",
+      "    for (i = 0; i < N; i++) {",
+      "        sum = 0;",
+      "        for (j = 0; j < N; j++) {",
+      "            sum += M[i][j];",
+      "        }",
+      "        if (sum - M[i][i] == M[i][i]) return 0;",
+      "    }",
+      "    return 1;",
+      "}"
+     ],
+     "bugIndex": 7,
+     "explain": "עם `==` מטריצה חוקית נפסלת: על המטריצה הראשונה מוחזר 0 במקום 1 (ריצה אמיתית)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 1,
@@ -40,7 +184,146 @@
    "official": true,
    "confidence": "high",
    "part": "ב",
-   "contextId": "c1b"
+   "contextId": "c1b",
+   "rubric": [
+    {
+     "text": "לולאה חיצונית על העמודות `j` ופנימית על השורות `i` שמסכמת את העמודה",
+     "points": 5
+    },
+    {
+     "text": "איפוס `sum = 0` בתחילת כל עמודה",
+     "points": 2
+    },
+    {
+     "text": "הבדיקה `sum - M[j][j] != M[j][j]` והחזרת `0` בכישלון",
+     "points": 4
+    },
+    {
+     "text": "`return 1` בסוף וקריאה של כל תא פעם אחת",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "להפוך את האינדקסים ולסכם שורה במקום עמודה (`M[j][i]`).",
+    "לשכוח לאפס את `sum` בין עמודות.",
+    "להשוות את הסכום לאיבר אחר במקום ל-`M[j][j]`, האלכסון של אותה עמודה."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "במטריצה הראשונה של סעיף ב: מהו סכום העמודה השנייה (`j = 1`) ללא איבר האלכסון?",
+     "answer": 7,
+     "tol": 0,
+     "explain": "$2+(-2)+7=7$, ושווה ל-`M[1][1] = 7` (ריצה אמיתית: 7)."
+    },
+    {
+     "type": "choice",
+     "prompt": "מה מחזירה `f_11` על המטריצה הראשונה ועל השנייה, לפי הסדר?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`1` ואז `0`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`0` ואז `1`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`1` ואז `1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`0` ואז `0`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "בשנייה בעמודה 2 מתקבל $2+(-2)+4=4\\ne7$ (ריצה אמיתית: 1 ו-0)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הסכימה בלולאה הפנימית.",
+     "code": true,
+     "lines": [
+      "int f_11(int M[][N]) {",
+      "    int i, j, sum;",
+      "    for (j = 0; j < N; j++) {",
+      "        sum = 0;",
+      "        for (i = 0; i < N; i++) {",
+      "___",
+      "        }",
+      "        if (sum - M[j][j] != M[j][j]) return 0;",
+      "    }",
+      "    return 1;",
+      "}"
+     ],
+     "blankIndex": 5,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "sum += M[i][j];"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "sum += M[j][i];"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "sum += M[i][i];"
+      }
+     ],
+     "correctId": "a",
+     "explain": "העמודה `j` קבועה והשורה `i` רצה: `M[i][j]`. `M[j][i]` מסכם שורה ו-`M[i][i]` את האלכסון; שתיהן נכשלות על המטריצה החוקית (ריצה אמיתית)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `f_11`.",
+     "code": true,
+     "lines": [
+      "int f_11(int M[][N]) {",
+      "    int i, j, sum;",
+      "    for (j = 0; j < N; j++) {",
+      "        sum = 0;",
+      "        for (i = 0; i < N; i++) {",
+      "            sum += M[i][j];",
+      "        }",
+      "        if (sum - M[j][j] != M[j][j]) return 0;",
+      "    }",
+      "    return 1;",
+      "}"
+     ],
+     "explain": "לכל עמודה: איפוס, סכום, בדיקה; ובסוף `return 1`."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int f_11(int M[][N]) {",
+      "    int i, j, sum;",
+      "    for (j = 0; j < N; j++) {",
+      "        sum = 0;",
+      "        for (i = 0; i < N; i++) {",
+      "            sum += M[i][j];",
+      "        }",
+      "        if (sum != M[j][j]) return 0;",
+      "    }",
+      "    return 1;",
+      "}"
+     ],
+     "bugIndex": 7,
+     "explain": "בלי להחסיר את האלכסון, המטריצה החוקית נפסלת (מוחזר 0 במקום 1, ריצה אמיתית)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 2,
@@ -51,7 +334,127 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "points": 25
+   "points": 25,
+   "rubric": [
+    {
+     "text": "מקרה בסיס: `i == j` (נגמרו הזוגות) מחזיר `-1`",
+     "points": 6
+    },
+    {
+     "text": "כשהסכום שווה ל-`k` מחזירים `i`",
+     "points": 5
+    },
+    {
+     "text": "כשהסכום גדול מ-`k` מקטינים את `j` (קריאה עם `j - 1`)",
+     "points": 7
+    },
+    {
+     "text": "אחרת מגדילים את `i` (קריאה עם `i + 1`)",
+     "points": 5
+    },
+    {
+     "text": "כל קריאה מצמצמת את התחום באחד, כלומר זמן $O(n)$",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לבדוק את כל הזוגות בשתי לולאות: לא רקורסיבי ו-$O(n^2)$.",
+    "להזיז את המצביע הלא נכון: אם הסכום גדול מדי צריך להקטין את `j`, לא להגדיל את `i`.",
+    "להשתמש במקרה בסיס `i > j` ולבדוק איבר מול עצמו."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "על `-5,-2,12,25,34,40`, `k=23`, `i=0`, `j=4`: כמה קריאות (כולל הראשונה) מבוצעות עד שמוחזר ערך?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "(0,4): $-5+34=29>23$; (0,3): $-5+25=20<23$; (1,3): $-2+25=23$, מחזירים 1 (ריצה אמיתית: 3 קריאות)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הענף שבו הסכום גדול מ-`k`.",
+     "code": true,
+     "lines": [
+      "int f_2(int *c, int k, int i, int j) {",
+      "    if (i == j)",
+      "        return -1;",
+      "    if (c[i] + c[j] == k) return i;",
+      "    if (c[i] + c[j] > k)",
+      "___",
+      "    return f_2(c, k, i + 1, j);",
+      "}"
+     ],
+     "blankIndex": 5,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "return f_2(c, k, i, j - 1);"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "return f_2(c, k, i + 1, j);"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "return f_2(c, k, i, j + 1);"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "return f_2(c, k, i - 1, j);"
+      }
+     ],
+     "correctId": "a",
+     "explain": "המערך ממוין: כדי להקטין סכום גדול מדי מקטינים את האיבר הימני."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `f_2`.",
+     "code": true,
+     "lines": [
+      "int f_2(int *c, int k, int i, int j) {",
+      "    if (i == j)",
+      "        return -1;",
+      "    if (c[i] + c[j] == k) return i;",
+      "    if (c[i] + c[j] > k)",
+      "        return f_2(c, k, i, j - 1);",
+      "    return f_2(c, k, i + 1, j);",
+      "}"
+     ],
+     "explain": "מקרה בסיס, התאמה, סכום גדול מדי, ובסוף סכום קטן מדי."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int f_2(int *c, int k, int i, int j) {",
+      "    if (i == j)",
+      "        return -1;",
+      "    if (c[i] + c[j] == k) return i;",
+      "    if (c[i] + c[j] < k)",
+      "        return f_2(c, k, i, j - 1);",
+      "    return f_2(c, k, i + 1, j);",
+      "}"
+     ],
+     "bugIndex": 4,
+     "explain": "עם `<` המצביעים זזים לכיוון הלא נכון: בדוגמה הראשונה מוחזר -1 במקום 1 (ריצה אמיתית)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהי סיבוכיות הזמן? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "כל קריאה מצמצמת את התחום באחד: $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 3,
@@ -62,7 +465,178 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "points": 25
+   "points": 25,
+   "rubric": [
+    {
+     "text": "מערך מונים בגודל 26 וספירת כל אות במחרוזת",
+     "points": 5
+    },
+    {
+     "text": "הופעה שנייה של אות (`> 1`) מחזירה `0` מיד",
+     "points": 6
+    },
+    {
+     "text": "דילוג על האפסים עד האות הראשונה",
+     "points": 4
+    },
+    {
+     "text": "מעבר על רצף האחדים",
+     "points": 5
+    },
+    {
+     "text": "אחרי הרצף כל המונים חייבים להיות 0 (אחרת `0`), ואחרת `1`",
+     "points": 5
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לבדוק רק שאין חזרות ולשכוח לבדוק שהאותיות רצופות.",
+    "להשוות לאורך המחרוזת במקום לחפש בלוק רציף: אותיות כמו `a`, `c` נראות תקינות.",
+    "מעקב מקסימום ומינימום עם `if`/`else if`: אות שהיא מינימום חדש לא נבדקת כמקסימום (הגרסה השנייה)."
+   ],
+   "steps": [
+    {
+     "type": "choice",
+     "prompt": "מה מחזירה `f_3` על `\"ca\"` ועל `\"cab\"`, לפי הסדר?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`0` ואז `1`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`1` ואז `1`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`0` ואז `0`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`1` ואז `0`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "ב-`\"ca\"` חסרה `b` בין `a` ל-`c`; ב-`\"cab\"` שלוש אותיות רצופות (ריצה אמיתית: 0 ו-1)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הלולאה שעוברת על רצף האותיות שהופיעו.",
+     "code": true,
+     "lines": [
+      "int f_3(char* str) {",
+      "      int a[26] = { 0 };",
+      "      int i = 0;",
+      "      while (*str) {",
+      "            a[*str - 'a']++;",
+      "            if (a[*str - 'a'] > 1) return 0;",
+      "            str++;",
+      "      }",
+      "      while ((i<26) && (a[i] == 0))",
+      "            i++;",
+      "___",
+      "            i++;",
+      "      while (i < 26) {",
+      "            if (a[i] != 0) return 0;",
+      "            i++;",
+      "      }",
+      "      return 1;",
+      "}"
+     ],
+     "blankIndex": 10,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "while ((i < 26) && (a[i] == 1))"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "while ((i < 26) && (a[i] == 0))"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "while ((i < 26) && (a[i] > 1))"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "while (i < 26)"
+      }
+     ],
+     "correctId": "a",
+     "explain": "עוברים על האחדים; אחריהם כל המונים צריכים להיות 0. כל אחת משלוש האפשרויות האחרות שגויה (בבדיקה מלאה על מחרוזות מעל a..e באורך עד 4: 79, 79 ו-126 תוצאות שגויות)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `f_3`.",
+     "code": true,
+     "lines": [
+      "int f_3(char* str) {",
+      "      int a[26] = { 0 };",
+      "      int i = 0;",
+      "      while (*str) {",
+      "            a[*str - 'a']++;",
+      "            if (a[*str - 'a'] > 1) return 0;",
+      "            str++;",
+      "      }",
+      "      while ((i<26) && (a[i] == 0))",
+      "            i++;",
+      "      while ((i < 26) && (a[i] == 1))",
+      "            i++;",
+      "      while (i < 26) {",
+      "            if (a[i] != 0) return 0;",
+      "            i++;",
+      "      }",
+      "      return 1;",
+      "}"
+     ],
+     "explain": "ספירה, דילוג על אפסים, מעבר על אחדים, ובדיקה שהשאר אפס."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int f_3(char* str) {",
+      "      int a[26] = { 0 };",
+      "      int i = 0;",
+      "      while (*str) {",
+      "            a[*str - 'a']++;",
+      "            if (a[*str - 'a'] >= 1) return 0;",
+      "            str++;",
+      "      }",
+      "      while ((i<26) && (a[i] == 0))",
+      "            i++;",
+      "      while ((i < 26) && (a[i] == 1))",
+      "            i++;",
+      "      while (i < 26) {",
+      "            if (a[i] != 0) return 0;",
+      "            i++;",
+      "      }",
+      "      return 1;",
+      "}"
+     ],
+     "bugIndex": 5,
+     "explain": "עם `>= 1` כל אות נחשבת חזרה: אפילו `\"b\"` מחזירה 0 (ריצה אמיתית)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהי סיבוכיות הזמן? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "סריקה אחת של המחרוזת ועוד 26 תאים: $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 4,
@@ -73,7 +647,132 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "points": 30
+   "points": 30,
+   "rubric": [
+    {
+     "text": "קליטת המספר הראשון ל-`max` בנפרד, בלי להדפיס אותו",
+     "points": 8
+    },
+    {
+     "text": "לולאה שקולטת עוד `n - 1` מספרים",
+     "points": 8
+    },
+    {
+     "text": "הדפסה רק כש-`num > max` (גדול **ממש**)",
+     "points": 10
+    },
+    {
+     "text": "עדכון `max = num` אחרי ההדפסה, בלי מערך (זיכרון $O(1)$ וזמן $O(n)$)",
+     "points": 4
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "שמירת כל המספרים במערך: הנחיית השאלה אוסרת.",
+    "`>=` במקום `>`: מדפיס גם מספר ששווה למקסימום הקודם.",
+    "להדפיס את המספר הראשון או לא לעדכן את `max` אחרי ההדפסה."
+   ],
+   "steps": [
+    {
+     "type": "text",
+     "prompt": "מה מדפיסה `maxmax(6)` על הקלט `2 6 3 4 7 5`? (הקוד מדפיס `%d` בלי מפרידים)",
+     "accept": [
+      "67"
+     ],
+     "normalize": "none",
+     "explain": "מודפסים 6 ו-7 בלבד, צמודים (ריצה אמיתית: 67)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "כמה מספרים מודפסים באותה ריצה?",
+     "answer": 2,
+     "tol": 0,
+     "explain": "6 גדול מ-2 ו-7 גדול מ-6; 3, 4 ו-5 אינם גדולים מהמקסימום (ריצה אמיתית: 2)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את תנאי ההדפסה.",
+     "code": true,
+     "lines": [
+      "int  maxmax(int n) {",
+      "    int max, i, num;",
+      "    scanf(\"%d\", &max);",
+      "    for (i = 0; i < n - 1; i++) {",
+      "        scanf(\"%d\", &num);",
+      "___",
+      "            printf(\"%d\", num);",
+      "            max = num;",
+      "        }",
+      "    }",
+      "}"
+     ],
+     "blankIndex": 5,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "if (num > max) {"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "if (num >= max) {"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "if (num < max) {"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "if (num != max) {"
+      }
+     ],
+     "correctId": "a",
+     "explain": "מדפיסים רק מספר גדול ממש מכל קודמיו, כלומר מהמקסימום עד כה."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `maxmax`.",
+     "code": true,
+     "lines": [
+      "int  maxmax(int n) {",
+      "    int max, i, num;",
+      "    scanf(\"%d\", &max);",
+      "    for (i = 0; i < n - 1; i++) {",
+      "        scanf(\"%d\", &num);",
+      "        if (num > max) {",
+      "            printf(\"%d\", num);",
+      "            max = num;",
+      "        }",
+      "    }",
+      "}"
+     ],
+     "explain": "קליטת הראשון, לולאה, קליטה, תנאי, הדפסה ועדכון."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int  maxmax(int n) {",
+      "    int max, i, num;",
+      "    scanf(\"%d\", &max);",
+      "    for (i = 0; i < n - 1; i++) {",
+      "        scanf(\"%d\", &num);",
+      "        if (num >= max) {",
+      "            printf(\"%d\", num);",
+      "            max = num;",
+      "        }",
+      "    }",
+      "}"
+     ],
+     "bugIndex": 5,
+     "explain": "עם `>=` על הקלט `2 2 3` מודפס 23 במקום 3 (ריצה אמיתית)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   }
  ]
 }

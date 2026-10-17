@@ -230,6 +230,195 @@ questions = [
       points=30),
 ]
 
+IDS = "abcdef"
+
+
+def opts(*vals):
+    return [{"id": IDS[i], "type": "text", "value": v} for i, v in enumerate(vals)]
+
+
+def rub(*items):
+    return [{"text": t, "points": p} for t, p in items]
+
+
+def lines_of(src):
+    return [ln for ln in src.strip("\n").expandtabs(4).split("\n") if ln.strip() and not ln.strip().startswith("//")]
+
+
+def swap(src, old, new):
+    """Return the code lines with exactly one line changed (asserted)."""
+    ls = lines_of(src)
+    idx = [i for i, ln in enumerate(ls) if ln.strip() == old.strip()]
+    assert len(idx) == 1, old
+    ls[idx[0]] = ls[idx[0]].replace(old.strip(), new.strip())
+    return ls, idx[0]
+
+
+def blank(lines, target):
+    idx = [i for i, ln in enumerate(lines) if ln.strip() == target]
+    assert len(idx) == 1, target
+    return [("___" if i == idx[0] else ln) for i, ln in enumerate(lines)], idx[0]
+
+
+def add(num, part, **kw):
+    for q in questions:
+        if q["num"] == num and q.get("part") == part:
+            q.update(kw)
+            return
+    raise KeyError((num, part))
+
+
+# ---- rubric / pitfalls / steps (ai-draft); expected values come from real clang runs of tools/verify/22A-B/steps.c.
+# Q3 uses the first official version f_3 (f_33 is wrong, see the note in the solution). The 25 points of Q1 are not
+# split on the page: the 12/13 split below is a draft. ----
+S1A = lines_of(SOL1A)
+b1a, i1a = swap(SOL1A, "if (sum - M[i][i] != M[i][i]) return 0;", "if (sum - M[i][i] == M[i][i]) return 0;")
+f1a, j1a = blank(S1A, "if (sum - M[i][i] != M[i][i]) return 0;")
+S1B = lines_of(SOL1B)
+b1b, i1b = swap(SOL1B, "if (sum - M[j][j] != M[j][j]) return 0;", "if (sum != M[j][j]) return 0;")
+f1b, j1b = blank(S1B, "sum += M[i][j];")
+S2 = lines_of(SOL2)
+b2, i2 = swap(SOL2, "if (c[i] + c[j] > k)", "if (c[i] + c[j] < k)")
+f2, j2 = blank(S2, "return f_2(c, k, i, j - 1);")
+S3 = lines_of(SOL3A)
+b3, i3 = swap(SOL3A, "if (a[*str - 'a'] > 1) return 0;", "if (a[*str - 'a'] >= 1) return 0;")
+f3, j3 = blank(S3, "while ((i < 26) && (a[i] == 1))")
+S4 = lines_of(SOL4)
+b4, i4 = swap(SOL4, "if (num > max) {", "if (num >= max) {")
+f4, j4 = blank(S4, "if (num > max) {")
+
+add(1, "א",
+    rubric=rub(("לולאה חיצונית על השורות `i`, ולולאה פנימית שמסכמת את כל השורה", 4),
+               ("איפוס `sum = 0` בתחילת כל שורה", 2),
+               ("הבדיקה `sum - M[i][i] != M[i][i]` והחזרת `0` בכישלון", 4),
+               ("`return 1` אחרי שכל השורות עברו, וקריאה של כל תא פעם אחת בלבד", 2)),
+    rubricSource="ai-draft",
+    pitfalls=["להשוות את `sum` ל-`M[i][i]` בלי להחסיר את איבר האלכסון מהסכום.",
+              "לשכוח לאפס את `sum` בין שורות, ולצבור סכומים מכל השורות.",
+              "להחזיר `1` או `0` בתוך הלולאה אחרי השורה הראשונה במקום לבדוק את כולן."],
+    steps=[
+        {"type": "numeric", "prompt": "במטריצה הראשונה (שמחזירה 1): מהו סכום השורה השנייה (`i = 1`) ללא איבר האלכסון?",
+         "answer": 7, "tol": 0, "explain": "$2+(-1)+6=7$, ושווה ל-`M[1][1] = 7` (ריצה אמיתית: 7)."},
+        {"type": "choice", "prompt": "מה מחזירה הפונקציה על המטריצה הראשונה ועל המטריצה השנייה, לפי הסדר?",
+         "options": opts("`1` ואז `0`", "`0` ואז `1`", "`1` ואז `1`", "`0` ואז `0`"), "correctId": "a",
+         "explain": "במטריצה השנייה בשורה 2 מתקבל $2+(-1)+5=6\\ne7$ (ריצה אמיתית: 1 ו-0)."},
+        {"type": "fillblank", "prompt": "השלימו את הבדיקה בסוף כל שורה.", "code": True, "lines": f1a, "blankIndex": j1a,
+         "options": opts("if (sum - M[i][i] != M[i][i]) return 0;", "if (sum != M[i][i]) return 0;",
+                         "if (sum - M[i][i] == M[i][i]) return 0;", "if (sum + M[i][i] != M[i][i]) return 0;"),
+         "correctId": "a",
+         "explain": "הסכום כולל את האלכסון, ולכן מחסירים אותו לפני ההשוואה. שלוש האפשרויות האחרות מחזירות 0 גם על המטריצה החוקית (ריצה אמיתית)."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `f_1`.", "code": True, "lines": S1A,
+         "explain": "לכל שורה: איפוס, סכום, בדיקה; ובסוף `return 1`."},
+        {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b1a, "bugIndex": i1a,
+         "explain": "עם `==` מטריצה חוקית נפסלת: על המטריצה הראשונה מוחזר 0 במקום 1 (ריצה אמיתית)."},
+    ],
+    stepsSource="ai-draft")
+
+add(1, "ב",
+    rubric=rub(("לולאה חיצונית על העמודות `j` ופנימית על השורות `i` שמסכמת את העמודה", 5),
+               ("איפוס `sum = 0` בתחילת כל עמודה", 2),
+               ("הבדיקה `sum - M[j][j] != M[j][j]` והחזרת `0` בכישלון", 4),
+               ("`return 1` בסוף וקריאה של כל תא פעם אחת", 2)),
+    rubricSource="ai-draft",
+    pitfalls=["להפוך את האינדקסים ולסכם שורה במקום עמודה (`M[j][i]`).",
+              "לשכוח לאפס את `sum` בין עמודות.",
+              "להשוות את הסכום לאיבר אחר במקום ל-`M[j][j]`, האלכסון של אותה עמודה."],
+    steps=[
+        {"type": "numeric", "prompt": "במטריצה הראשונה של סעיף ב: מהו סכום העמודה השנייה (`j = 1`) ללא איבר האלכסון?",
+         "answer": 7, "tol": 0, "explain": "$2+(-2)+7=7$, ושווה ל-`M[1][1] = 7` (ריצה אמיתית: 7)."},
+        {"type": "choice", "prompt": "מה מחזירה `f_11` על המטריצה הראשונה ועל השנייה, לפי הסדר?",
+         "options": opts("`1` ואז `0`", "`0` ואז `1`", "`1` ואז `1`", "`0` ואז `0`"), "correctId": "a",
+         "explain": "בשנייה בעמודה 2 מתקבל $2+(-2)+4=4\\ne7$ (ריצה אמיתית: 1 ו-0)."},
+        {"type": "fillblank", "prompt": "השלימו את הסכימה בלולאה הפנימית.", "code": True, "lines": f1b, "blankIndex": j1b,
+         "options": opts("sum += M[i][j];", "sum += M[j][i];", "sum += M[i][i];"), "correctId": "a",
+         "explain": "העמודה `j` קבועה והשורה `i` רצה: `M[i][j]`. `M[j][i]` מסכם שורה ו-`M[i][i]` את האלכסון; שתיהן נכשלות על המטריצה החוקית (ריצה אמיתית)."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `f_11`.", "code": True, "lines": S1B,
+         "explain": "לכל עמודה: איפוס, סכום, בדיקה; ובסוף `return 1`."},
+        {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b1b, "bugIndex": i1b,
+         "explain": "בלי להחסיר את האלכסון, המטריצה החוקית נפסלת (מוחזר 0 במקום 1, ריצה אמיתית)."},
+    ],
+    stepsSource="ai-draft")
+
+add(2, None,
+    rubric=rub(("מקרה בסיס: `i == j` (נגמרו הזוגות) מחזיר `-1`", 6),
+               ("כשהסכום שווה ל-`k` מחזירים `i`", 5),
+               ("כשהסכום גדול מ-`k` מקטינים את `j` (קריאה עם `j - 1`)", 7),
+               ("אחרת מגדילים את `i` (קריאה עם `i + 1`)", 5),
+               ("כל קריאה מצמצמת את התחום באחד, כלומר זמן $O(n)$", 2)),
+    rubricSource="ai-draft",
+    pitfalls=["לבדוק את כל הזוגות בשתי לולאות: לא רקורסיבי ו-$O(n^2)$.",
+              "להזיז את המצביע הלא נכון: אם הסכום גדול מדי צריך להקטין את `j`, לא להגדיל את `i`.",
+              "להשתמש במקרה בסיס `i > j` ולבדוק איבר מול עצמו."],
+    steps=[
+        {"type": "numeric", "prompt": "על `-5,-2,12,25,34,40`, `k=23`, `i=0`, `j=4`: כמה קריאות (כולל הראשונה) מבוצעות עד שמוחזר ערך?",
+         "answer": 3, "tol": 0,
+         "explain": "(0,4): $-5+34=29>23$; (0,3): $-5+25=20<23$; (1,3): $-2+25=23$, מחזירים 1 (ריצה אמיתית: 3 קריאות)."},
+        {"type": "fillblank", "prompt": "השלימו את הענף שבו הסכום גדול מ-`k`.", "code": True, "lines": f2, "blankIndex": j2,
+         "options": opts("return f_2(c, k, i, j - 1);", "return f_2(c, k, i + 1, j);", "return f_2(c, k, i, j + 1);",
+                         "return f_2(c, k, i - 1, j);"), "correctId": "a",
+         "explain": "המערך ממוין: כדי להקטין סכום גדול מדי מקטינים את האיבר הימני."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `f_2`.", "code": True, "lines": S2,
+         "explain": "מקרה בסיס, התאמה, סכום גדול מדי, ובסוף סכום קטן מדי."},
+        {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b2, "bugIndex": i2,
+         "explain": "עם `<` המצביעים זזים לכיוון הלא נכון: בדוגמה הראשונה מוחזר -1 במקום 1 (ריצה אמיתית)."},
+        {"type": "text", "prompt": "מהי סיבוכיות הזמן? (למשל `O(n)`)", "accept": ["O(n)"], "normalize": "complexity",
+         "explain": "כל קריאה מצמצמת את התחום באחד: $O(n)$."},
+    ],
+    stepsSource="ai-draft")
+
+add(3, None,
+    rubric=rub(("מערך מונים בגודל 26 וספירת כל אות במחרוזת", 5),
+               ("הופעה שנייה של אות (`> 1`) מחזירה `0` מיד", 6),
+               ("דילוג על האפסים עד האות הראשונה", 4),
+               ("מעבר על רצף האחדים", 5),
+               ("אחרי הרצף כל המונים חייבים להיות 0 (אחרת `0`), ואחרת `1`", 5)),
+    rubricSource="ai-draft",
+    pitfalls=["לבדוק רק שאין חזרות ולשכוח לבדוק שהאותיות רצופות.",
+              "להשוות לאורך המחרוזת במקום לחפש בלוק רציף: אותיות כמו `a`, `c` נראות תקינות.",
+              "מעקב מקסימום ומינימום עם `if`/`else if`: אות שהיא מינימום חדש לא נבדקת כמקסימום (הגרסה השנייה)."],
+    steps=[
+        {"type": "choice", "prompt": "מה מחזירה `f_3` על `\"ca\"` ועל `\"cab\"`, לפי הסדר?",
+         "options": opts("`0` ואז `1`", "`1` ואז `1`", "`0` ואז `0`", "`1` ואז `0`"), "correctId": "a",
+         "explain": "ב-`\"ca\"` חסרה `b` בין `a` ל-`c`; ב-`\"cab\"` שלוש אותיות רצופות (ריצה אמיתית: 0 ו-1)."},
+        {"type": "fillblank", "prompt": "השלימו את הלולאה שעוברת על רצף האותיות שהופיעו.", "code": True, "lines": f3, "blankIndex": j3,
+         "options": opts("while ((i < 26) && (a[i] == 1))", "while ((i < 26) && (a[i] == 0))",
+                         "while ((i < 26) && (a[i] > 1))", "while (i < 26)"), "correctId": "a",
+         "explain": "עוברים על האחדים; אחריהם כל המונים צריכים להיות 0. כל אחת משלוש האפשרויות האחרות שגויה "
+                    "(בבדיקה מלאה על מחרוזות מעל a..e באורך עד 4: 79, 79 ו-126 תוצאות שגויות)."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `f_3`.", "code": True, "lines": S3,
+         "explain": "ספירה, דילוג על אפסים, מעבר על אחדים, ובדיקה שהשאר אפס."},
+        {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b3, "bugIndex": i3,
+         "explain": "עם `>= 1` כל אות נחשבת חזרה: אפילו `\"b\"` מחזירה 0 (ריצה אמיתית)."},
+        {"type": "text", "prompt": "מהי סיבוכיות הזמן? (למשל `O(n)`)", "accept": ["O(n)"], "normalize": "complexity",
+         "explain": "סריקה אחת של המחרוזת ועוד 26 תאים: $O(n)$."},
+    ],
+    stepsSource="ai-draft")
+
+add(4, None,
+    rubric=rub(("קליטת המספר הראשון ל-`max` בנפרד, בלי להדפיס אותו", 8),
+               ("לולאה שקולטת עוד `n - 1` מספרים", 8),
+               ("הדפסה רק כש-`num > max` (גדול **ממש**)", 10),
+               ("עדכון `max = num` אחרי ההדפסה, בלי מערך (זיכרון $O(1)$ וזמן $O(n)$)", 4)),
+    rubricSource="ai-draft",
+    pitfalls=["שמירת כל המספרים במערך: הנחיית השאלה אוסרת.",
+              "`>=` במקום `>`: מדפיס גם מספר ששווה למקסימום הקודם.",
+              "להדפיס את המספר הראשון או לא לעדכן את `max` אחרי ההדפסה."],
+    steps=[
+        {"type": "text", "prompt": "מה מדפיסה `maxmax(6)` על הקלט `2 6 3 4 7 5`? (הקוד מדפיס `%d` בלי מפרידים)",
+         "accept": ["67"], "normalize": "none",
+         "explain": "מודפסים 6 ו-7 בלבד, צמודים (ריצה אמיתית: 67)."},
+        {"type": "numeric", "prompt": "כמה מספרים מודפסים באותה ריצה?", "answer": 2, "tol": 0,
+         "explain": "6 גדול מ-2 ו-7 גדול מ-6; 3, 4 ו-5 אינם גדולים מהמקסימום (ריצה אמיתית: 2)."},
+        {"type": "fillblank", "prompt": "השלימו את תנאי ההדפסה.", "code": True, "lines": f4, "blankIndex": j4,
+         "options": opts("if (num > max) {", "if (num >= max) {", "if (num < max) {", "if (num != max) {"), "correctId": "a",
+         "explain": "מדפיסים רק מספר גדול ממש מכל קודמיו, כלומר מהמקסימום עד כה."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `maxmax`.", "code": True, "lines": S4,
+         "explain": "קליטת הראשון, לולאה, קליטה, תנאי, הדפסה ועדכון."},
+        {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b4, "bugIndex": i4,
+         "explain": "עם `>=` על הקלט `2 2 3` מודפס 23 במקום 3 (ריצה אמיתית)."},
+    ],
+    stepsSource="ai-draft")
+
 exam = {
     "examCode": "22A-B",
     "examLabel": "מבוא למדעי המחשב, סמסטר א' תשפ\"ב, מועד ב (2022)",
