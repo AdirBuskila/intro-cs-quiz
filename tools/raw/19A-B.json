@@ -15,7 +15,51 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה): תשובה **c**, סכום x ו-y.\nבקוד המודפס כתוב `If` באות גדולה; זו שגיאת הקלדה, והכוונה ל-`if`.\nאם `y==0` מוחזר `x`. אם $y>0$, כל קריאה מקטינה את y ב-1 ומוסיפה 1 לתוצאה, כך שאחרי y קריאות מקבלים $x+y$.\nאם $y<0$, כל קריאה מגדילה את y ב-1 ומחסירה 1 מהתוצאה, כך שאחרי $|y|$ קריאות מקבלים $x-|y|=x+y$.\nלכן בכל מקרה מוחזר $x+y$. למשל `fn(5,3)` מחזירה 8 ו-`fn(5,-3)` מחזירה 2.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "בחירת התשובה הנכונה, c: הפונקציה מחזירה את סכום x ו-y",
+     "points": 5
+    },
+    {
+     "text": "עבור $y>0$: כל קריאה מקטינה את y ב-1 ומוסיפה 1 לתוצאה, ולכן מקבלים $x+y$",
+     "points": 5
+    },
+    {
+     "text": "עבור $y<0$: כל קריאה מגדילה את y ב-1 ומחסירה 1 מהתוצאה, ולכן מקבלים $x-|y|=x+y$",
+     "points": 5
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לבחור a (הפרש): במקרה $y<0$ הפונקציה מחסירה, אבל התוצאה היא $x+y$ ולא $x-y$.",
+    "לשכוח את המקרה $y<0$ ולנמק רק עבור $y>0$.",
+    "לטעות בבסיס הרקורסיה: הוא `y==0` ומחזיר `x`, ולא מוסיף איבר."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `fn(5, 3)`?",
+     "answer": 8,
+     "tol": 0,
+     "explain": "y חיובי, ולכן בכל קריאה מוסיפים 1 לתוצאה: $5+3=8$ (ריצה אמיתית: 8)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `fn(5, -3)`?",
+     "answer": 2,
+     "tol": 0,
+     "explain": "y שלילי, ולכן בכל קריאה מחסירים 1: $5-3=2$, כלומר $x+y$ (ריצה אמיתית: 2)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "כמה קריאות ל-`fn` מתבצעות בסך הכול (כולל הראשונה) עבור `fn(5, -3)`?",
+     "answer": 4,
+     "tol": 0,
+     "explain": "הערכים של y: $-3,-2,-1,0$, ובקריאה האחרונה `y==0` מחזיר `x` (ריצה אמיתית: 4)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 2,
@@ -26,7 +70,127 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint digits_parity(int n)\n{\n   if (n == 0)\n      return 1;\n   if (n % 10 % 2 != 0)        // even position (0, 2, ...) must hold an even digit\n      return 0;\n   n = n / 10;\n   if (n == 0)\n      return 1;\n   if (n % 10 % 2 == 0)        // odd position (1, 3, ...) must hold an odd digit\n      return 0;\n   return digits_parity(n / 10);\n}\n```\n(השאלה לא נותנת שם לפונקציה; השם `digits_parity` נבחר כאן.)\nמקרה בסיס: `n==0`, לא נשארו ספרות, מחזירים `1`. בכל קריאה הספרה האחרונה (`n%10`) נמצאת במקום זוגי וחייבת להיות זוגית. אחרי שמורידים אותה, הספרה הבאה נמצאת במקום אי-זוגי וחייבת להיות אי-זוגית.\nאחרי שתי ספרות ממשיכים רקורסיבית עם המספר בלי שתיהן, ושוב הספרה האחרונה נמצאת במקום זוגי. מספר הקריאות הוא בערך חצי ממספר הספרות.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מקרה בסיס: `n==0` מחזיר `1`",
+     "points": 4
+    },
+    {
+     "text": "בדיקת הספרה האחרונה `n%10` שבמקום זוגי: חייבת להיות זוגית",
+     "points": 5
+    },
+    {
+     "text": "הסרת ספרה ובדיקת הספרה הבאה, במקום אי-זוגי: חייבת להיות אי-זוגית, ובסיס נוסף כש-`n` נגמר",
+     "points": 5
+    },
+    {
+     "text": "קריאה רקורסיבית על המספר בלי שתי הספרות (`n / 10` אחרי ההסרה הראשונה)",
+     "points": 4
+    },
+    {
+     "text": "החזרת `0` בהפרה הראשונה",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לבדוק רק זוגיות של כל ספרה ולשכוח שבמקום אי-זוגי הספרה צריכה להיות אי-זוגית.",
+    "לספור מקומות משמאל: המספור מימין לשמאל, והספרה `n%10` נמצאת במקום 0.",
+    "לשכוח את בדיקת הסיום אחרי הספרה הראשונה: עבור מספר בעל ספרה אחת `n` הופך ל-0, והספרה 0 זוגית ולכן תחזיר 0 בטעות."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "כמה קריאות ל-`digits_parity` מתבצעות בסך הכול (כולל הראשונה) עבור `n = 43418`?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "כל קריאה מסירה שתי ספרות: 43418, אחר כך 434, אחר כך 4, ושם `n` נהיה 0 ומחזירים 1 (ריצה אמיתית: 3)."
+    },
+    {
+     "type": "choice",
+     "prompt": "מה מחזירה `digits_parity(12)` ומה מחזירה `digits_parity(21)`, לפי הסדר?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`1, 0`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`0, 1`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`1, 1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`0, 0`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "ב-12 הספרה 2 במקום 0 (זוגית) והספרה 1 במקום 1 (אי-זוגית): 1. ב-21 הספרה 1 במקום 0 אי-זוגית: 0 (ריצה אמיתית: 1, 0)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את השורה האחרונה של הפונקציה.",
+     "code": true,
+     "lines": [
+      "int digits_parity(int n)",
+      "{",
+      "   if (n == 0) return 1; if (n % 10 % 2 != 0) return 0;",
+      "   n = n / 10; if (n == 0) return 1;",
+      "   if (n % 10 % 2 == 0) return 0;",
+      "___",
+      "}"
+     ],
+     "blankIndex": 5,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "return digits_parity(n / 10);"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "return digits_parity(n);"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "return digits_parity(n / 100);"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "return digits_parity(n / 10) + 1;"
+      }
+     ],
+     "correctId": "a",
+     "explain": "אחרי שהוסרה ספרה אחת, מסירים את השנייה בעזרת `n / 10` וממשיכים עם המקום הזוגי הבא. `n` לבדו בודק שוב את אותה ספרה, `n / 100` מדלג על ספרה, ו-`+ 1` מחזיר ערך שאינו 0 או 1 (ריצה אמיתית: כולן נכשלות)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `digits_parity`.",
+     "code": true,
+     "lines": [
+      "int digits_parity(int n)",
+      "{",
+      "   if (n == 0) return 1; if (n % 10 % 2 != 0) return 0;",
+      "   n = n / 10; if (n == 0) return 1;",
+      "   if (n % 10 % 2 == 0) return 0;",
+      "   return digits_parity(n / 10);",
+      "}"
+     ],
+     "explain": "בסיס ובדיקת מקום זוגי, הסרת ספרה ובסיס שני, בדיקת מקום אי-זוגי, ובסוף הרקורסיה (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 3,
@@ -38,7 +202,112 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint count_in_range(int *a, int n)\n{\n   int i, count = 0;\n   int *seen = (int*)calloc(n, sizeof(int));\n   for (i = 0; i < n; i++)\n   {\n      if (a[i] >= 0 && a[i] < n && !seen[a[i]])\n      {\n         seen[a[i]] = 1;\n         count++;\n      }\n   }\n   free(seen);\n   return count;\n}\n```\n(השאלה לא נותנת שם לפונקציה; השם `count_in_range` נבחר כאן.)\nמערך עזר `seen` בגודל `n` מסמן אילו ערכים בתחום `0` עד `n-1` כבר נספרו; ערכים מחוץ לתחום (כמו `9999`) מדלגים עליהם. כל ערך נספר רק בפעם הראשונה שהוא מופיע.\nסריקה אחת של המערך: $O(n)$.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מערך עזר `seen` בגודל `n`, כי הערכים בתחום 0 עד `n-1`",
+     "points": 4
+    },
+    {
+     "text": "דילוג על ערכים מחוץ לתחום (`a[i] >= 0 && a[i] < n`)",
+     "points": 5
+    },
+    {
+     "text": "ספירת כל ערך שונה פעם אחת בלבד, בעזרת `seen`",
+     "points": 5
+    },
+    {
+     "text": "החזרת `count` ושחרור הזיכרון",
+     "points": 3
+    },
+    {
+     "text": "סריקה אחת, כלומר $O(n)$",
+     "points": 3
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לספור כל מופע במקום כל ערך שונה: במערך `{1,1}` מתקבל 2 במקום 1.",
+    "לא לדלג על ערכים מחוץ לתחום: `seen[9999]` יוצא מגבולות המערך.",
+    "בדיקת כל ערך מול כל הערכים שלפניו בלולאה מקוננת: $O(n^2)$ ולא $O(n)$."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `count_in_range` עבור `a = {3,3,-1,0,7,0}` ו-`n = 6`?",
+     "answer": 2,
+     "tol": 0,
+     "explain": "בתחום $0..5$ מופיעים רק הערכים 3 ו-0 (כל אחד פעמיים), וההשאר `-1` ו-`7` מחוץ לתחום: 2 ערכים שונים (ריצה אמיתית: 2)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את תנאי ה-`if`.",
+     "code": true,
+     "lines": [
+      "int count_in_range(int *a, int n)",
+      "{",
+      "   int i, count = 0, *seen = (int*)calloc(n, sizeof(int));",
+      "   for (i = 0; i < n; i++)",
+      "      if (___)",
+      "      {",
+      "         seen[a[i]] = 1;",
+      "         count++;",
+      "      }",
+      "   free(seen);",
+      "   return count;",
+      "}"
+     ],
+     "blankIndex": 4,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "a[i] >= 0 && a[i] < n && !seen[a[i]]"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "a[i] >= 0 && a[i] < n"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "a[i] >= 0 && a[i] < n && seen[a[i]]"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "a[i] > 0 && a[i] < n && !seen[a[i]]"
+      }
+     ],
+     "correctId": "a",
+     "explain": "סופרים ערך רק אם הוא בתחום ועוד לא נראה. בלי `!seen` מתקבלות ספירות כפולות, עם `seen` בלי שלילה לא סופרים אף ערך, ו-`> 0` מפספס את הערך 0 (ריצה אמיתית: כולן נכשלות על מערכים אקראיים)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `count_in_range`.",
+     "code": true,
+     "lines": [
+      "int count_in_range(int *a, int n)",
+      "{",
+      "   int i, count = 0, *seen = (int*)calloc(n, sizeof(int));",
+      "   for (i = 0; i < n; i++) if (a[i] >= 0 && a[i] < n && !seen[a[i]]) { seen[a[i]] = 1; count++; }",
+      "   free(seen); return count;",
+      "}"
+     ],
+     "explain": "הקצאת `seen`, הסריקה, ובסוף שחרור והחזרה (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "סריקה אחת של המערך עם עבודה קבועה בכל איבר: $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 3,
@@ -50,7 +319,116 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint min_prefix_index(int *a, int n)\n{\n   int i, total = 0, found = 0;\n   int *seen = (int*)calloc(n, sizeof(int));\n   for (i = 0; i < n; i++)              // pass 1: how many distinct values in 0..n-1\n      if (a[i] >= 0 && a[i] < n && seen[a[i]] == 0)\n      {\n         seen[a[i]] = 1;\n         total++;\n      }\n   for (i = 0; i < n; i++)              // pass 2: first index where all of them were seen\n   {\n      if (a[i] >= 0 && a[i] < n && seen[a[i]] == 1)\n      {\n         seen[a[i]] = 2;\n         found++;\n      }\n      if (found == total)\n      {\n         free(seen);\n         return i;\n      }\n   }\n   free(seen);\n   return -1;                           // only when n == 0\n}\n```\n(השאלה לא נותנת שם לפונקציה; השם `min_prefix_index` נבחר כאן.)\nסריקה ראשונה (כמו בסעיף הראשי) סופרת כמה ערכים שונים בתחום יש במערך, `total`, ומסמנת אותם ב-1. סריקה שנייה עוברת מההתחלה ומסמנת ב-2 כל ערך בתחום שנראה בה לראשונה; האינדקס הראשון שבו נראו כל `total` הערכים הוא התשובה.\nאם אין במערך אף ערך בתחום, `total` הוא 0 ומוחזר `0` (התנאי מתקיים כבר בקידומת `a[0]`); השאלה לא מגדירה את המקרה הזה.\nשתי סריקות: $O(n)$.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "סריקה ראשונה: ספירת הערכים השונים שבתחום, `total`, וסימונם ב-`seen`",
+     "points": 3
+    },
+    {
+     "text": "סריקה שנייה: סימון המופע הראשון של כל ערך בתחום (`seen` ל-2) וספירתו ב-`found`",
+     "points": 3
+    },
+    {
+     "text": "החזרת `i` כאשר `found == total`",
+     "points": 2
+    },
+    {
+     "text": "זמן $O(n)$ ושחרור המערך",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לספור גם ערכים מחוץ לתחום, כמו `9999`, כחלק מ-`total`.",
+    "להגדיל את `found` בכל מופע של ערך ולא רק במופע הראשון שלו: לכן מסמנים ב-2.",
+    "לבדוק את `found == total` רק אחרי הלולאה ולהחזיר את האינדקס האחרון במקום הקטן ביותר."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "אחרי הסריקה הראשונה עבור `a = {1,9999,1,4,2,1}` ו-`n = 6`: מהו `total`?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "בתחום $0..5$ מופיעים 1, 4 ו-2, והערך 9999 מחוץ לתחום: `total = 3` (ריצה אמיתית: 3)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `min_prefix_index` עבור `a = {0,0,0,1,1}` ו-`n = 5`?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "יש שני ערכים בתחום (0 ו-1), והערך 1 מופיע לראשונה באינדקס 3, שבו `found` מגיע ל-`total` (ריצה אמיתית: 3)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את תנאי העצירה בסריקה השנייה.",
+     "code": true,
+     "lines": [
+      "int min_prefix_index(int *a, int n)",
+      "{",
+      "   int i, total = 0, found = 0, *seen = (int*)calloc(n, sizeof(int));",
+      "   for (i = 0; i < n; i++) if (a[i] >= 0 && a[i] < n && seen[a[i]] == 0) { seen[a[i]] = 1; total++; }",
+      "   for (i = 0; i < n; i++)",
+      "   {",
+      "      if (a[i] >= 0 && a[i] < n && seen[a[i]] == 1) { seen[a[i]] = 2; found++; }",
+      "      if (___) { free(seen); return i; }",
+      "   }",
+      "   free(seen);",
+      "   return -1;",
+      "}"
+     ],
+     "blankIndex": 7,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "found == total"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "found == n"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "found > total"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "found == total - 1"
+      }
+     ],
+     "correctId": "a",
+     "explain": "עוצרים כשכל הערכים השונים כבר נראו. האפשרויות האחרות לא מתקיימות לעולם או מתקיימות מוקדם מדי (ריצה אמיתית: כולן נכשלות על הדוגמאות)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `min_prefix_index`.",
+     "code": true,
+     "lines": [
+      "int min_prefix_index(int *a, int n)",
+      "{",
+      "   int i, total = 0, found = 0, *seen = (int*)calloc(n, sizeof(int));",
+      "   for (i = 0; i < n; i++) if (a[i] >= 0 && a[i] < n && seen[a[i]] == 0) { seen[a[i]] = 1; total++; }",
+      "   for (i = 0; i < n; i++) { if (a[i] >= 0 && a[i] < n && seen[a[i]] == 1) { seen[a[i]] = 2; found++; } if (found == total) { free(seen); return i; } }",
+      "   free(seen); return -1;",
+      "}"
+     ],
+     "explain": "הקצאה, סריקה ראשונה לספירה, סריקה שנייה שעוצרת, ושחרור והחזרת `-1` (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "שתי סריקות לינאריות: $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 4,
@@ -61,7 +439,130 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint is_rotation(int *a, int *b, int n)\n{\n   int i, k = -1;\n   if (n == 0)\n      return 1;\n   for (i = 0; i < n; i++)          // where did a[0] move to? (values are distinct)\n      if (b[i] == a[0])\n         k = i;\n   if (k == -1)\n      return 0;\n   for (i = 0; i < n; i++)          // a rotation by k cells puts a[i] at b[(i+k)%n]\n      if (b[(i + k) % n] != a[i])\n         return 0;\n   return 1;\n}\n```\n(השאלה לא נותנת שם לפונקציה; השם `is_rotation` נבחר כאן.)\nכל הערכים ב-`b` שונים, ולכן `a[0]` מופיע ב-`b` לכל היותר פעם אחת, והמקום שלו `k` קובע את גודל הסיבוב: סיבוב ב-`k` תאים ימינה מעביר את `a[i]` למקום `(i+k)%n`.\nסריקה אחת מוצאת את `k` (אם `a[0]` לא נמצא ב-`b` מחזירים `0`), וסריקה שנייה בודקת את כל המקומות. בדוגמה `a[0]=5` נמצא ב-`b[2]`, כלומר סיבוב ב-2.\nשתי סריקות: $O(n)$. (מערך `b` זהה ל-`a`, כלומר סיבוב ב-0 או ב-`n` תאים, נחשב כאן סיבוב.)",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מציאת המקום `k` של `a[0]` בתוך `b` (הערכים שונים, ולכן `k` יחיד), ו-`0` אם `a[0]` לא נמצא",
+     "points": 6
+    },
+    {
+     "text": "טיפול ב-`n == 0`: מחזירים `1`",
+     "points": 4
+    },
+    {
+     "text": "בדיקת כל התאים: `a[i]` חייב להופיע ב-`b[(i + k) % n]`",
+     "points": 9
+    },
+    {
+     "text": "החזרת `0` בהפרה הראשונה ו-`1` בסוף",
+     "points": 3
+    },
+    {
+     "text": "שתי סריקות לינאריות, כלומר $O(n)$",
+     "points": 3
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לנסות את כל $n$ הסיבובים ולהשוות כל אחד: $O(n^2)$ ולא $O(n)$.",
+    "לשכוח את `% n`: `i + k` יוצא מגבולות `b`.",
+    "לא לנצל שהערכים שונים: רק בגללו המקום של `a[0]` יחיד וקובע את גודל הסיבוב."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "עבור `a = {5,2,8,4,1}` ו-`b = {4,1,5,2,8}`: מהו `k`, האינדקס של `a[0]` בתוך `b`?",
+     "answer": 2,
+     "tol": 0,
+     "explain": "`b[2] = 5 = a[0]`, כלומר סיבוב ב-2 תאים ימינה (ריצה אמיתית: 2)."
+    },
+    {
+     "type": "choice",
+     "prompt": "מה מחזירה הפונקציה עבור `a = {1,2,3}` ו-`b = {3,2,1}`?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`0`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`1`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "`a[0] = 1` נמצא ב-`b[2]`, ולכן `k = 2`. אבל `b[(1+2)%3] = b[0] = 3` שונה מ-`a[1] = 2`: מחזירים 0 (ריצה אמיתית: 0). הפיכת סדר אינה סיבוב."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את התנאי שבודק כל תא.",
+     "code": true,
+     "lines": [
+      "int is_rotation(int *a, int *b, int n)",
+      "{",
+      "   int i, k = -1;",
+      "   if (n == 0) return 1;",
+      "   for (i = 0; i < n; i++)",
+      "      if (b[i] == a[0]) k = i;",
+      "   if (k == -1) return 0;",
+      "   for (i = 0; i < n; i++)",
+      "      if (___) return 0;",
+      "   return 1;",
+      "}"
+     ],
+     "blankIndex": 8,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "b[(i + k) % n] != a[i]"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "b[(i + k + 1) % n] != a[i]"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "b[i] != a[i]"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "b[(k - i + n) % n] != a[i]"
+      }
+     ],
+     "correctId": "a",
+     "explain": "סיבוב ב-`k` תאים ימינה מעביר את `a[i]` למקום `(i + k) % n`. האחרות בודקות היסט שגוי, בלי היסט, או סדר הפוך (ריצה אמיתית: כולן נכשלות על סיבובים אמיתיים)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `is_rotation`.",
+     "code": true,
+     "lines": [
+      "int is_rotation(int *a, int *b, int n)",
+      "{",
+      "   int i, k = -1; if (n == 0) return 1;",
+      "   for (i = 0; i < n; i++) { if (b[i] == a[0]) k = i; } if (k == -1) return 0;",
+      "   for (i = 0; i < n; i++) if (b[(i + k) % n] != a[i]) return 0;",
+      "   return 1;",
+      "}"
+     ],
+     "explain": "הכנה וטיפול ב-`n == 0`, איתור `k`, בדיקת כל התאים, ו-`return 1` (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "שתי סריקות לינאריות: $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 5,
@@ -72,7 +573,125 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nvoid sort_two_parts(int *a, int n)\n{\n   int i, j, k, mid = 1;\n   int *temp;\n   while (mid < n && a[mid - 1] <= a[mid])   // the second part starts at the first descent\n      mid++;\n   if (mid >= n)                             // no descent: already sorted\n      return;\n   temp = (int*)malloc(n * sizeof(int));\n   i = 0; j = mid; k = 0;\n   while (i < mid && j < n)                  // merge the two sorted parts\n   {\n      if (a[i] <= a[j])\n         temp[k++] = a[i++];\n      else\n         temp[k++] = a[j++];\n   }\n   while (i < mid)\n      temp[k++] = a[i++];\n   while (j < n)\n      temp[k++] = a[j++];\n   for (i = 0; i < n; i++)\n      a[i] = temp[i];\n   free(temp);\n}\n```\n(השאלה לא נותנת שם לפונקציה; השם `sort_two_parts` נבחר כאן.)\nקודם מוצאים את תחילת החלק השני: המקום הראשון `mid` שבו `a[mid-1] > a[mid]`. בתוך כל חלק אין ירידה, ולכן הירידה הראשונה היא בדיוק הגבול בין החלקים; אם אין ירידה בכלל, המערך כבר ממוין.\nאחר כך ממזגים את שני החלקים הממוינים למערך עזר, כמו שלב המיזוג במיון מיזוג, ומעתיקים חזרה.\nכל איבר נבדק ומועתק מספר קבוע של פעמים: $O(n)$.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "איתור תחילת החלק השני: המקום הראשון `mid` שבו `a[mid-1] > a[mid]`, ו-`return` כשאין ירידה",
+     "points": 5
+    },
+    {
+     "text": "מיזוג שני החלקים הממוינים למערך עזר בעזרת שני מצביעים `i`, `j`",
+     "points": 7
+    },
+    {
+     "text": "העתקת השארית של החלק שלא נגמר",
+     "points": 3
+    },
+    {
+     "text": "העתקה חזרה ל-`a` ושחרור מערך העזר",
+     "points": 3
+    },
+    {
+     "text": "זמן $O(n)$",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "למיין את כל המערך מחדש ($O(n\\log n)$) במקום לנצל את שני החלקים הממוינים.",
+    "לשכוח להעתיק את שארית החלק שנותר אחרי שהאחר נגמר.",
+    "לא להעתיק חזרה למערך `a`: הפונקציה אמורה למיין אותו במקום."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מהו `mid`, תחילת החלק השני, עבור `a = {1,1,4,8,-2,3}`?",
+     "answer": 4,
+     "tol": 0,
+     "explain": "הירידה הראשונה היא `8 > -2` באינדקסים 3 ו-4, ולכן `mid = 4` (ריצה אמיתית: 4)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מהו `mid` עבור `a = {5,6,7,1,2}`?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "הירידה הראשונה היא `7 > 1`, ולכן `mid = 3` (ריצה אמיתית: 3)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את תנאי המיזוג.",
+     "code": true,
+     "lines": [
+      "void sort_two_parts(int *a, int n)",
+      "{",
+      "   int i, j, k, mid = 1, *temp;",
+      "   while (mid < n && a[mid - 1] <= a[mid]) mid++;",
+      "   if (mid >= n) return;",
+      "   temp = (int*)malloc(n * sizeof(int));",
+      "   i = 0; j = mid; k = 0;",
+      "   while (i < mid && j < n)",
+      "      if (___) temp[k++] = a[i++];",
+      "      else temp[k++] = a[j++];",
+      "   while (i < mid) temp[k++] = a[i++];",
+      "   while (j < n) temp[k++] = a[j++];",
+      "   for (i = 0; i < n; i++) a[i] = temp[i];",
+      "   free(temp);",
+      "}"
+     ],
+     "blankIndex": 8,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "a[i] <= a[j]"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "a[i] >= a[j]"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "a[i] == a[j]"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "a[i] > 0"
+      }
+     ],
+     "correctId": "a",
+     "explain": "מעתיקים תחילה את האיבר הקטן מבין שני ראשי החלקים. האחרות מעתיקות בסדר הפוך או לפי תנאי שאינו קשור (ריצה אמיתית: כולן נכשלות על מערכים אקראיים)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `sort_two_parts`.",
+     "code": true,
+     "lines": [
+      "void sort_two_parts(int *a, int n)",
+      "{",
+      "   int i, j, k, mid = 1, *temp;",
+      "   while (mid < n && a[mid - 1] <= a[mid]) mid++;",
+      "   if (mid >= n) return; temp = (int*)malloc(n * sizeof(int)); i = 0; j = mid; k = 0;",
+      "   while (i < mid && j < n) { if (a[i] <= a[j]) temp[k++] = a[i++]; else temp[k++] = a[j++]; }",
+      "   while (i < mid) temp[k++] = a[i++]; while (j < n) temp[k++] = a[j++];",
+      "   for (i = 0; i < n; i++) a[i] = temp[i]; free(temp);",
+      "}"
+     ],
+     "explain": "הגדרות, איתור `mid`, הכנת מערך העזר, מיזוג, שארית, והעתקה חזרה עם שחרור (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "כל איבר נבדק ומועתק מספר קבוע של פעמים: $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 6,
@@ -83,7 +702,152 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint neighbors_differ(int A[N][N])\n{\n   int i, j;\n   for (i = 0; i < N; i++)\n      for (j = 0; j < N; j++)\n      {\n         if (j + 1 < N && A[i][j] == A[i][j + 1])                  // right\n            return 0;\n         if (i + 1 < N && A[i][j] == A[i + 1][j])                  // down\n            return 0;\n         if (i + 1 < N && j + 1 < N && A[i][j] == A[i + 1][j + 1]) // down-right\n            return 0;\n         if (i + 1 < N && j > 0 && A[i][j] == A[i + 1][j - 1])     // down-left\n            return 0;\n      }\n   return 1;\n}\n```\n(השאלה לא נותנת שם לפונקציה; השם `neighbors_differ` נבחר כאן.)\n`N` מוגדר ב-`#define`. כל זוג שכנים נבדק פעם אחת: כל תא מושווה רק לשכן מימין, מלמטה, מלמטה-ימינה ומלמטה-שמאלה. השכנים שמעליו ומשמאלו כבר הושוו אליו כשעברנו עליהם.\nהתנאים `i+1<N`, `j+1<N` ו-`j>0` מונעים יציאה מגבולות המטריצה.\nלכל היותר ארבע השוואות לכל תא: $O(N^2)$, וזה אופטימלי כי צריך לקרוא כל תא.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מעבר על כל תא ובדיקה מול השכן מימין",
+     "points": 4
+    },
+    {
+     "text": "בדיקה מול השכן מלמטה",
+     "points": 4
+    },
+    {
+     "text": "בדיקה מול שני השכנים באלכסונים למטה: ימינה ושמאלה",
+     "points": 6
+    },
+    {
+     "text": "הגנה על הגבולות (`j + 1 < N`, `i + 1 < N`, `j > 0`)",
+     "points": 3
+    },
+    {
+     "text": "החזרת `0` בשכנים שווים ו-`1` בסוף",
+     "points": 1
+    },
+    {
+     "text": "זמן $O(N^2)$",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לבדוק רק שכנים באותה שורה ובאותה עמודה ולשכוח את האלכסונים.",
+    "לא להגן על הגבולות: `A[i+1][j-1]` בלי `i+1<N` ו-`j>0` יוצא מהמטריצה.",
+    "לבדוק את כל שמונת השכנים לכל תא: נכון, אבל כל זוג נבדק פעמיים."
+   ],
+   "steps": [
+    {
+     "type": "choice",
+     "prompt": "מה מחזירה `neighbors_differ` עבור המטריצה הבאה?\n```\n1 2 1\n3 4 3\n1 2 1\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`1`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`0`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "הערכים השווים (1 בפינות, 3 בצדדים ו-2 למעלה ולמטה) רחוקים זה מזה בשתי שורות או עמודות, ולכן אינם שכנים: מחזירים 1 (ריצה אמיתית: 1)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "במטריצה $3\\times 3$ שכל ערכיה שונים: כמה השוואות בין תאים מתבצעות בסך הכול?",
+     "answer": 20,
+     "tol": 0,
+     "explain": "זוגות שכנים: 6 אופקיים, 6 אנכיים, 4 באלכסון ימינה-למטה ו-4 באלכסון שמאלה-למטה, כלומר 20 (ריצה אמיתית: 20)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הגנת הגבול בבדיקת השכן שלמטה-שמאלה.",
+     "code": true,
+     "lines": [
+      "int neighbors_differ(int A[N][N])",
+      "{",
+      "   int i, j;",
+      "   for (i = 0; i < N; i++)",
+      "      for (j = 0; j < N; j++)",
+      "      {",
+      "         if (j + 1 < N && A[i][j] == A[i][j + 1])",
+      "            return 0;",
+      "         if (i + 1 < N && A[i][j] == A[i + 1][j])",
+      "            return 0;",
+      "         if (i + 1 < N && j + 1 < N && A[i][j] == A[i + 1][j + 1])",
+      "            return 0;",
+      "         if (i + 1 < N && ___ && A[i][j] == A[i + 1][j - 1])",
+      "            return 0;",
+      "      }",
+      "   return 1;",
+      "}"
+     ],
+     "blankIndex": 12,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "j > 0"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "j > 1"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "j + 1 < N"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "j > 2"
+      }
+     ],
+     "correctId": "a",
+     "explain": "השכן שמאלה-למטה קיים רק כאשר `j > 0`. האחרות מדלגות על עמודות (ריצה אמיתית: הן נכשלות על מטריצות אקראיות)."
+    },
+    {
+     "type": "findbug",
+     "prompt": "בגרסה הבאה שורה אחת שונתה והפונקציה מפספסת שכנים. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int neighbors_differ(int A[N][N])",
+      "{",
+      "   int i, j;",
+      "   for (i = 0; i < N; i++)",
+      "      for (j = 0; j < N; j++)",
+      "      {",
+      "         if (j + 1 < N && A[i][j] == A[i][j + 1])",
+      "            return 0;",
+      "         if (i + 1 < N && A[i][j] == A[i + 1][j])",
+      "            return 0;",
+      "         if (i + 1 < N && j + 1 < N && A[i][j] == A[i + 1][j])",
+      "            return 0;",
+      "         if (i + 1 < N && j > 0 && A[i][j] == A[i + 1][j - 1])",
+      "            return 0;",
+      "      }",
+      "   return 1;",
+      "}"
+     ],
+     "bugIndex": 10,
+     "explain": "השורה בודקת את השכן מלמטה פעמיים ולא את האלכסון ימינה-למטה, ולכן במטריצה `{{1,2,3},{4,1,5},{6,7,8}}` (שני 1 באלכסון) מתקבל 1 במקום 0 (ריצה אמיתית)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה כתלות ב-$N$? (למשל `O(N)`)",
+     "accept": [
+      "O(N^2)",
+      "O(N²)"
+     ],
+     "normalize": "complexity",
+     "explain": "מבקרים בכל אחד מ-$N^2$ התאים ובודקים לכל היותר ארבעה שכנים: $O(N^2)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   }
  ]
 }
