@@ -18,7 +18,7 @@ Gates 1, 2 and 7 always stop for Adir.
   - [ ] config.overlay.json written, app repo scaffolded (triage stays in the factory)
 - [ ] Phase 2 - flagship  (GATE 2: Adir tries it in the browser)
   - [ ] topic taxonomy chosen
-  - [ ] flagship sitting transcribed + validated
+  - [x] flagship sitting transcribed + validated (25A-A: 4 code items, Q2 held)
   - [ ] steps (if open questions) + refuter pass
   - [ ] smoke / verify_dom green, running locally
   - [ ] Adir tried it
@@ -55,3 +55,6 @@ Gates 1, 2 and 7 always stop for Adir.
   - [ ] registry status = live
 
 ## Notes
+- Flagship 25A-A (5.02.2025, pp.1-8): 4 items, all kind `code` (arrays, binary_search, recursion, matrices), points 26/26/26/27. Raw generator tools/gen/gen_25A-A.py; rubric and steps still to come (step-author).
+- clang results (tools/verify/25A-A/): Q1, Q3, Q4 official code compiles and matches the examples (Q1 also 20000 random arrays vs brute force). Q2 official code is wrong for positive keys: held, see ASK_ADIR.
+- verify_dom.js fails at section 8 only because course.config.json lists 4 needHelp courses and no courses/ level files exist yet (courses=0); with needHelp empty everything passes.
