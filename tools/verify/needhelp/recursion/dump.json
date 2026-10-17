@@ -1,0 +1,1059 @@
+{
+ "courseId": "recursion",
+ "levels": [
+  {
+   "id": "C01",
+   "order": 1,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C01-Q1",
+     "question": "מה מחזירה `f(4)`?\n```c\nint f(int n) {\n    if (n == 1) return 1;\n    return n * f(n - 1);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`4`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`10`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`24`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`1`"
+      }
+     ]
+    },
+    {
+     "id": "C01-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה `h(3)`?\n```c\nint h(int n) {\n    if (n == 0) return 5;\n    return h(n - 1) + 2;\n}\n```"
+     }
+    },
+    {
+     "id": "C01-Q3",
+     "step": {
+      "type": "numeric",
+      "prompt": "אחרי הרצת `f(4)`, מה ערך המשתנה הגלובלי `calls`? (הוא מונה כמה פעמים נכנסו לפונקציה)\n```c\nint calls = 0;\nint f(int n) {\n    calls++;\n    if (n == 0) return 0;\n    return 1 + f(n - 1);\n}\n```"
+     }
+    },
+    {
+     "id": "C01-Q4",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה, שמחזירה $2^n$ (חזקה של 2) בלי לולאה.",
+      "code": true,
+      "lines": [
+       "if (n == 0) return 1;",
+       "return 2 * pow2(n - 1);",
+       "}",
+       "int pow2(int n) {"
+      ]
+     }
+    },
+    {
+     "id": "C01-Q5",
+     "question": "מה קורה כשמריצים `f(3)`?\n```c\nint f(int n) {\n    return n + f(n - 1);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "היא מחזירה `6`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "היא מחזירה `0`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "היא קורסת: אין מקרה בסיס, והקריאות לא נעצרות"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "היא מחזירה `3`"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C02",
+   "order": 2,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C02-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה `f(3, 4)`?\n```c\nint f(int a, int b) {\n    if (b == 0) return 0;\n    return a + f(a, b - 1);\n}\n```"
+     }
+    },
+    {
+     "id": "C02-Q2",
+     "question": "מה הפונקציה `s` מחשבת עבור כל $n \\ge 1$ ?\n```c\nint s(int n) {\n    if (n == 1) return 1;\n    return s(n - 1) + 2 * n - 1;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`n + n - 1`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`n * (n + 1) / 2`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`n * n`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`2 * n - 1`"
+      }
+     ]
+    },
+    {
+     "id": "C02-Q3",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה `g(4)`?\n```c\nint g(int n) {\n    if (n == 0) return 1;\n    return 2 * g(n - 1) + 1;\n}\n```"
+     }
+    },
+    {
+     "id": "C02-Q4",
+     "question": "מה מחזירה `r(7)`?\n```c\nint r(int n) {\n    if (n <= 0) return 0;\n    return r(n - 2) + n;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`28`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`12`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`16`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`7`"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C03",
+   "order": 3,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C03-Q1",
+     "question": "מה מדפיסה `f(4)`?\n```c\nvoid f(int n) {\n    if (n == 0) return;\n    printf(\"%d \", n * 2);\n    f(n - 1);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`2 4 6 8`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`4 3 2 1`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`8 6 4 2`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`8 6 4 2 0`"
+      }
+     ]
+    },
+    {
+     "id": "C03-Q2",
+     "question": "מה מדפיסה `g(4)`?\n```c\nvoid g(int n) {\n    if (n == 0) return;\n    g(n - 1);\n    printf(\"%d \", n * 2);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`8 6 4 2`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`2 4 6 8`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`1 2 3 4`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`2 4 6 8 0`"
+      }
+     ]
+    },
+    {
+     "id": "C03-Q3",
+     "question": "מה מדפיסה `h(3)`?\n```c\nvoid h(int n) {\n    if (n == 0) return;\n    printf(\"%d \", n);\n    h(n - 1);\n    printf(\"%d \", n * 10);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`3 2 1 10 20 30`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`3 2 1 30 20 10`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`3 30 2 20 1 10`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`1 2 3 10 20 30`"
+      }
+     ]
+    },
+    {
+     "id": "C03-Q4",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה מספרים מדפיסה `k(3)` בסך הכול?\n```c\nvoid k(int n) {\n    if (n == 0) {\n        printf(\"0 \");\n        return;\n    }\n    printf(\"%d \", n);\n    k(n - 1);\n    printf(\"%d \", n);\n}\n```"
+     }
+    },
+    {
+     "id": "C03-Q5",
+     "step": {
+      "type": "fillblank",
+      "prompt": "השלימו את השורה כך ש-`up(3)` תדפיס `1 2 3`.",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "up(n - 1);"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "up(n + 1);"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "up(n);"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "printf(\"%d \", n - 1);"
+       }
+      ],
+      "lines": [
+       "void up(int n) {",
+       "if (n == 0) return;",
+       "___",
+       "printf(\"%d \", n);",
+       "}"
+      ],
+      "blankIndex": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "C04",
+   "order": 4,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C04-Q1",
+     "question": "מה מחזירה `f(4527)`?\n```c\nint f(int n) {\n    if (n == 0) return 0;\n    return n % 10 + f(n / 10);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`7`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`4527`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`18`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`4`"
+      }
+     ]
+    },
+    {
+     "id": "C04-Q2",
+     "question": "מה מדפיסה `p(1230)`?\n```c\nvoid p(int n) {\n    if (n == 0) return;\n    printf(\"%d\", n % 10);\n    p(n / 10);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`1230`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`321`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`0321`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`123`"
+      }
+     ]
+    },
+    {
+     "id": "C04-Q3",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה `f(7177)`?\n```c\nint f(int n) {\n    if (n == 0) return 0;\n    return (n % 10 == 7) + f(n / 10);\n}\n```"
+     }
+    },
+    {
+     "id": "C04-Q4",
+     "step": {
+      "type": "fillblank",
+      "prompt": "השלימו את השורה כך ש-`sumDigits` תחזיר את סכום הספרות של $n$ (למשל 123 נותן 6).",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "n % 10 + sumDigits(n / 10)"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "n / 10 + sumDigits(n % 10)"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "n % 10 * sumDigits(n / 10)"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "sumDigits(n / 10)"
+       }
+      ],
+      "lines": [
+       "int sumDigits(int n) {",
+       "if (n == 0) return 0;",
+       "return ___;",
+       "}"
+      ],
+      "blankIndex": 2
+     }
+    },
+    {
+     "id": "C04-Q5",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר את מספר הספרות של $n$, אבל יש בה שורה אחת שגויה. איזו?",
+      "code": true,
+      "lines": [
+       "int digitCount(int n) {",
+       "if (n < 10) return 1;",
+       "return 1 + digitCount(n % 10);",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C04-Q6",
+     "question": "מה מחזירות `c(0)` ו-`c(305)`, לפי הסדר?\n```c\nint c(int n) {\n    if (n == 0) return 0;\n    return 1 + c(n / 10);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`1 3`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`0 3`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`0 2`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`1 2`"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C05",
+   "order": 5,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C05-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה הקריאה `f(a, 6)` עבור `a = {5, 1, 4, 3, 9, 2}` ?\n```c\nint f(int* a, int n) {\n    if (n == 0) return 0;\n    return (a[n - 1] > 3) + f(a, n - 1);\n}\n```"
+     }
+    },
+    {
+     "id": "C05-Q2",
+     "question": "מה מחזירה `f(a, 2)` עבור `a = {2, 4, 6, 8}` ?\n```c\nint f(int* a, int n) {\n    if (n == 0) return 0;\n    return a[0] + f(a + 1, n - 1);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`20`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`6`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`4`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`12`"
+      }
+     ]
+    },
+    {
+     "id": "C05-Q3",
+     "step": {
+      "type": "fillblank",
+      "prompt": "השלימו את הקריאה הרקורסיבית כך שהפונקציה תחזיר `1` אם המערך ממוין בסדר עולה (לא יורד), אחרת `0`.",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "isAscending(arr + 1, size - 1)"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "isAscending(arr, size - 1)"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "isAscending(arr + 1, size - 2)"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "arr[0] <= arr[1]"
+       }
+      ],
+      "lines": [
+       "int isAscending(int* arr, int size) {",
+       "if (size <= 1) return 1;",
+       "if (arr[0] > arr[1]) return 0;",
+       "return ___;",
+       "}"
+      ],
+      "blankIndex": 3
+     }
+    },
+    {
+     "id": "C05-Q4",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה שמחזירה את האיבר הגדול ביותר במערך (גודל $n \\ge 1$).",
+      "code": true,
+      "lines": [
+       "if (n == 1) return a[0];",
+       "int m = maxArr(a + 1, n - 1);",
+       "return a[0] > m ? a[0] : m;",
+       "}",
+       "int maxArr(int* a, int n) {"
+      ]
+     }
+    },
+    {
+     "id": "C05-Q5",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר `1` אם כל איברי המערך חיוביים. יש בה שורה אחת שגויה. איזו?",
+      "code": true,
+      "lines": [
+       "int allPositive(int* a, int n) {",
+       "if (n == 0) return 1;",
+       "if (a[0] <= 0) return 0;",
+       "return allPositive(a, n - 1);",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "bank:20A-A-Q1a",
+     "bankId": "20A-A-Q1a"
+    }
+   ]
+  },
+  {
+   "id": "C06",
+   "order": 6,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C06-Q1",
+     "question": "מה מחזירה `cnt(\"banana\", 'a')`?\n```c\nint cnt(char* s, char c) {\n    if (*s == '\\0') return 0;\n    return (*s == c) + cnt(s + 1, c);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`6`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`2`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`3`"
+      }
+     ]
+    },
+    {
+     "id": "C06-Q2",
+     "question": "מה מדפיסה `rev(\"abc\")`?\n```c\nvoid rev(char* s) {\n    if (*s == '\\0') return;\n    rev(s + 1);\n    putchar(*s);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`abc`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`cba`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`cb`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`bca`"
+      }
+     ]
+    },
+    {
+     "id": "C06-Q3",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה `f(\"hello world\")` ? (הרווח נספר כתו רגיל)\n```c\nint f(char* s) {\n    if (*s == '\\0') return 0;\n    return (*s >= 'a' && *s <= 'm') + f(s + 1);\n}\n```"
+     }
+    },
+    {
+     "id": "C06-Q4",
+     "step": {
+      "type": "fillblank",
+      "prompt": "השלימו כך ש-`hasChar` תחזיר `1` אם התו `c` מופיע במחרוזת, אחרת `0`.",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "hasChar(s + 1, c)"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "hasChar(s, c)"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "hasChar(s + 1, c) + 1"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "0"
+       }
+      ],
+      "lines": [
+       "int hasChar(char* s, char c) {",
+       "if (*s == '\\0') return 0;",
+       "if (*s == c) return 1;",
+       "return ___;",
+       "}"
+      ],
+      "blankIndex": 3
+     }
+    },
+    {
+     "id": "C06-Q5",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה שמדפיסה מחרוזת מהסוף להתחלה.",
+      "code": true,
+      "lines": [
+       "if (*s == '\\0') return;",
+       "rev(s + 1);",
+       "putchar(*s);",
+       "}",
+       "void rev(char* s) {"
+      ]
+     }
+    },
+    {
+     "id": "C06-Q6",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה לספור כמה פעמים התו `c` מופיע במחרוזת. יש בה שורה אחת שגויה. איזו?",
+      "code": true,
+      "lines": [
+       "int cnt(char* s, char c) {",
+       "if (*s == '\\0') return 0;",
+       "if (*s == c) return 1 + cnt(s + 1, c);",
+       "return cnt(s, c);",
+       "}"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "C07",
+   "order": 7,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C07-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה `w(5)`?\n```c\nint w(int n) {\n    if (n == 0) return 1;\n    if (n == 1) return 2;\n    return w(n - 1) + w(n - 2);\n}\n```"
+     }
+    },
+    {
+     "id": "C07-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה קריאות ל-`fib` מתבצעות בסך הכול בהרצת `fib(5)`, כולל הקריאה הראשונה?\n```c\nint calls = 0;\nint fib(int n) {\n    calls++;\n    if (n <= 1) return n;\n    return fib(n - 1) + fib(n - 2);\n}\n```"
+     }
+    },
+    {
+     "id": "C07-Q3",
+     "question": "מה מדפיסה `f(3)`?\n```c\nvoid f(int n) {\n    if (n == 0) return;\n    f(n - 1);\n    printf(\"%d \", n);\n    f(n - 1);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`3 2 1 1 2 3`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`1 2 3 1 2 3`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`1 2 1 3 1 2 1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`3 2 1 3 2 1`"
+      }
+     ]
+    },
+    {
+     "id": "C07-Q4",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה קריאות ל-`f` מתבצעות בהרצת `f(4)`, כולל הראשונה וקריאות מקרה הבסיס?\n```c\nint calls = 0;\nvoid f(int n) {\n    calls++;\n    if (n == 0) return;\n    f(n - 1);\n    f(n - 1);\n}\n```"
+     }
+    },
+    {
+     "id": "C07-Q5",
+     "question": "מה סדר הגודל של זמן הריצה של `f(n)` מהשאלה הקודמת?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "$O(n)$"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "$O(n^2)$"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "$O(2^n)$"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "$O(\\log n)$"
+      }
+     ]
+    },
+    {
+     "id": "C07-Q6",
+     "step": {
+      "type": "fillblank",
+      "prompt": "השלימו את שורת ההחזרה כך ש-`fib` תחזיר את איבר מספר $n$ של סדרת פיבונאצ'י ($0, 1, 1, 2, 3, 5, \\ldots$).",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "fib(n - 1) + fib(n - 1)"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "fib(n - 1) * fib(n - 2)"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "fib(n - 1) + fib(n - 2)"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "fib(n - 2) + fib(n - 3)"
+       }
+      ],
+      "lines": [
+       "int fib(int n) {",
+       "if (n <= 1) return n;",
+       "return ___;",
+       "}"
+      ],
+      "blankIndex": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "C08",
+   "order": 8,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C08-Q1",
+     "question": "מה קורה בהרצת `f(5)`?\n```c\nint f(int n) {\n    if (n == 0) return 0;\n    return n + f(n - 2);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "היא מחזירה `9`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "היא מחזירה `0`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "היא מחזירה `5`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "היא קורסת: ערכי n הם 5, 3, 1, -1, ... ולא מגיעים ל-0"
+      }
+     ]
+    },
+    {
+     "id": "C08-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה `f(10)`?\n```c\nint f(int n) {\n    if (n <= 0) return 0;\n    return 1 + f(n - 3);\n}\n```"
+     }
+    },
+    {
+     "id": "C08-Q3",
+     "step": {
+      "type": "fillblank",
+      "prompt": "הפונקציה אמורה לספור כמה מהמספרים $n, n-2, n-4, \\ldots$ הם חיוביים (לכל $n \\ge 0$). איזה תנאי בסיס מתאים?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "n <= 0"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "n < 0"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "n == 0"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "n == 1"
+       }
+      ],
+      "lines": [
+       "int f(int n) {",
+       "if (___) return 0;",
+       "return 1 + f(n - 2);",
+       "}"
+      ],
+      "blankIndex": 1
+     }
+    },
+    {
+     "id": "C08-Q4",
+     "question": "קוראים `f(3)` ואחר כך (בנפרד) מדפיסים מה ש-`f(2)` מחזירה. מה מודפס?\n```c\nint f(int n) {\n    static int c = 0;\n    c++;\n    if (n == 0) return c;\n    return f(n - 1);\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`3`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`4`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`7`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`8`"
+      }
+     ]
+    },
+    {
+     "id": "C08-Q5",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר את סכום המספרים מ-1 עד $n$. יש בה שורה אחת שגויה. איזו?",
+      "code": true,
+      "lines": [
+       "int sumTo(int n) {",
+       "if (n == 0) return 0;",
+       "return sumTo(n - 1);",
+       "}"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "C09",
+   "order": 9,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C09-Q1",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה, שמחזירה כמה ביטים 1 יש בייצוג הבינארי של $n \\ge 0$.",
+      "code": true,
+      "lines": [
+       "if (n == 0) return 0;",
+       "return n % 2 + onesBin(n / 2);",
+       "}",
+       "int onesBin(int n) {"
+      ]
+     }
+    },
+    {
+     "id": "C09-Q2",
+     "step": {
+      "type": "fillblank",
+      "prompt": "השלימו כך שהפונקציה תחזיר `1` אם המערך פלינדרום (נקרא אותו דבר משני הכיוונים), אחרת `0`.",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "n - 1"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "n - 2"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "n - 3"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "n / 2"
+       }
+      ],
+      "lines": [
+       "int isPal(int* arr, int n) {",
+       "if (n <= 1) return 1;",
+       "if (arr[0] != arr[n - 1]) return 0;",
+       "return isPal(arr + 1, ___);",
+       "}"
+      ],
+      "blankIndex": 3
+     }
+    },
+    {
+     "id": "C09-Q3",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר $x^n$ ($n \\ge 0$). יש בה שורה אחת שגויה. איזו?",
+      "code": true,
+      "lines": [
+       "int power(int x, int n) {",
+       "if (n == 0) return 1;",
+       "return x + power(x, n - 1);",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C09-Q4",
+     "question": "השלימו את השורה החסרה כך ש-`prodDigits(n)` תחזיר את מכפלת הספרות של $n \\ge 1$ (למשל 234 נותן 24).\n```c\nint prodDigits(int n) {\n    if (n < 10) return n;\n    return ___;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`n % 10 + prodDigits(n / 10)`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`n / 10 * prodDigits(n % 10)`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`n % 10 * prodDigits(n / 10)`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`prodDigits(n / 10)`"
+      }
+     ]
+    },
+    {
+     "id": "C09-Q5",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה `g(3, 5)`?\n```c\nint g(int x, int n) {\n    if (n == 0) return 1;\n    if (n % 2 == 0) {\n        int h = g(x, n / 2);\n        return h * h;\n    }\n    return x * g(x, n - 1);\n}\n```"
+     }
+    },
+    {
+     "id": "bank:19A-A-Q2",
+     "bankId": "19A-A-Q2"
+    }
+   ]
+  },
+  {
+   "id": "C10",
+   "order": 10,
+   "boss": true,
+   "questions": [
+    {
+     "id": "bank:19A-A-Q1",
+     "bankId": "19A-A-Q1"
+    },
+    {
+     "id": "bank:24A-A-Q3",
+     "bankId": "24A-A-Q3"
+    },
+    {
+     "id": "bank:22A-A-Q2",
+     "bankId": "22A-A-Q2"
+    },
+    {
+     "id": "bank:25A-A-Q3",
+     "bankId": "25A-A-Q3"
+    },
+    {
+     "id": "bank:22A-B-Q2",
+     "bankId": "22A-B-Q2"
+    },
+    {
+     "id": "bank:20A-A-Q2",
+     "bankId": "20A-A-Q2"
+    }
+   ]
+  }
+ ]
+}
