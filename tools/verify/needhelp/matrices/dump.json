@@ -1,0 +1,801 @@
+{
+ "courseId": "matrices",
+ "levels": [
+  {
+   "id": "C01",
+   "order": 1,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C01-Q1",
+     "question": "נתונה המטריצה:\n```c\nint m[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};\n```\nמה הערך של `m[1][2]` ?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "10"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "7"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "8"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "3"
+      }
+     ]
+    },
+    {
+     "id": "C01-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה תאים יש במטריצה שהוצהרה כך: `int a[5][7];` ?"
+     }
+    },
+    {
+     "id": "C01-Q3",
+     "question": "איזו הצהרה יוצרת מטריצה עם **4 שורות ו-6 עמודות**?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`int a[6][4];`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`int a[4][];`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`int a[4][6];`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`int a[24];`"
+      }
+     ]
+    },
+    {
+     "id": "C01-Q4",
+     "question": "במטריצה `int mat[R][C]` (כש-`R` ו-`C` קבועים) איזה תא הוא **התא האחרון**, בשורה האחרונה ובעמודה האחרונה?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`mat[R][C]`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`mat[R-1][C-1]`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`mat[R-1][C]`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`mat[R][C-1]`"
+      }
+     ]
+    },
+    {
+     "id": "C01-Q5",
+     "question": "מה ידפיס הקוד?\n```c\nint m[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};\nint *p = &m[0][0];\nprintf(\"%d\", p[6]);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "3"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "6"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "7"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "8"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C02",
+   "order": 2,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C02-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nint a[3][3] = {{3, 8, 1}, {6, 2, 9}, {4, 7, 6}};\nint s = 0;\nfor (int i = 0; i < 3; i++)\n    for (int j = 0; j < 3; j++)\n        s += a[i][j];\nprintf(\"%d\", s);\n```"
+     }
+    },
+    {
+     "id": "C02-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nint a[3][3] = {{3, 8, 1}, {6, 2, 9}, {4, 7, 6}};\nint count = 0;\nfor (int i = 0; i < 3; i++)\n    for (int j = 0; j < 3; j++)\n        if (a[i][j] > 4)\n            count++;\nprintf(\"%d\", count);\n```"
+     }
+    },
+    {
+     "id": "C02-Q3",
+     "question": "מה ידפיס הקוד? (הפלט בלי רווחים)\n```c\nint a[2][3] = {{1, 2, 3}, {4, 5, 6}};\nfor (int j = 0; j < 3; j++)\n    for (int i = 0; i < 2; i++)\n        printf(\"%d\", a[i][j]);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "123456"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "321654"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "142536"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "1245"
+      }
+     ]
+    },
+    {
+     "id": "C02-Q4",
+     "question": "רוצים למצוא את הערך **המקסימלי** במטריצה `a[R][C]`, שיכולה להכיל גם מספרים שליליים בלבד. איזה אתחול של `max` נכון לפני הלולאות?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`int max = 0;`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`int max = a[0][0];`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`int max = -1;`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`int max = INT_MAX;`"
+      }
+     ]
+    },
+    {
+     "id": "C02-Q5",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה לספור כמה תאים חיוביים יש במטריצה `ROWS x COLS`. מצאו את השורה השגויה.",
+      "code": true,
+      "lines": [
+       "#define ROWS 2",
+       "#define COLS 3",
+       "int countPositive(int a[ROWS][COLS]) {",
+       "    int count = 0;",
+       "    for (int i = 0; i < ROWS; i++)",
+       "        for (int j = 0; j < ROWS; j++)",
+       "            if (a[i][j] > 0)",
+       "                count++;",
+       "    return count;",
+       "}"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "C03",
+   "order": 3,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C03-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nint a[3][3] = {{1, 4, 2}, {6, 0, 3}, {5, 5, 1}};\nint s = 0;\nfor (int k = 0; k < 3; k++)\n    s += a[k][2];\nprintf(\"%d\", s);\n```"
+     }
+    },
+    {
+     "id": "C03-Q2",
+     "step": {
+      "type": "fillblank",
+      "prompt": "הפונקציה מחזירה את סכום עמודה `j` של מטריצה `N x N`. מה צריך להיכנס במקום החסר?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "a[j][k]"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "a[k][j]"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "a[k][k]"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "a[k][0]"
+       }
+      ],
+      "lines": [
+       "int colSum(int a[][N], int j) {",
+       "    int s = 0;",
+       "    for (int k = 0; k < N; k++)",
+       "        s += ___;",
+       "    return s;",
+       "}"
+      ],
+      "blankIndex": 3
+     }
+    },
+    {
+     "id": "C03-Q3",
+     "question": "מה ידפיס הקוד?\n```c\nint a[3][3] = {{1, 4, 2}, {6, 0, 3}, {5, 5, 1}};\nint best = 0, bestSum = -1;\nfor (int i = 0; i < 3; i++) {\n    int s = 0;\n    for (int j = 0; j < 3; j++)\n        s += a[i][j];\n    if (s > bestSum) {\n        bestSum = s;\n        best = i;\n    }\n}\nprintf(\"%d\", best);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "11"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "0"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "2"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "1"
+      }
+     ]
+    },
+    {
+     "id": "C03-Q4",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר 1 אם לכל השורות אותו סכום, ו-0 אחרת. מצאו את השורה השגויה.",
+      "code": true,
+      "lines": [
+       "int equalRows(int a[][N]) {",
+       "    int ref = 0;",
+       "    for (int j = 0; j < N; j++)",
+       "        ref += a[j][0];",
+       "    for (int i = 1; i < N; i++) {",
+       "        int s = 0;",
+       "        for (int j = 0; j < N; j++)",
+       "            s += a[i][j];",
+       "        if (s != ref)",
+       "            return 0;",
+       "    }",
+       "    return 1;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C03-Q5",
+     "step": {
+      "type": "text",
+      "prompt": "מה סיבוכיות הזמן של `equalRows` על מטריצה `N x N`? (כתבו בצורה `O(...)`)",
+      "normalize": "complexity"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C04",
+   "order": 4,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C04-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nint e[4][4] = {{2, 0, 5, 1}, {3, 4, 1, 7}, {6, 2, 9, 0}, {8, 1, 3, 5}};\nint s = 0;\nfor (int i = 0; i < 4; i++)\n    s += e[i][i];\nprintf(\"%d\", s);\n```"
+     }
+    },
+    {
+     "id": "C04-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "באותה מטריצה:\n```c\nint e[4][4] = {{2, 0, 5, 1}, {3, 4, 1, 7}, {6, 2, 9, 0}, {8, 1, 3, 5}};\nint s = 0;\nfor (int i = 0; i < 4; i++)\n    s += e[i][3 - i];\nprintf(\"%d\", s);\n```\nמה יודפס?"
+     }
+    },
+    {
+     "id": "C04-Q3",
+     "question": "בלולאה אחת שבה `i` רץ מ-0 עד `N-1`, איזה ביטוי ניגש לתא של **האלכסון המשני** בשורה `i` ?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`a[i][N-i]`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`a[i][N-1]`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`a[N-1-i][N-1-i]`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`a[i][N-1-i]`"
+      }
+     ]
+    },
+    {
+     "id": "C04-Q4",
+     "question": "איזה תנאי נכון לתא `(i, j)` שנמצא על **האלכסון המשני** של מטריצה `N x N` ?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`i + j == N`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`i - j == N - 1`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`i * j == N - 1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`i + j == N - 1`"
+      }
+     ]
+    },
+    {
+     "id": "C04-Q5",
+     "step": {
+      "type": "fillblank",
+      "prompt": "הפונקציה בודקת אם סכום האלכסון הראשי שווה לסכום המשני. מה צריך להיכנס במקום החסר?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "N - i"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "N - 1"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "i"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "N - 1 - i"
+       }
+      ],
+      "lines": [
+       "int sameDiagonals(int a[][N]) {",
+       "    int d1 = 0, d2 = 0;",
+       "    for (int i = 0; i < N; i++) {",
+       "        d1 += a[i][i];",
+       "        d2 += a[i][___];",
+       "    }",
+       "    return d1 == d2;",
+       "}"
+      ],
+      "blankIndex": 4
+     }
+    }
+   ]
+  },
+  {
+   "id": "C05",
+   "order": 5,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C05-Q1",
+     "question": "מעבירים לפונקציה את המטריצה `int g[5][7];` בקריאה `f(g, 5)`, והפונקציה ניגשת אל `m[1][2]`. איזו חתימה נכונה?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`void f(int m[5][], int cols)`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`void f(int m[][], int rows, int cols)`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`void f(int m[], int rows, int cols)`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`void f(int m[][7], int rows)`"
+      }
+     ]
+    },
+    {
+     "id": "C05-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "במטריצה `int a[4][5]`, באיזה מקום (מ-0) ברצף הזיכרון נמצא התא `a[2][3]` ?"
+     }
+    },
+    {
+     "id": "C05-Q3",
+     "question": "מה ידפיס הקוד?\n```c\nvoid clearDiag(int m[][3], int rows) {\n    for (int i = 0; i < rows; i++)\n        m[i][i] = 0;\n}\n\nint main() {\n    int a[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\n    clearDiag(a, 3);\n    int s = 0;\n    for (int i = 0; i < 3; i++)\n        for (int j = 0; j < 3; j++)\n            s += a[i][j];\n    printf(\"%d\", s);\n    return 0;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "45"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "30"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "15"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "0"
+      }
+     ]
+    },
+    {
+     "id": "C05-Q4",
+     "step": {
+      "type": "fillblank",
+      "prompt": "המטריצה מוצהרת `int g[4][6];` והפונקציה נקראת כך: `countPositive(g, 4)`. מה צריך להיכנס בחתימה במקום החסר?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "4"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "6"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "5"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "3"
+       }
+      ],
+      "lines": [
+       "int countPositive(int m[][___], int rows) {",
+       "    int c = 0;",
+       "    for (int i = 0; i < rows; i++)",
+       "        for (int j = 0; j < 6; j++)",
+       "            if (m[i][j] > 0)",
+       "                c++;",
+       "    return c;",
+       "}"
+      ],
+      "blankIndex": 0
+     }
+    },
+    {
+     "id": "C05-Q5",
+     "question": "מה ידפיס הקוד?\n```c\nint a[2][3] = {{1, 2, 3}, {4, 5, 6}};\nint out[3] = {0, 0, 0};\nfor (int i = 0; i < 2; i++)\n    for (int j = 0; j < 3; j++)\n        out[j] += a[i][j];\nprintf(\"%d %d %d\", out[0], out[1], out[2]);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "6 15 0"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "4 5 6"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "5 7 9"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "21 0 0"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C06",
+   "order": 6,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C06-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה חלונות בגודל 3x3 נכנסים כולם בתוך מטריצה בגודל 6 שורות על 5 עמודות?"
+     }
+    },
+    {
+     "id": "C06-Q2",
+     "question": "איזה תנאי בודק בבטחה אם התא `a[i][j]` שווה לשכן מימין, במטריצה `a[N][N]`?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`a[i][j] == a[i][j + 1] && j + 1 < N`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`j < N && a[i][j] == a[i][j + 1]`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`j + 1 < N && a[i][j] == a[i][j + 1]`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`j + 1 <= N && a[i][j] == a[i][j + 1]`"
+      }
+     ]
+    },
+    {
+     "id": "C06-Q3",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nint a[3][3] = {{1, 1, 2}, {3, 3, 3}, {2, 1, 1}};\nint count = 0;\nfor (int i = 0; i < 3; i++)\n    for (int j = 0; j < 2; j++)\n        if (a[i][j] == a[i][j + 1])\n            count++;\nprintf(\"%d\", count);\n```"
+     }
+    },
+    {
+     "id": "C06-Q4",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה סופרת כמה תאים שווים לתא שמתחתם. מצאו את השורה השגויה.",
+      "code": true,
+      "lines": [
+       "#define N 3",
+       "int equalBelow(int a[N][N]) {",
+       "    int cnt = 0;",
+       "    for (int i = 0; i < N; i++)",
+       "        for (int j = 0; j < N; j++)",
+       "            if (a[i][j] == a[i + 1][j])",
+       "                cnt++;",
+       "    return cnt;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C06-Q5",
+     "question": "מה ידפיס הקוד, שמחשב את סכום **שמונת השכנים** של התא האמצעי?\n```c\nint a[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\nint s = 0;\nfor (int di = -1; di <= 1; di++)\n    for (int dj = -1; dj <= 1; dj++)\n        if (di != 0 || dj != 0)\n            s += a[1 + di][1 + dj];\nprintf(\"%d\", s);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "45"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "40"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "25"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "23"
+      }
+     ]
+    },
+    {
+     "id": "C06-Q6",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד? (הערכים הם 0 עד 9)\n```c\nint a[3][3] = {{9, 1, 9}, {2, 9, 3}, {4, 5, 6}};\nint count[10] = {0};\nfor (int i = 0; i < 3; i++)\n    for (int j = 0; j < 3; j++)\n        count[a[i][j]]++;\nprintf(\"%d\", count[9]);\n```"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C07",
+   "order": 7,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C07-Q1",
+     "question": "מה ידפיס הקוד?\n```c\nint m[2][4] = {{9, 9, 9, 9}, {1, 2, 3, 4}};\nint r = 1;\nint last = m[r][3];\nfor (int c = 3; c > 0; c--)\n    m[r][c] = m[r][c - 1];\nm[r][0] = last;\nfor (int c = 0; c < 4; c++)\n    printf(\"%d \", m[r][c]);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "2 3 4 1"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "4 1 1 1"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "4 1 2 3"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "1 1 2 3"
+      }
+     ]
+    },
+    {
+     "id": "C07-Q2",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את הפונקציה שמזיזה את שורה `r` צעד ימינה בצורה מחזורית.",
+      "code": true,
+      "lines": [
+       "for (int c = N - 1; c > 0; c--)",
+       "    m[r][c] = m[r][c - 1];",
+       "m[r][0] = last;",
+       "int last = m[r][N - 1];"
+      ]
+     }
+    },
+    {
+     "id": "C07-Q3",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\n#define N 4\nint m[N][N] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {5, 6, 0, 8}, {1, 2, 3, 9}};\nint violations = 0;\nfor (int i = 0; i < N / 2; i++)\n    for (int j = 0; j < N; j++)\n        if (m[i][j] != m[N - 1 - i][j])\n            violations++;\nprintf(\"%d\", violations);\n```"
+     }
+    },
+    {
+     "id": "C07-Q4",
+     "question": "מה ידפיס הקוד?\n```c\n#define N 4\nint m[N][N] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {5, 6, 0, 8}, {1, 2, 3, 9}};\nint violations = 0;\nfor (int i = 0; i < N; i++)\n    for (int j = 0; j < N; j++)\n        if (m[i][j] != m[N - 1 - i][j])\n            violations++;\nprintf(\"%d\", violations);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "2"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "3"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "1"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "4"
+      }
+     ]
+    },
+    {
+     "id": "C07-Q5",
+     "step": {
+      "type": "findbug",
+      "prompt": "הלולאה אמורה להחליף בין שורה `r1` לשורה `r2`. מצאו את השורה השגויה.",
+      "code": true,
+      "lines": [
+       "for (int j = 0; j < N; j++) {",
+       "    int t = m[r1][j];",
+       "    m[r1][j] = m[r2][j];",
+       "    m[r2][j] = m[r1][j];",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C07-Q6",
+     "step": {
+      "type": "numeric",
+      "prompt": "המטריצה ממוינת בשורות ובעמודות. כמה תאים נבדקים עד שהחיפוש של `6` מסתיים?\n```c\nint a[3][3] = {{1, 4, 7}, {2, 5, 8}, {3, 6, 9}};\nint key = 6, i = 0, j = 2, steps = 0;\nwhile (i < 3 && j >= 0) {\n    steps++;\n    if (a[i][j] == key) break;\n    if (a[i][j] > key) j--; else i++;\n}\nprintf(\"%d\", steps);\n```"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C08",
+   "order": 8,
+   "boss": true,
+   "questions": [
+    {
+     "id": "bank:22A-B-Q1a",
+     "bankId": "22A-B-Q1a"
+    },
+    {
+     "id": "bank:22A-B-Q1b",
+     "bankId": "22A-B-Q1b"
+    },
+    {
+     "id": "bank:20A-A-Q5a",
+     "bankId": "20A-A-Q5a"
+    },
+    {
+     "id": "bank:20A-A-Q5b",
+     "bankId": "20A-A-Q5b"
+    },
+    {
+     "id": "bank:25A-A-Q4",
+     "bankId": "25A-A-Q4"
+    }
+   ]
+  }
+ ]
+}
