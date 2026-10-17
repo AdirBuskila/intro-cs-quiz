@@ -33,7 +33,57 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "contextId": "c1"
+   "contextId": "c1",
+   "rubric": [
+    {
+     "text": "הצבה נכונה בנוסחת הנסיגה `a[n-1] / n + fun_rec(a, n - 1)*(n-1)/n` ופירוק עד מקרה הבסיס `n == 1`",
+     "points": 2
+    },
+    {
+     "text": "חישוב הערכים הביניים לפי הסדר: מקרה הבסיס, אחר כך הרמות העוקבות",
+     "points": 1
+    },
+    {
+     "text": "תוצאה סופית `4.0`",
+     "points": 1
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לשכוח את הגורם `(n-1)/n` בקריאה הרקורסיבית ולחבר פשוט את `a[n-1] / n`.",
+    "חילוק שלם: כל המשתנים כאן `double`, ולכן `a[n-1] / n` אינו מעוגל."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `fun_rec(a, 2)` עבור `a = {-3, 6, 7, -2, 12}`?",
+     "answer": 1.5,
+     "tol": 0,
+     "explain": "$\\frac{6}{2}+(-3)\\cdot\\frac{1}{2}=1.5$ (ריצה אמיתית: 1.5)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `fun_rec(a, 3)`? (עגלו לשתי ספרות אחרי הנקודה)",
+     "answer": 3.33,
+     "tol": 0.01,
+     "explain": "$\\frac{7}{3}+1.5\\cdot\\frac{2}{3}=\\frac{10}{3}$ (ריצה אמיתית: 3.333333)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `fun_rec(a, 4)`?",
+     "answer": 2,
+     "tol": 0,
+     "explain": "$\\frac{-2}{4}+\\frac{10}{3}\\cdot\\frac{3}{4}=-0.5+2.5=2$ (ריצה אמיתית: 2.0)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `fun_rec(a, 5)`, כלומר התשובה לסעיף?",
+     "answer": 4,
+     "tol": 0,
+     "explain": "$\\frac{12}{5}+2\\cdot\\frac{4}{5}=2.4+1.6=4$ (ריצה אמיתית: 4.0)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 1,
@@ -45,7 +95,50 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "contextId": "c1"
+   "contextId": "c1",
+   "rubric": [
+    {
+     "text": "פירוק הקריאה `n = 4` לאיבר `a[3] / 4` ולקריאה `fun_rec(a, 3)` שמוכפלת ב-`3/4`",
+     "points": 2
+    },
+    {
+     "text": "חישוב `fun_rec(a, 3)` כממוצע שלושת האיברים הראשונים",
+     "points": 1
+    },
+    {
+     "text": "תוצאה סופית `2.0`",
+     "points": 1
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "להשתמש ב-`n = 5` או במערך המלא במקום באיבר ה-4 הראשונים בלבד.",
+    "להפעיל את `fun_rec(a, 3)` בלי להכפיל ב-`(n-1)/n = 3/4`."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מהו הביטוי `a[n-1] / n` כש-`n = 4`?",
+     "answer": -0.5,
+     "tol": 0,
+     "explain": "`a[3] = -2`, ו-$\\frac{-2}{4}=-0.5$ (ריצה אמיתית: -0.5)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מהו `fun_rec(a, 3)*3/4`? (עגלו לשתי ספרות אחרי הנקודה)",
+     "answer": 2.5,
+     "tol": 0.01,
+     "explain": "$\\frac{10}{3}\\cdot\\frac{3}{4}=2.5$ (ריצה אמיתית: 2.5)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `fun_rec(a, 4)`?",
+     "answer": 2,
+     "tol": 0,
+     "explain": "$-0.5+2.5=2$ (ריצה אמיתית: 2.0)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 1,
@@ -57,7 +150,92 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "contextId": "c1"
+   "contextId": "c1",
+   "rubric": [
+    {
+     "text": "זיהוי שהפונקציה מחשבת את הממוצע של $n$ האיברים הראשונים",
+     "points": 3
+    },
+    {
+     "text": "הנחת האינדוקציה: `fun_rec(a, n-1)` היא ממוצע $n-1$ האיברים הראשונים",
+     "points": 2
+    },
+    {
+     "text": "הכפלה ב-$\\frac{n-1}{n}$ הופכת את הממוצע לסכום חלקי $n$, ולכן יחד עם $\\frac{a[n-1]}{n}$ מתקבל הסכום חלקי $n$",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לענות \"סכום\" או \"המקסימום\" רק מתוך הדוגמה, בלי להוכיח לכל $n$.",
+    "לא לנמק מדוע הגורם $\\frac{n-1}{n}$ נדרש: הוא הופך ממוצע של $n-1$ איברים לסכומם חלקי $n$."
+   ],
+   "steps": [
+    {
+     "type": "choice",
+     "prompt": "מה מחשבת `fun_rec(a, n)` עבור מערך של מספרים ממשיים?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "ממוצע $n$ האיברים הראשונים"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "סכום $n$ האיברים הראשונים"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "האיבר האחרון חלקי $n$"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "המקסימום מבין $n$ האיברים הראשונים"
+      }
+     ],
+     "correctId": "a",
+     "explain": "על `{2, 4, 6, 8}` ו-`n = 4` מתקבל 5, הממוצע (ריצה אמיתית: 5.0), וכך גם על 10000 מערכים אקראיים."
+    },
+    {
+     "type": "choice",
+     "prompt": "אם `fun_rec(a, n-1)` הוא ממוצע $n-1$ האיברים הראשונים, מה שווה `fun_rec(a, n-1)*(n-1)/n`?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "סכום $n-1$ האיברים הראשונים חלקי $n$"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "סכום $n-1$ האיברים הראשונים חלקי $n-1$"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "סכום $n$ האיברים חלקי $n-1$"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "הממוצע של $n-1$ האיברים הראשונים"
+      }
+     ],
+     "correctId": "a",
+     "explain": "ממוצע כפול $(n-1)$ נותן את הסכום, וחילוק ב-$n$ משאיר סכום חלקי $n$."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `fun_rec` על `{2, 4, 6, 8}` עם `n = 4`?",
+     "answer": 5,
+     "tol": 0,
+     "explain": "הממוצע של 2, 4, 6, 8 הוא 5 (ריצה אמיתית: 5.0)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 2,
@@ -67,7 +245,121 @@
    "solution": "**פתרון רשמי** (20A-A עמ' 3):\n```c\nint CalGimatria ( char * str , int * gematria )\n{\n\n    if (*str == '\\0')\n    {\n        return 0;\n    }\n    return gematria [*str - 'a'] + CalGimatria (str + 1, gematria);\n}\n```",
    "solutionSource": "official-pdf",
    "official": true,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מקרה בסיס: `*str == '\\0'` מחזיר `0`",
+     "points": 4
+    },
+    {
+     "text": "שימוש נכון בטבלה: האינדקס `*str - 'a'` ב-`gematria`",
+     "points": 6
+    },
+    {
+     "text": "חיבור הערך של התו הנוכחי לקריאה הרקורסיבית על `str + 1`",
+     "points": 7
+    },
+    {
+     "text": "רקורסיה אחת לכל תו, כלומר זמן לינארי בלי העתקת המחרוזת",
+     "points": 3
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לשכוח את מקרה הבסיס של סוף המחרוזת ולהמשיך מעבר ל-`'\\0'`.",
+    "לגשת ל-`gematria[*str]` בלי להחסיר `'a'` ולצאת מגבולות המערך.",
+    "לקרוא רקורסיבית עם `str` במקום `str + 1`, ולא להתקדם."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `CalGimatria(\"exam\", gematria)`?",
+     "answer": 646,
+     "tol": 0,
+     "explain": "$5+600+1+40=646$ (ריצה אמיתית: 646)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה הקריאה על המחרוזת `\"zz\"`?",
+     "answer": 1600,
+     "tol": 0,
+     "explain": "כל `z` שווה 800: $800+800=1600$ (ריצה אמיתית: 1600)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את שורת ההחזרה הרקורסיבית.",
+     "code": true,
+     "lines": [
+      "int CalGimatria ( char * str , int * gematria )",
+      "{",
+      "    if (*str == '\\0')",
+      "    {",
+      "        return 0;",
+      "    }",
+      "___",
+      "}"
+     ],
+     "blankIndex": 6,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "return gematria [*str - 'a'] + CalGimatria (str + 1, gematria);"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "return gematria [*str - 'a'] + CalGimatria (str, gematria);"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "return gematria [*str] + CalGimatria (str + 1, gematria);"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "return gematria [*str - 'a'];"
+      }
+     ],
+     "correctId": "a",
+     "explain": "מוסיפים את גימטריית התו הנוכחי ועוברים לתו הבא (`str + 1`); האינדקס הוא מרחק האות מ-`'a'`."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `CalGimatria`.",
+     "code": true,
+     "lines": [
+      "int CalGimatria ( char * str , int * gematria )",
+      "{",
+      "    if (*str == '\\0')",
+      "    {",
+      "        return 0;",
+      "    }",
+      "    return gematria [*str - 'a'] + CalGimatria (str + 1, gematria);",
+      "}"
+     ],
+     "explain": "קודם בדיקת סוף המחרוזת, ואחר כך הערך של התו הנוכחי ועוד שאר המחרוזת."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int CalGimatria ( char * str , int * gematria )",
+      "{",
+      "    if (*str == '\\0')",
+      "    {",
+      "        return 0;",
+      "    }",
+      "    return gematria [*str - 'a'] * CalGimatria (str + 1, gematria);",
+      "}"
+     ],
+     "bugIndex": 6,
+     "explain": "כפל במקום חיבור: מקרה הבסיס מחזיר 0, ולכן הכול מוכפל ב-0 ו-\"exam\" מחזירה 0 (ריצה אמיתית: 0)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 3,
@@ -79,7 +371,190 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "contextId": "c3"
+   "contextId": "c3",
+   "rubric": [
+    {
+     "text": "תנאי הלולאה `i < m && k < n`: עוצרים כשאחד המערכים נגמר",
+     "points": 4
+    },
+    {
+     "text": "כששני האיברים שווים: `swap` של `B[i]` עם התא הבא בבלוק הקדמי (`++last`) והגדלת `i`, ואז `k++`",
+     "points": 5
+    },
+    {
+     "text": "כש-`B[i] > A[k]` מקדמים את `k`",
+     "points": 3
+    },
+    {
+     "text": "אחרת (`B[i] < A[k]`) מקדמים את `i`",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "תנאי עם `||` במקום `&&`: הלולאה ממשיכה אחרי שמערך נגמר וקוראת מחוץ לגבולות.",
+    "לקדם את המצביע הלא נכון בהשוואה: במערך ממוין מקדמים את המצביע של האיבר הקטן יותר.",
+    "לא להגדיל את `last` לפני ה-`swap` ולדרוס איבר בבלוק הקדמי."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "בדוגמה (`A={-1,0,5,6,8,8,10}`, `B={-2,5,5,7,8,10,11,12}`): כמה איברים יש בבלוק הקדמי של $B$ אחרי הריצה?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "$B$ הופך ל-`5 8 10 7 -2 5 11 12`: הבלוק הקדמי הוא `5 8 10` (ריצה אמיתית)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את תנאי הלולאה.",
+     "code": true,
+     "lines": [
+      "void partition_B(int* A, int n, int* B, int m)",
+      "{",
+      "    int i=0, k = 0, last = -1;",
+      "___",
+      "    {",
+      "        if (B[ i ] == A[ k ])",
+      "        {",
+      "            swap (B + (++last) , B + (i ++ ));   // last ++; swap (&B[last], &B[i] ) ; i++;",
+      "            k ++ ;",
+      "        }",
+      "        else",
+      "            if (B[ i ] > A[ k ])",
+      "                k++;",
+      "            else",
+      "                i++ ;",
+      "    }",
+      "}"
+     ],
+     "blankIndex": 3,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "while (i < m && k < n)"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "while (i < m || k < n)"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "while (i < m)"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "while (i < n && k < m)"
+      }
+     ],
+     "correctId": "a",
+     "explain": "הלולאה נעצרת כשאחד המערכים נגמר; `||` קורא מחוץ לגבולות."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הפקודה בענף `B[i] > A[k]`.",
+     "code": true,
+     "lines": [
+      "void partition_B(int* A, int n, int* B, int m)",
+      "{",
+      "    int i=0, k = 0, last = -1;",
+      "    while (i < m && k < n)",
+      "    {",
+      "        if (B[ i ] == A[ k ])",
+      "        {",
+      "            swap (B + (++last) , B + (i ++ ));   // last ++; swap (&B[last], &B[i] ) ; i++;",
+      "            k ++ ;",
+      "        }",
+      "        else",
+      "            if (B[ i ] > A[ k ])",
+      "___",
+      "            else",
+      "                i++ ;",
+      "    }",
+      "}"
+     ],
+     "blankIndex": 12,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "k++;"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "i++;"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "last++;"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "k--;"
+      }
+     ],
+     "correctId": "a",
+     "explain": "`B[i]` גדול מ-`A[k]`, ולכן ההתאמה עבור `B[i]` יכולה להימצא רק בהמשך $A$: מקדמים את `k`."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `partition_B`.",
+     "code": true,
+     "lines": [
+      "void partition_B(int* A, int n, int* B, int m)",
+      "{",
+      "    int i=0, k = 0, last = -1;",
+      "    while (i < m && k < n)",
+      "    {",
+      "        if (B[ i ] == A[ k ])",
+      "        {",
+      "            swap (B + (++last) , B + (i ++ ));   // last ++; swap (&B[last], &B[i] ) ; i++;",
+      "            k ++ ;",
+      "        }",
+      "        else",
+      "            if (B[ i ] > A[ k ])",
+      "                k++;",
+      "            else",
+      "                i++ ;",
+      "    }",
+      "}"
+     ],
+     "explain": "אתחול, לולאה, ענף השוויון, ואחר כך ענפי ההשוואה."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה והפונקציה כבר אינה מסדרת את הבלוק הקדמי. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "void partition_B(int* A, int n, int* B, int m)",
+      "{",
+      "    int i=0, k = 0, last = -1;",
+      "    while (i < m && k < n)",
+      "    {",
+      "        if (B[ i ] == A[ k ])",
+      "        {",
+      "            swap (B + (++last) , B + (i ++ ));   // last ++; swap (&B[last], &B[i] ) ; i++;",
+      "            k ++ ;",
+      "        }",
+      "        else",
+      "            if (B[ i ] < A[ k ])",
+      "                k++;",
+      "            else",
+      "                i++ ;",
+      "    }",
+      "}"
+     ],
+     "bugIndex": 11,
+     "explain": "עם `<` הענפים מתחלפים; בדוגמה $B$ נשאר `-2 5 5 7 8 10 11 12` ללא הבלוק הקדמי (ריצה אמיתית)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 3,
@@ -91,7 +566,74 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "contextId": "c3"
+   "contextId": "c3",
+   "rubric": [
+    {
+     "text": "זמן הריצה הוא $O(m+n)$",
+     "points": 3
+    },
+    {
+     "text": "נימוק: בכל איטרציה `i` או `k` (או שניהם) גדלים, ולכן לכל היותר $m+n$ איטרציות",
+     "points": 2
+    },
+    {
+     "text": "ה-`swap` מתבצע רק בשוויון ולכן לכל היותר $n$ פעמים ואינו משנה את הסדר הגדול",
+     "points": 1
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לענות $O(n\\cdot m)$ בגלל הלולאה: אין לולאה מקוננת, כל מצביע רק מתקדם.",
+    "לענות $O(\\max(m,n))$ בלי נימוק: צריך להסביר ששני המצביעים רק מתקדמים."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "בדוגמה ($n=7$, $m=8$): כמה איטרציות מבצעת הלולאה?",
+     "answer": 10,
+     "tol": 0,
+     "explain": "ספירה בריצה אמיתית: 10 איטרציות, פחות מ-$m+n=15$."
+    },
+    {
+     "type": "choice",
+     "prompt": "מדוע מספר האיטרציות חסום על ידי $m+n$?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "בכל איטרציה לפחות אחד המצביעים `i`, `k` גדל, והם לא חוזרים אחורה"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "הלולאה החיצונית רצה $n$ פעמים והפנימית $m$ פעמים"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "ה-`swap` מסדר מחדש את כל $B$"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "הפונקציה מבצעת חיפוש בינארי"
+      }
+     ],
+     "correctId": "a",
+     "explain": "אין לולאה מקוננת. ב-100000 זוגות ממוינים אקראיים לא נמצאה ריצה עם יותר מ-$m+n$ איטרציות."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה כתלות ב-$m$ וב-$n$? (למשל `O(n)`)",
+     "accept": [
+      "O(m+n)",
+      "O(n+m)"
+     ],
+     "normalize": "complexity",
+     "explain": "סריקה אחת של כל אחד מהמערכים: $O(m+n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 4,
@@ -102,7 +644,160 @@
    "solution": "**פתרון רשמי** (20A-A עמ' 5, שני פתרונות שונים בתיבה; ההנחה המסומנת בפתרון: המערך מכיל לפחות שני איברים):\nפתרון ראשון:\n```c\nint FindDouble(int* a ,  int n)\n{\n    int low = 0, high = n - 1, mid;\n    while (low < high)\n    {\n        mid = (high-low)/2+low;\n        if (a[mid] == a[mid + 1])\n            return a[mid];\n\n        if(a[mid] - a[low] == mid - low)\n\n            low = mid + 1;\n        else\n            high = mid;\n    }\n}\n```\nפתרון שני:\n```c\nint findDoubleNum(int *a, int n)\n{\n    int low = 0, high = n - 1, mid;\n    /*if (n == 2)\n        return a[0];*/\n\n    while (low <= high)\n    {\n        mid = (high - low) / 2 + low;\n        if (a[mid] == a[0]+mid)\n            low = mid + 1;\n        else\n            high = mid-1;\n    }\n    return a[mid];\n}\n```",
    "solutionSource": "official-pdf",
    "official": true,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "שימוש בחיפוש בינארי עם `low`, `high` ו-`mid` כדי להגיע ל-$O(\\log n)$",
+     "points": 4
+    },
+    {
+     "text": "החזרת `a[mid]` כשמתקיים `a[mid] == a[mid + 1]`",
+     "points": 4
+    },
+    {
+     "text": "בדיקת `a[mid] - a[low] == mid - low`: אם מתקיים אין כפול בקטע `low..mid`, ולכן `low = mid + 1`",
+     "points": 5
+    },
+    {
+     "text": "אחרת הכפול בקטע השמאלי ולכן `high = mid`",
+     "points": 4
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "חיפוש לינארי על כל המערך: נכון אבל $O(n)$ ולא $O(\\log n)$.",
+    "לבדוק את `a[mid]` מול `mid` בלבד (בלי `low`) כשהמערך אינו מתחיל ב-0.",
+    "`high = mid - 1` במקום `high = mid`: מאבדים את `mid` שיכול להיות חלק מהזוג הכפול."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "במערך הדוגמה (14 איברים, `low = 0`, `high = 13`): מהו `mid` באיטרציה הראשונה?",
+     "answer": 6,
+     "tol": 0,
+     "explain": "`mid = (13-0)/2+0 = 6`, ו-`a[6] == a[7] == 3`, ולכן מוחזר 3 (ריצה אמיתית: 3)."
+    },
+    {
+     "type": "choice",
+     "prompt": "במערך `{1,2,3,4,4,5,6,7,8}` (9 איברים) באיטרציה הראשונה `mid = 4`, `a[mid]-a[low] = 3` ו-`mid-low = 4`. מה קורה?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`high = mid`: הכפול נמצא בקטע `low..mid`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`low = mid + 1`: הכפול בצד ימין"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "הפונקציה מחזירה `a[mid]` מיד"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`high = mid - 1`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "ההפרש בערכים (3) קטן מהפרש האינדקסים (4), ולכן יש כפול בקטע השמאלי (כולל `mid`)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הפקודה בענף ה-`else`.",
+     "code": true,
+     "lines": [
+      "int FindDouble(int* a ,  int n)",
+      "{",
+      "    int low = 0, high = n - 1, mid;",
+      "    while (low < high)",
+      "    {",
+      "        mid = (high-low)/2+low;",
+      "        if (a[mid] == a[mid + 1])",
+      "            return a[mid];",
+      "        if(a[mid] - a[low] == mid - low)",
+      "            low = mid + 1;",
+      "        else",
+      "___",
+      "    }",
+      "}"
+     ],
+     "blankIndex": 11,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "high = mid;"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "high = mid - 1;"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "low = mid;"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "low = mid + 1;"
+      }
+     ],
+     "correctId": "a",
+     "explain": "`mid` עצמו עדיין יכול להיות אחד משני הכפולים, ולכן `high = mid` ולא `mid - 1`."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `FindDouble`.",
+     "code": true,
+     "lines": [
+      "int FindDouble(int* a ,  int n)",
+      "{",
+      "    int low = 0, high = n - 1, mid;",
+      "    while (low < high)",
+      "    {",
+      "        mid = (high-low)/2+low;",
+      "        if (a[mid] == a[mid + 1])",
+      "            return a[mid];",
+      "        if(a[mid] - a[low] == mid - low)",
+      "            low = mid + 1;",
+      "        else",
+      "            high = mid;",
+      "    }",
+      "}"
+     ],
+     "explain": "אתחול, לולאה, חישוב `mid`, בדיקת כפול, בדיקת ההפרשים, ובחירת הצד."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה והפונקציה נכשלת על חלק מהקלטים. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int FindDouble(int* a ,  int n)",
+      "{",
+      "    int low = 0, high = n - 1, mid;",
+      "    while (low < high)",
+      "    {",
+      "        mid = (high-low)/2+low;",
+      "        if (a[mid] == a[mid + 1])",
+      "            return a[mid];",
+      "        if(a[mid] - a[low] == mid - low)",
+      "            low = mid + 1;",
+      "        else",
+      "            high = mid - 1;",
+      "    }",
+      "}"
+     ],
+     "bugIndex": 11,
+     "explain": "עם `high = mid - 1` נאבד את `mid`: למשל על `{-4,-4,-3}` הלולאה מסתיימת בלי להחזיר ערך. בבדיקה על 594 מערכים תקינים הגרסה הרשמית נכונה תמיד והגרסה השבורה נכשלת ב-216."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 4,
@@ -113,7 +808,82 @@
    "solution": "**פתרון רשמי** (20A-A עמ' 6, נימוק לפתרון הראשון `FindDouble`): מאחר וכל איבר במערך **גדול ב-1** מהאיבר הקודם, ההפרש בין האינדקסים חייב להיות שווה להפרש בין האיברים.\nלכן על ידי בדיקת התנאי `if(a[mid] - a[low] == mid - low)` ניתן לדעת האם הערך הכפול במערך הוא בחלק הימני של `mid` או בחלק השמאלי.\nבמידה והתשובה היא כן - הקטע `(low,mid)` אינו מכיל את האיבר הכפול שאנחנו מחפשים, ונמשיך חיפוש בינארי בחלק הימני `(mid+1,high)`.\nבמידה ולא - נתמקד בחיפוש בינארי בקטע `(low,mid)` של המערך.",
    "solutionSource": "official-pdf",
    "official": true,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "הבחנה שהפרש הערכים בין שני תאים שווה להפרש האינדקסים כל עוד אין כפול ביניהם",
+     "points": 4
+    },
+    {
+     "text": "הבדיקה `a[mid] - a[low] == mid - low` מכריעה אם הכפול בקטע השמאלי או הימני",
+     "points": 3
+    },
+    {
+     "text": "שתי התוצאות מובילות לצמצום התחום ל-`(mid+1,high)` או ל-`(low,mid)`",
+     "points": 1
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לנמק רק \"חיפוש בינארי\" בלי להסביר איך ההשוואה מראה לאיזה צד ללכת.",
+    "לבלבל בין שני הצדדים: שוויון ההפרשים אומר שהכפול בצד **ימין**."
+   ],
+   "steps": [
+    {
+     "type": "choice",
+     "prompt": "מהי התכונה שבה משתמש הנימוק?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "בקטע בלי כפול ההפרש בין שני ערכים שווה להפרש האינדקסים שלהם"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "המערך ממוין ולכן אפשר לחפש את הערך הכפול ישירות"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "הערך הכפול הוא תמיד באמצע המערך"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "סכום האיברים ידוע מראש"
+      }
+     ],
+     "correctId": "a",
+     "explain": "כל איבר גדול ב-1 מקודמו, ולכן $a[mid]-a[low]=mid-low$ בדיוק כשאין כפול ב-`low..mid`."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שלבי הנימוק.",
+     "lines": [
+      "כל איבר במערך גדול ב-1 מהאיבר הקודם, ולכן ההפרש בין האינדקסים שווה להפרש בין הערכים.",
+      "לכן הבדיקה `a[mid] - a[low] == mid - low` קובעת אם הערך הכפול נמצא בחלק הימני של `mid` או בחלק השמאלי.",
+      "אם התשובה היא כן, הקטע `(low,mid)` אינו מכיל את האיבר הכפול.",
+      "במקרה כזה ממשיכים בחיפוש בינארי בחלק הימני `(mid+1,high)`.",
+      "אם התשובה היא לא, מתמקדים בחיפוש בינארי בקטע `(low,mid)` של המערך."
+     ],
+     "explain": "קודם התכונה, אחר כך הבדיקה, ואז שני המקרים."
+    },
+    {
+     "type": "findbug",
+     "prompt": "בגרסה הבאה של הנימוק משפט אחד שגוי. איזה?",
+     "lines": [
+      "כל איבר במערך גדול ב-1 מהאיבר הקודם, ולכן ההפרש בין האינדקסים שווה להפרש בין הערכים.",
+      "לכן הבדיקה `a[mid] - a[low] == mid - low` קובעת אם הערך הכפול נמצא בחלק הימני של `mid` או בחלק השמאלי.",
+      "אם התשובה היא כן, הקטע `(low,mid)` אינו מכיל את האיבר הכפול.",
+      "במקרה כזה ממשיכים בחיפוש בינארי בחלק השמאלי `(low,mid)`.",
+      "אם התשובה היא לא, מתמקדים בחיפוש בינארי בקטע `(low,mid)` של המערך."
+     ],
+     "bugIndex": 3,
+     "explain": "אם הקטע `(low,mid)` ללא כפול, ממשיכים ימינה, בקטע `(mid+1,high)`, ולא שמאלה."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 5,
@@ -125,7 +895,142 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "contextId": "c5"
+   "contextId": "c5",
+   "rubric": [
+    {
+     "text": "לולאה על `i` מ-1 עד 9 (לא כוללת את 0)",
+     "points": 2
+    },
+    {
+     "text": "תנאי הכישלון `count[i] != 1`: ספרה חסרה או חוזרת",
+     "points": 3
+    },
+    {
+     "text": "`return 0` מיד כשהתנאי מתקיים",
+     "points": 1
+    },
+    {
+     "text": "`return 1` בסוף כשכל הספרות 1..9 מופיעות בדיוק פעם אחת",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לבדוק גם את `count[0]`: חלון חוקי אינו מכיל 0.",
+    "להסתפק בבדיקת `count[i] > 1`: חלון עם 0 ובלי 9 עובר בטעות.",
+    "לשכוח את `return 1` בסוף הפונקציה."
+   ],
+   "steps": [
+    {
+     "type": "choice",
+     "prompt": "מה מחזירה `TestCount` כש-`count[1..9]` שווים כולם ל-1?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`1`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`0`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`9`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "אינה מוגדרת"
+      }
+     ],
+     "correctId": "a",
+     "explain": "אף `count[i]` אינו שונה מ-1, והפונקציה מגיעה ל-`return 1` (ריצה אמיתית: 1)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `TestCount` כש-`count[5] = 2` ו-`count[9] = 0` (והשאר 1)?",
+     "answer": 0,
+     "tol": 0,
+     "explain": "כבר `count[5] != 1` מחזיר 0 (ריצה אמיתית: 0)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את התנאי.",
+     "code": true,
+     "lines": [
+      "int TestCount(int *count)",
+      "{",
+      "        int i;",
+      "        for (i = 1; i < 10; i++)",
+      "___",
+      "                        return 0;",
+      "        return 1;",
+      "}"
+     ],
+     "blankIndex": 4,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "if (count[i] != 1)"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "if (count[i] == 1)"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "if (count[i] > 1)"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "if (i != 1)"
+      }
+     ],
+     "correctId": "a",
+     "explain": "ספרה שמופיעה אפס פעמים או יותר מפעם אחת פוסלת את החלון. `> 1` בלבד אינו מספיק: חלון עם 0 ובלי 9 עובר (ריצה אמיתית)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות `TestCount`.",
+     "code": true,
+     "lines": [
+      "int TestCount(int *count)",
+      "{",
+      "        int i;",
+      "        for (i = 1; i < 10; i++)",
+      "                if (count[i] != 1)",
+      "                        return 0;",
+      "        return 1;",
+      "}"
+     ],
+     "explain": "לולאה על הספרות, פסילה בכישלון, ו-`return 1` בסוף."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int TestCount(int *count)",
+      "{",
+      "        int i;",
+      "        for (i = 1; i < 10; i++)",
+      "                if (count[i] == 1)",
+      "                        return 0;",
+      "        return 1;",
+      "}"
+     ],
+     "bugIndex": 4,
+     "explain": "עם `== 1` חלון חוקי נפסל מיד (`count` של כל 1 מחזיר 0, ריצה אמיתית)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 5,
@@ -137,7 +1042,163 @@
    "solutionSource": "official-pdf",
    "official": true,
    "confidence": "high",
-   "contextId": "c5"
+   "contextId": "c5",
+   "rubric": [
+    {
+     "text": "גבולות הלולאות: `rows < R-2` ו-`cols < C-2` כך שחלון 3x3 נשאר בתוך המטריצה",
+     "points": 6
+    },
+    {
+     "text": "איפוס `count` בכל חלון (`initializeCountArray`)",
+     "points": 3
+    },
+    {
+     "text": "ספירת 9 התאים של החלון: `i` מ-`rows` עד `rows + 2`, `j` מ-`cols` עד `cols + 2`, ו-`count[mat[i][j]]++`",
+     "points": 6
+    },
+    {
+     "text": "החזרת 1 כש-`TestCount` מצליחה, ו-0 אחרי שכל החלונות נבדקו",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "גבול `R` במקום `R-2`: החלון יוצא מהמטריצה.",
+    "לא לאפס את `count` בין חלונות, ולצבור ספירות מחלונות קודמים.",
+    "להחזיר 0 מיד אחרי החלון הראשון הלא חוקי במקום להמשיך לחלון הבא."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "במטריצה עם $R=6$, $C=5$: כמה חלונות 3x3 הפונקציה בודקת?",
+     "answer": 12,
+     "tol": 0,
+     "explain": "$(R-2)(C-2)=4\\cdot3=12$ (ריצה אמיתית: 12)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "בחלון `1 2 3 / 8 7 6 / 4 5 5`: מהו `count[5]` אחרי הספירה?",
+     "answer": 2,
+     "tol": 0,
+     "explain": "הספרה 5 מופיעה פעמיים (`count[9] = 0`), ולכן `TestCount` מחזירה 0 (ריצה אמיתית: 2 ו-0)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את כותרת הלולאה החיצונית.",
+     "code": true,
+     "lines": [
+      "int Sudoku(int mat[R][C])    // or: int Sudoku(int mat[][C])",
+      "{",
+      "        int count[10] = { 0 };",
+      "        int rows,cols,i,j;",
+      "___",
+      "        {",
+      "                for (cols = 0; cols<C-2; cols++)",
+      "                {",
+      "                        initializeCountArray (count);",
+      "                        for (i = rows; i <= rows + 2; i++)",
+      "                        {",
+      "                                for (j = cols; j <= cols + 2; j++)",
+      "                                {",
+      "                                        count[ mat[i][j] ] ++;",
+      "                                }",
+      "                        }",
+      "                        if (TestCount(count))",
+      "                                return 1;",
+      "                }",
+      "        }",
+      "        return 0;",
+      "}"
+     ],
+     "blankIndex": 4,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "for(rows=0; rows<R-2; rows++)"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "for(rows=0; rows<R-3; rows++)"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "for(rows=0; rows<R; rows++)"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "for(rows=0; rows<=R-2; rows++)"
+      }
+     ],
+     "correctId": "a",
+     "explain": "חלון מתחיל בשורה `rows` ומסתיים ב-`rows + 2`, ולכן `rows` עד `R-3` כולל. `R-3` חותך את החלון האחרון (ריצה אמיתית: חלון בשורות האחרונות לא נמצא)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `Sudoku`.",
+     "code": true,
+     "lines": [
+      "int Sudoku(int mat[R][C])    // or: int Sudoku(int mat[][C])",
+      "{",
+      "        int count[10] = { 0 };",
+      "        int rows,cols,i,j;",
+      "        for(rows=0; rows<R-2; rows++)",
+      "        {",
+      "                for (cols = 0; cols<C-2; cols++)",
+      "                {",
+      "                        initializeCountArray (count);",
+      "                        for (i = rows; i <= rows + 2; i++)",
+      "                        {",
+      "                                for (j = cols; j <= cols + 2; j++)",
+      "                                {",
+      "                                        count[ mat[i][j] ] ++;",
+      "                                }",
+      "                        }",
+      "                        if (TestCount(count))",
+      "                                return 1;",
+      "                }",
+      "        }",
+      "        return 0;",
+      "}"
+     ],
+     "explain": "לולאות על פינת החלון, איפוס, ספירה, בדיקה, ובסוף `return 0`."
+    },
+    {
+     "type": "findbug",
+     "prompt": "שורה אחת שונתה. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int Sudoku(int mat[R][C])    // or: int Sudoku(int mat[][C])",
+      "{",
+      "        int count[10] = { 0 };",
+      "        int rows,cols,i,j;",
+      "        for(rows=0; rows<R-2; rows++)",
+      "        {",
+      "                for (cols = 0; cols<C-2; cols++)",
+      "                {",
+      "                        initializeCountArray (count);",
+      "                        for (i = rows; i <= rows + 1; i++)",
+      "                        {",
+      "                                for (j = cols; j <= cols + 2; j++)",
+      "                                {",
+      "                                        count[ mat[i][j] ] ++;",
+      "                                }",
+      "                        }",
+      "                        if (TestCount(count))",
+      "                                return 1;",
+      "                }",
+      "        }",
+      "        return 0;",
+      "}"
+     ],
+     "bugIndex": 9,
+     "explain": "עם `rows + 1` נספרות רק שתי שורות (6 תאים), ו-`TestCount` לעולם לא מצליחה: על חלון חוקי מוחזר 0 (ריצה אמיתית)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   }
  ]
 }
