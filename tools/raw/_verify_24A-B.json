@@ -1,0 +1,22 @@
+{
+ "items": {
+  "Q1": {
+   "verdict": "agree",
+   "note": "300k random + both examples (size 3 {2,4,6}; empty -> {0}, size 1); linear timing"
+  },
+  "Q2": {
+   "verdict": "agree",
+   "note": "500k random strings vs pair-count argmax with smallest tie; all six examples match; strings shorter than 2 digits unspecified (returns 0)"
+  },
+  "Q3": {
+   "verdict": "agree",
+   "note": "500k random sorted pos/neg arrays vs double loop, 0 diffs; both examples match; O(n+m)"
+  },
+  "Q4": {
+   "verdict": "agree",
+   "note": "500k random arrays vs counting, 0 diffs; example gives 6; merge_sort is in the exam black-box list; n log n timing"
+  }
+ },
+ "examCode": "24A-B",
+ "by": "refuter (own clang harnesses tools/verify/24A-B/refute_*)"
+}

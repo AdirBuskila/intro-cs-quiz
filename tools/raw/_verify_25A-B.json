@@ -1,0 +1,22 @@
+{
+ "items": {
+  "Q1": {
+   "verdict": "agree",
+   "note": "300k random tests incl. negatives vs parity-count; examples 0 and 2"
+  },
+  "Q2": {
+   "verdict": "unclear",
+   "note": "correct only if the black-box binary_search returns 1/0 (the handwritten note in the student answer, 0 diffs in that case); with the index/-1 semantics used in 19A-A, every test fails (200000/200000). The exam page lists only signatures, so the assumption is not given by the sitting. Flag the semantics assumption in the solution text"
+  },
+  "Q3": {
+   "verdict": "agree",
+   "note": "500k random tests vs per-letter count, 0 diffs. EXAM DEFECT (transcription faithful to page 12): the printed example claims \"glue\" -> 1 for text=\"intelligence\", but the text has no letter u, so the correct result is 0"
+  },
+  "Q4": {
+   "verdict": "agree",
+   "note": "exhaustive N=3,4,5 (512; 65536; 33.5M matrices) and 500k random N=6 vs an independent prefix-sum reference, 0 diffs; the sample gives 4; O(N^2)"
+  }
+ },
+ "examCode": "25A-B",
+ "by": "refuter (own clang harnesses tools/verify/25A-B/refute_*)"
+}

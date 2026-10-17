@@ -1,0 +1,14 @@
+{
+ "items": {
+  "Q5": {
+   "verdict": "agree",
+   "note": "only the signature line differs from the printed official code (adds int d, as the body needs); 200k random tests vs brute force 0 diffs; one merge_sort + n binary searches = O(n log n), timing scales n log n"
+  },
+  "Q6": {
+   "verdict": "agree",
+   "note": "only the inner column loop header differs (j++ -> i++); exhaustive N=1..4 (3,256,19683,65536 matrices) 0 diffs vs brute force; O(N^2) by inspection"
+  }
+ },
+ "examCode": "19A-A",
+ "by": "refuter (own clang harnesses tools/verify/19A-A/refute_*)"
+}

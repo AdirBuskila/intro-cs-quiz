@@ -1,0 +1,124 @@
+{
+ "items": {
+  "Q1": {
+   "verdict": "agree",
+   "note": "official code verified: 100k valid inputs all paired, 3 swaps at size 12"
+  },
+  "Q2": {
+   "verdict": "agree",
+   "note": "official verified"
+  },
+  "Q3": {
+   "verdict": "agree",
+   "note": "official verified (random vs stable sort by distance)"
+  },
+  "Q4": {
+   "verdict": "agree",
+   "note": "official verified vs BFS"
+  }
+ },
+ "steps": {
+  "Q1.s0 choice": {
+   "verdict": "agree",
+   "note": "1,9,3,7,8,2 is the real output"
+  },
+  "Q1.s1 numeric": {
+   "verdict": "agree",
+   "note": "3 swaps at size 12"
+  },
+  "Q1.s2 order": {
+   "verdict": "agree",
+   "note": "forced (declaration must precede the loop)"
+  },
+  "Q1.s3 findbug": {
+   "verdict": "agree",
+   "note": "i<size leaves the sample unchanged (1,2,3,7,8,9); line 3 is the only change"
+  },
+  "Q1.s4 text": {
+   "verdict": "agree",
+   "note": ""
+  },
+  "Q1.pitfall2": {
+   "verdict": "disagree",
+   "note": "swapping a[i] with a[size-1-i] for i<size/2 reverses the array (9,8,7,3,2,1), it does not restore the original; it only restores it if the loop runs over all i. The pitfall wording \"returns pairs to their original place\" is inaccurate; both versions are wrong but for different reasons"
+  },
+  "Q1.rubric": {
+   "verdict": "agree",
+   "note": "6+10+4+6=26"
+  },
+  "Q2.s0 choice": {
+   "verdict": "agree",
+   "note": "dca"
+  },
+  "Q2.s1 fillblank": {
+   "verdict": "disagree",
+   "note": "two correct options: a (count=0) and b (count--) both give 0/200000 wrong vs the reference; b is not checkably wrong. c and d are wrong (83034/200000)"
+  },
+  "Q2.s2 order": {
+   "verdict": "disagree",
+   "note": "order not forced: \"int count[26]\" can precede \"int i, pos\"; \"count[..]=0\" can precede \"str[pos++]=str[i]\" (0/200000 wrong when swapped)"
+  },
+  "Q2.s3 findbug": {
+   "verdict": "agree",
+   "note": "index 8, == 2 gives empty for the sample"
+  },
+  "Q2.s4 text": {
+   "verdict": "agree",
+   "note": ""
+  },
+  "Q2.rubric": {
+   "verdict": "agree",
+   "note": "7+8+6+3+2=26"
+  },
+  "Q3.s0 choice": {
+   "verdict": "agree",
+   "note": ""
+  },
+  "Q3.s1 numeric": {
+   "verdict": "agree",
+   "note": "2,1,3 -> 1"
+  },
+  "Q3.s2 fillblank": {
+   "verdict": "agree",
+   "note": "only a correct (c wrong on 13746/20000; b writes past the end, d overwrites index 0)"
+  },
+  "Q3.s3 order": {
+   "verdict": "disagree",
+   "note": "order not forced: the \"int first,last,new_position\" line and the \"int* new_sort = malloc\" line are independent (swapped version correct on 20000/20000)"
+  },
+  "Q3.s4 findbug": {
+   "verdict": "agree",
+   "note": "index 6; > gives 2,3,1"
+  },
+  "Q3.rubric": {
+   "verdict": "agree",
+   "note": "3+7+9+6+2=27"
+  },
+  "Q4.s0 numeric": {
+   "verdict": "agree",
+   "note": "6"
+  },
+  "Q4.s1 numeric": {
+   "verdict": "agree",
+   "note": "19"
+  },
+  "Q4.s2 fillblank": {
+   "verdict": "agree",
+   "note": "only a correct (b wrong on 3017/20000; c returns 0 immediately; d counts non-255 cells wrongly)"
+  },
+  "Q4.s3 order": {
+   "verdict": "disagree",
+   "note": "order not forced: the four neighbour calls are independent; reversed call order gives identical results on 20000/20000"
+  },
+  "Q4.s4 findbug": {
+   "verdict": "agree",
+   "note": "index 9; sample gives 5 not 6"
+  },
+  "Q4.rubric": {
+   "verdict": "agree",
+   "note": "6+5+7+6+2=26"
+  }
+ },
+ "examCode": "23A-A",
+ "by": "refuter (own clang harnesses tools/verify/23A-A/refute_*)"
+}
