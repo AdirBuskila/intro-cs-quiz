@@ -1,0 +1,143 @@
+{
+ "examCode": "20A-A",
+ "examLabel": "מבוא למדעי המחשב, סמסטר א' תש\"פ, מועד א (11.02.2020)",
+ "year": 2020,
+ "examDate": "11.02.2020",
+ "sourceFile": "20A-A exam pp.1-14",
+ "solutionFile": "20A-A official solution pp.1-14",
+ "contexts": {
+  "c1": {
+   "kind": "code",
+   "title": "שאלה 1: הפונקציה הנתונה (מקבלת מערך וגודלו)",
+   "code": "double fun_rec(double *a, int n)\n{\n        if (n == 1) return a[0];\n\n        return a[n-1] / n + fun_rec(a, n - 1)*(n-1)/n;\n}"
+  },
+  "c3": {
+   "kind": "code",
+   "title": "שאלה 3: השלמת הפונקציה partition_B",
+   "code": "void partition_B(int* A, int n, int* B, int m)\n{\n        int i=0, k = 0, last = -1;\n\n        while (______________________________)\n        {\n                if (B[ i ] == A[ k ])\n                {\n                        ______________________________\n\n                        ______________________________\n                }\n                else\n                        if (B[ i ] > A[ k ])\n\n                                ____________________________\n                        else\n\n                                ____________________________\n        }\n}"
+  },
+  "c5": {
+   "kind": "code",
+   "title": "שאלה 5: הגדרות ופונקציית העזר initializeCountArray",
+   "code": "#define R 6\n#define C 5\n\nvoid initializeCountArray(int *count)\n{\n        int i;\n        for (i = 0; i < 10; i++) count[i] = 0;\n}"
+  }
+ },
+ "questions": [
+  {
+   "num": 1,
+   "part": "א",
+   "kind": "computation",
+   "topic": "recursion",
+   "question": "מה תחזיר הפונקציה עבור המערך `a = {-3, 6, 7, -2, 12}` ו-`n = 5`?",
+   "solution": "**פתרון רשמי** (20A-A עמ' 2): `4.0`.",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "contextId": "c1"
+  },
+  {
+   "num": 1,
+   "part": "ב",
+   "kind": "computation",
+   "topic": "recursion",
+   "question": "מה תחזיר הפונקציה עבור אותו מערך ו-`n = 4`?",
+   "solution": "**פתרון רשמי** (20A-A עמ' 2): `2.0`.",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "contextId": "c1"
+  },
+  {
+   "num": 1,
+   "part": "ג",
+   "kind": "computation",
+   "topic": "recursion",
+   "question": "מה מחשבת הפונקציה `fun_rec` עבור מערך של מספרים ממשיים שאורכו $n$? תנו הגדרה כללית ונמקו את תשובתכם.",
+   "solution": "**פתרון רשמי** (20A-A עמ' 2): הפונקציה מחשבת **ממוצע** של $n$ איברים במערך `a`.\n**נימוק:** על פי נוסחת נסיגה, מחלקים את האיבר הנוכחי בגודל המערך ומוסיפים את ממוצע שאר האיברים עד האיבר הנוכחי.\nבהנחה שהפונקציה `fun_rec(a, n-1)` מחזירה ממוצע של $n-1$ האיברים הראשונים נקבל:\n$$\\text{fun\\_rec}(a,n)=\\frac{a[n-1]}{n}+\\frac{a[0]+\\cdots+a[n-2]}{n-1}\\cdot\\frac{n-1}{n}=\\frac{a[0]+a[1]+\\cdots+a[n-2]+a[n-1]}{n}$$",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "contextId": "c1"
+  },
+  {
+   "num": 2,
+   "kind": "code",
+   "topic": "recursion",
+   "question": "נגדיר גימטרייה לאותיות לועזיות באופן הבא:\n`a=1, b=2,..., i=9, j=10, k=20,..., r=90, s=100, t=200,..., z=800`\nנשמור את הערכים במערך גימטרייה `int gematria[26]`, כך שהגימטרייה של האות `a` נשמרה ב-`gematria[0]`, הגימטרייה של האות `b` נשמרה ב-`gematria[1]` וכו'.\nכתבו פונקציה **רקורסיבית** יעילה שמקבלת שני פרמטרים - מחרוזת של אותיות לועזיות קטנות והמערך `gematria` ומחזירה את הגימטרייה של המחרוזת, ששווה לסכום הגימטריות של כל האותיות במחרוזת.\nלדוגמא:\nהגימטרייה של המחרוזת \"exam\" היא `5+600+1+40=646`",
+   "solution": "**פתרון רשמי** (20A-A עמ' 3):\n```c\nint CalGimatria ( char * str , int * gematria )\n{\n\n    if (*str == '\\0')\n    {\n        return 0;\n    }\n    return gematria [*str - 'a'] + CalGimatria (str + 1, gematria);\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high"
+  },
+  {
+   "num": 3,
+   "part": "א",
+   "kind": "code",
+   "topic": "sorting_merge",
+   "question": "נתונים שני מערכים **ממוינים**: מערך $A$ בגודל $n$, ומערך $B$ בגודל $m$.\nהשלימו את הפונקציה שמקבלת את שני המערכים האלה וגודלם ומסדרת מחדש את איברי המערך $B$ כך שבתחילת המערך $B$ יופיעו האיברים **המשותפים** עם $A$, ובסוף המערך יופיעו האיברים שלא שייכים ל-$A$. הסדר שבו מופיעים האיברים **בתוך** שני החלקים של $B$ לא חשוב.\nאפשר להיעזר בפונקציה `swap`.\nלדוגמא:\nעבור `A={ -1, 0, 5, 6, 8, 8, 10 }`, `B={-2,5,5,7,8,10,11,12}`\nהפונקציה תסדר את המערך $B$ מחדש: `B={5,8,10,7,-2,5,11,12}`",
+   "solution": "**פתרון רשמי** (20A-A עמ' 4, ההשלמות מוקלדות בתיבות):\nתנאי הלולאה: `i < m && k < n`\nבהתאמה: `swap (B + (++last) , B + (i ++ ));` (כלומר `last ++; swap (&B[last], &B[i]); i++;`) ואחריו `k ++ ;`\nכש-`B[i] > A[k]`: `k++;`, אחרת: `i++ ;`\n```c\nvoid partition_B(int* A, int n, int* B, int m)\n{\n    int i=0, k = 0, last = -1;\n\n    while (i < m && k < n)\n    {\n        if (B[ i ] == A[ k ])\n        {\n            swap (B + (++last) , B + (i ++ ));   // last ++; swap (&B[last], &B[i] ) ; i++;\n            k ++ ;\n        }\n        else\n            if (B[ i ] > A[ k ])\n                k++;\n            else\n                i++ ;\n    }\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "contextId": "c3"
+  },
+  {
+   "num": 3,
+   "part": "ב",
+   "kind": "computation",
+   "topic": "complexity",
+   "question": "מה סדר גודל של זמן ריצת הפונקציה כתלות ב-$m$ ו-$n$? תנו **נימוק** קצר.",
+   "solution": "**פתרון רשמי** (20A-A עמ' 4): הפונקציה רצה בסדר גודל של $m+n$.\nהפונקציה עוברת פעם אחת על כל אחד מהמערכים, ומבצעת `swap` עד $n$ פעמים.",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "contextId": "c3"
+  },
+  {
+   "num": 4,
+   "part": "א",
+   "kind": "code",
+   "topic": "binary_search",
+   "question": "נתון מערך **ממוין** בסדר עולה של מספרים שלמים. ידוע שכל איבר במערך **גדול ב-1** מהאיבר שלפניו, למעט איבר אחד ששווה לקודמו.\nכתבו פונקציה **יעילה** שמקבלת את המערך וגודלו ומחזירה את הערך של האיבר שמופיע פעמיים במערך.\nלדוגמא:\nעבור המערך `a = {-3,-2,-1,0,1,2,3,3,4,5,6,7,8,9}` הפונקציה תחזיר `3`.\nעל הפונקציה לרוץ בסדר גודל של $\\log n$.",
+   "solution": "**פתרון רשמי** (20A-A עמ' 5, שני פתרונות שונים בתיבה; ההנחה המסומנת בפתרון: המערך מכיל לפחות שני איברים):\nפתרון ראשון:\n```c\nint FindDouble(int* a ,  int n)\n{\n    int low = 0, high = n - 1, mid;\n    while (low < high)\n    {\n        mid = (high-low)/2+low;\n        if (a[mid] == a[mid + 1])\n            return a[mid];\n\n        if(a[mid] - a[low] == mid - low)\n\n            low = mid + 1;\n        else\n            high = mid;\n    }\n}\n```\nפתרון שני:\n```c\nint findDoubleNum(int *a, int n)\n{\n    int low = 0, high = n - 1, mid;\n    /*if (n == 2)\n        return a[0];*/\n\n    while (low <= high)\n    {\n        mid = (high - low) / 2 + low;\n        if (a[mid] == a[0]+mid)\n            low = mid + 1;\n        else\n            high = mid-1;\n    }\n    return a[mid];\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high"
+  },
+  {
+   "num": 4,
+   "part": "ב",
+   "kind": "proof",
+   "topic": "binary_search",
+   "question": "תנו **נימוק** קצר לנכונות הפונקציה.",
+   "solution": "**פתרון רשמי** (20A-A עמ' 6, נימוק לפתרון הראשון `FindDouble`): מאחר וכל איבר במערך **גדול ב-1** מהאיבר הקודם, ההפרש בין האינדקסים חייב להיות שווה להפרש בין האיברים.\nלכן על ידי בדיקת התנאי `if(a[mid] - a[low] == mid - low)` ניתן לדעת האם הערך הכפול במערך הוא בחלק הימני של `mid` או בחלק השמאלי.\nבמידה והתשובה היא כן - הקטע `(low,mid)` אינו מכיל את האיבר הכפול שאנחנו מחפשים, ונמשיך חיפוש בינארי בחלק הימני `(mid+1,high)`.\nבמידה ולא - נתמקד בחיפוש בינארי בקטע `(low,mid)` של המערך.",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high"
+  },
+  {
+   "num": 5,
+   "part": "א",
+   "kind": "code",
+   "topic": "matrices",
+   "question": "**השלימו** את הפונקציה `Sudoku` אשר מקבלת מטריצה $A$ בגודל $R\\times C$ ובודקת האם קיימת בתוך $A$ תת-מטריצה בגודל 3x3 המקיימת את חוקי משחק הסודוקו. משחק הסודוקו דורש שתת-מטריצה בגודל 3x3 תכיל את כל המספרים בין 1 ל-9, ללא חזרות.\nלדוגמא:\n```\n1  12  8  11\n17  1  2   3\n2   8  7   6\n4   4  5   9\n```\n(תת-המטריצה המקיימת את החוקים מסומנת באפור בדוגמה המודפסת: `1 2 3 / 8 7 6 / 4 5 9`, שורות 1-3 ועמודות 1-3.)\nאם מטריצה $A$ מכילה תת-מטריצה המקיימת את חוקי הסודוקו על הפונקציה להחזיר `1`, אחרת - הפונקציה תחזיר `0`.\nהפונקציה `Sudoku` משתמשת במערך מונים `count` ובשתי פונקציות עזר: פונקציה `initializeCountArray` מאפסת את המערך `count`, והפונקציה `TestCount` בודקת איברים במערך `count` כדי לדעת האם תת-המטריצה מכילה את כל המספרים בין 1 ל-9, ללא חזרות.\nא. השלימו את הפונקציה `TestCount`:\n```c\nint TestCount(int *count)\n{\n        int i;\n        for (i = 1; i < 10; i++)\n\n                if (_____________________)\n\n                        ______________________;\n        return 0;\n}\n```",
+   "solution": "**פתרון רשמי** (20A-A עמ' 7): התנאי `count[i] != 1`, ההוראה `return 0`, והפונקציה מסתיימת ב-`return 1;` (בעמוד הפתרון).\n```c\nint TestCount(int *count)\n{\n        int i;\n        for (i = 1; i < 10; i++)\n                if (count[i] != 1)\n                        return 0;\n        return 1;\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "contextId": "c5"
+  },
+  {
+   "num": 5,
+   "part": "ב",
+   "kind": "code",
+   "topic": "matrices",
+   "question": "השלימו את הפונקציה `Sudoku` המשתמשת בשתי פונקציות העזר המוגדרות למעלה:\n```c\nint Sudoku(int mat[______][______])\n{\n        int count[10] = { 0 };\n        int rows,cols,i,j;\n\n        for(rows=0; rows<_______; rows++)\n        {\n                for (cols = 0; cols<________; cols++)\n                {\n                        ____________________________\n\n                        for (i = rows; i <= __________; i++)\n                        {\n                                for (j = cols; j <= _________; j++)\n                                {\n                                        count[_______________________] ++;\n                                }\n                        }\n                        if (__________________________________)\n\n                                ____________________;\n                }\n        }\n        return _________________;\n}\n```",
+   "solution": "**פתרון רשמי** (20A-A עמ' 8): הפתרון מניח שכל האיברים בתוך המטריצה הם בטווח בין 0 ל-9.\nהכותרת יכולה להיות `int Sudoku(int mat[R][C])` או `int Sudoku(int mat[][C])`.\n```c\nint Sudoku(int mat[R][C])    // or: int Sudoku(int mat[][C])\n{\n        int count[10] = { 0 };\n        int rows,cols,i,j;\n\n        for(rows=0; rows<R-2; rows++)\n        {\n                for (cols = 0; cols<C-2; cols++)\n                {\n                        initializeCountArray (count);\n                        for (i = rows; i <= rows + 2; i++)\n                        {\n                                for (j = cols; j <= cols + 2; j++)\n                                {\n                                        count[ mat[i][j] ] ++;\n                                }\n                        }\n                        if (TestCount(count))\n                                return 1;\n                }\n        }\n        return 0;\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "contextId": "c5"
+  }
+ ]
+}
