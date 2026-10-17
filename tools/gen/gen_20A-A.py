@@ -350,6 +350,23 @@ def blank(lines, target):
     return [("___" if i == idx[0] else ln) for i, ln in enumerate(lines)], idx[0]
 
 
+def grp(src, sizes, merge=()):
+    """Logical blocks for `order` steps: consecutive code lines grouped by `sizes`, comments stripped,
+    declarations merged via `merge` = [(old_text, new_text)]."""
+    import re
+    ls = [re.sub(r"\s*//.*$", "", ln) for ln in lines_of(src)]
+    assert sum(sizes) == len(ls), (sum(sizes), len(ls))
+    out, pos = [], 0
+    for n in sizes:
+        out.append(chr(10).join(ls[pos:pos + n]))
+        pos += n
+    for old, new in merge:
+        hit = [i for i, b in enumerate(out) if re.search(old, b)]
+        assert len(hit) == 1, old
+        out[hit[0]] = re.sub(old, new, out[hit[0]])
+    return out
+
+
 def add(num, part, **kw):
     for q in questions:
         if q["num"] == num and q.get("part") == part:
@@ -366,16 +383,20 @@ b2, i2 = swap(SOL2, "return gematria [*str - 'a'] + CalGimatria (str + 1, gematr
               "return gematria [*str - 'a'] * CalGimatria (str + 1, gematria);")
 f2, j2 = blank(S2, "return gematria [*str - 'a'] + CalGimatria (str + 1, gematria);")
 S3 = lines_of(SOL3A)
+O3 = grp(SOL3A, [3, 2, 5, 5, 2])
 b3, i3 = swap(SOL3A, "if (B[ i ] > A[ k ])", "if (B[ i ] < A[ k ])")
 f3a, j3a = blank(S3, "while (i < m && k < n)")
 f3b, j3b = blank(S3, "k++;")
 S4 = lines_of(SOL4A1)
+O4 = grp(SOL4A1, [3, 2, 7, 2])
 b4, i4 = swap(SOL4A1, "high = mid;", "high = mid - 1;")
 f4, j4 = blank(S4, "high = mid;")
 S5A = lines_of(SOL5A)
 b5a, i5a = swap(SOL5A, "if (count[i] != 1)", "if (count[i] == 1)")
 f5a, j5a = blank(S5A, "if (count[i] != 1)")
 S5B = lines_of(SOL5B)
+O5B = grp(SOL5B, [4, 4, 1, 7, 2, 2, 2],
+          merge=[(r"int count\[10\] = \{ 0 \};\s*int rows,cols,i,j;", "int count[10] = { 0 }, rows, cols, i, j;")])
 b5b, i5b = swap(SOL5B, "for (i = rows; i <= rows + 2; i++)", "for (i = rows; i <= rows + 1; i++)")
 f5b, j5b = blank(S5B, "for(rows=0; rows<R-2; rows++)")
 
@@ -386,6 +407,7 @@ PROOF4B = [
     "במקרה כזה ממשיכים בחיפוש בינארי בחלק הימני `(mid+1,high)`.",
     "אם התשובה היא לא, מתמקדים בחיפוש בינארי בקטע `(low,mid)` של המערך.",
 ]
+PROOF4B_ORDER = [PROOF4B[0], PROOF4B[1], " ".join(PROOF4B[2:])]
 PROOF4B_BAD = list(PROOF4B)
 PROOF4B_BAD[3] = "במקרה כזה ממשיכים בחיפוש בינארי בחלק השמאלי `(low,mid)`."
 
@@ -393,7 +415,7 @@ add(1, "א",
     rubric=rub(("הצבה נכונה בנוסחת הנסיגה `a[n-1] / n + fun_rec(a, n - 1)*(n-1)/n` ופירוק עד מקרה הבסיס `n == 1`", 2),
                ("חישוב הערכים הביניים לפי הסדר: מקרה הבסיס, אחר כך הרמות העוקבות", 1),
                ("תוצאה סופית `4.0`", 1)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לשכוח את הגורם `(n-1)/n` בקריאה הרקורסיבית ולחבר פשוט את `a[n-1] / n`.",
               "חילוק שלם: כל המשתנים כאן `double`, ולכן `a[n-1] / n` אינו מעוגל."],
     steps=[
@@ -408,13 +430,13 @@ add(1, "א",
         {"type": "numeric", "prompt": "מה מחזירה `fun_rec(a, 5)`, כלומר התשובה לסעיף?", "answer": 4, "tol": 0,
          "explain": "$\\frac{12}{5}+2\\cdot\\frac{4}{5}=2.4+1.6=4$ (ריצה אמיתית: 4.0)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(1, "ב",
     rubric=rub(("פירוק הקריאה `n = 4` לאיבר `a[3] / 4` ולקריאה `fun_rec(a, 3)` שמוכפלת ב-`3/4`", 2),
                ("חישוב `fun_rec(a, 3)` כממוצע שלושת האיברים הראשונים", 1),
                ("תוצאה סופית `2.0`", 1)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["להשתמש ב-`n = 5` או במערך המלא במקום באיבר ה-4 הראשונים בלבד.",
               "להפעיל את `fun_rec(a, 3)` בלי להכפיל ב-`(n-1)/n = 3/4`."],
     steps=[
@@ -425,13 +447,13 @@ add(1, "ב",
         {"type": "numeric", "prompt": "מה מחזירה `fun_rec(a, 4)`?", "answer": 2, "tol": 0,
          "explain": "$-0.5+2.5=2$ (ריצה אמיתית: 2.0)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(1, "ג",
     rubric=rub(("זיהוי שהפונקציה מחשבת את הממוצע של $n$ האיברים הראשונים", 3),
                ("הנחת האינדוקציה: `fun_rec(a, n-1)` היא ממוצע $n-1$ האיברים הראשונים", 2),
                ("הכפלה ב-$\\frac{n-1}{n}$ הופכת את הממוצע לסכום חלקי $n$, ולכן יחד עם $\\frac{a[n-1]}{n}$ מתקבל הסכום חלקי $n$", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לענות \"סכום\" או \"המקסימום\" רק מתוך הדוגמה, בלי להוכיח לכל $n$.",
               "לא לנמק מדוע הגורם $\\frac{n-1}{n}$ נדרש: הוא הופך ממוצע של $n-1$ איברים לסכומם חלקי $n$."],
     steps=[
@@ -446,14 +468,14 @@ add(1, "ג",
         {"type": "numeric", "prompt": "מה מחזירה `fun_rec` על `{2, 4, 6, 8}` עם `n = 4`?", "answer": 5, "tol": 0,
          "explain": "הממוצע של 2, 4, 6, 8 הוא 5 (ריצה אמיתית: 5.0)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(2, None,
     rubric=rub(("מקרה בסיס: `*str == '\\0'` מחזיר `0`", 4),
                ("שימוש נכון בטבלה: האינדקס `*str - 'a'` ב-`gematria`", 6),
                ("חיבור הערך של התו הנוכחי לקריאה הרקורסיבית על `str + 1`", 7),
                ("רקורסיה אחת לכל תו, כלומר זמן לינארי בלי העתקת המחרוזת", 3)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לשכוח את מקרה הבסיס של סוף המחרוזת ולהמשיך מעבר ל-`'\\0'`.",
               "לגשת ל-`gematria[*str]` בלי להחסיר `'a'` ולצאת מגבולות המערך.",
               "לקרוא רקורסיבית עם `str` במקום `str + 1`, ולא להתקדם."],
@@ -473,14 +495,14 @@ add(2, None,
         {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b2, "bugIndex": i2,
          "explain": "כפל במקום חיבור: מקרה הבסיס מחזיר 0, ולכן הכול מוכפל ב-0 ו-\"exam\" מחזירה 0 (ריצה אמיתית: 0)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(3, "א",
     rubric=rub(("תנאי הלולאה `i < m && k < n`: עוצרים כשאחד המערכים נגמר", 4),
                ("כששני האיברים שווים: `swap` של `B[i]` עם התא הבא בבלוק הקדמי (`++last`) והגדלת `i`, ואז `k++`", 5),
                ("כש-`B[i] > A[k]` מקדמים את `k`", 3),
                ("אחרת (`B[i] < A[k]`) מקדמים את `i`", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["תנאי עם `||` במקום `&&`: הלולאה ממשיכה אחרי שמערך נגמר וקוראת מחוץ לגבולות.",
               "לקדם את המצביע הלא נכון בהשוואה: במערך ממוין מקדמים את המצביע של האיבר הקטן יותר.",
               "לא להגדיל את `last` לפני ה-`swap` ולדרוס איבר בבלוק הקדמי."],
@@ -489,26 +511,26 @@ add(3, "א",
          "answer": 3, "tol": 0,
          "explain": "$B$ הופך ל-`5 8 10 7 -2 5 11 12`: הבלוק הקדמי הוא `5 8 10` (ריצה אמיתית)."},
         {"type": "fillblank", "prompt": "השלימו את תנאי הלולאה.", "code": True, "lines": f3a, "blankIndex": j3a,
-         "options": opts("while (i < m && k < n)", "while (i < m || k < n)", "while (i < m)", "while (i < n && k < m)"),
-         "correctId": "a", "explain": "הלולאה נעצרת כשאחד המערכים נגמר; `||` קורא מחוץ לגבולות."},
+         "options": opts("while (i < m && k < n)", "while (i < m || k < n)", "while (i < m - 1 && k < n)", "while (i < n && k < m)"),
+         "correctId": "a", "explain": "הלולאה נעצרת כשאחד המערכים נגמר; `||` קורא מחוץ לגבולות, ו-`i < m - 1` מפספס את האיבר האחרון של $B$ (נכשל ב-3648 מ-20000 קלטים אקראיים)."},
         {"type": "fillblank", "prompt": "השלימו את הפקודה בענף `B[i] > A[k]`.", "code": True, "lines": f3b, "blankIndex": j3b,
          "options": opts("k++;", "i++;", "last++;", "k--;"), "correctId": "a",
          "explain": "`B[i]` גדול מ-`A[k]`, ולכן ההתאמה עבור `B[i]` יכולה להימצא רק בהמשך $A$: מקדמים את `k`."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `partition_B`.", "code": True, "lines": S3,
-         "explain": "אתחול, לולאה, ענף השוויון, ואחר כך ענפי ההשוואה."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `partition_B`.", "code": True, "lines": O3,
+         "explain": "אתחול, כותרת הלולאה, ענף השוויון (`swap` ו-`k++` יחד), ענפי ההשוואה, וסגירה."},
         {"type": "findbug", "prompt": "שורה אחת שונתה והפונקציה כבר אינה מסדרת את הבלוק הקדמי. מצאו אותה.", "code": True,
          "lines": b3, "bugIndex": i3,
          "explain": "עם `<` הענפים מתחלפים; בדוגמה $B$ נשאר `-2 5 5 7 8 10 11 12` ללא הבלוק הקדמי (ריצה אמיתית)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(3, "ב",
     rubric=rub(("זמן הריצה הוא $O(m+n)$", 3),
                ("נימוק: בכל איטרציה `i` או `k` (או שניהם) גדלים, ולכן לכל היותר $m+n$ איטרציות", 2),
                ("ה-`swap` מתבצע רק בשוויון ולכן לכל היותר $n$ פעמים ואינו משנה את הסדר הגדול", 1)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לענות $O(n\\cdot m)$ בגלל הלולאה: אין לולאה מקוננת, כל מצביע רק מתקדם.",
-              "לענות $O(\\max(m,n))$ בלי נימוק: צריך להסביר ששני המצביעים רק מתקדמים."],
+              "לספור רק את האיטרציות עם שוויון (עד $n$) ולענות $O(n)$: גם איטרציות בלי שוויון מתקדמות, ו-$B$ יכול להיות גדול בהרבה מ-$A$."],
     steps=[
         {"type": "numeric", "prompt": "בדוגמה ($n=7$, $m=8$): כמה איטרציות מבצעת הלולאה?", "answer": 10, "tol": 0,
          "explain": "ספירה בריצה אמיתית: 10 איטרציות, פחות מ-$m+n=15$."},
@@ -521,14 +543,14 @@ add(3, "ב",
          "accept": ["O(m+n)", "O(n+m)"], "normalize": "complexity",
          "explain": "סריקה אחת של כל אחד מהמערכים: $O(m+n)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(4, "א",
     rubric=rub(("שימוש בחיפוש בינארי עם `low`, `high` ו-`mid` כדי להגיע ל-$O(\\log n)$", 4),
                ("החזרת `a[mid]` כשמתקיים `a[mid] == a[mid + 1]`", 4),
                ("בדיקת `a[mid] - a[low] == mid - low`: אם מתקיים אין כפול בקטע `low..mid`, ולכן `low = mid + 1`", 5),
                ("אחרת הכפול בקטע השמאלי ולכן `high = mid`", 4)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["חיפוש לינארי על כל המערך: נכון אבל $O(n)$ ולא $O(\\log n)$.",
               "לבדוק את `a[mid]` מול `mid` בלבד (בלי `low`) כשהמערך אינו מתחיל ב-0.",
               "`high = mid - 1` במקום `high = mid`: מאבדים את `mid` שיכול להיות חלק מהזוג הכפול."],
@@ -544,20 +566,20 @@ add(4, "א",
         {"type": "fillblank", "prompt": "השלימו את הפקודה בענף ה-`else`.", "code": True, "lines": f4, "blankIndex": j4,
          "options": opts("high = mid;", "high = mid - 1;", "low = mid;", "low = mid + 1;"), "correctId": "a",
          "explain": "`mid` עצמו עדיין יכול להיות אחד משני הכפולים, ולכן `high = mid` ולא `mid - 1`."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `FindDouble`.", "code": True, "lines": S4,
-         "explain": "אתחול, לולאה, חישוב `mid`, בדיקת כפול, בדיקת ההפרשים, ובחירת הצד."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `FindDouble`.", "code": True, "lines": O4,
+         "explain": "אתחול, כותרת הלולאה, גוף הלולאה (חישוב `mid` ושתי הבדיקות עם הבחירה בצד), וסגירה."},
         {"type": "findbug", "prompt": "שורה אחת שונתה והפונקציה נכשלת על חלק מהקלטים. מצאו אותה.", "code": True,
          "lines": b4, "bugIndex": i4,
          "explain": "עם `high = mid - 1` נאבד את `mid`: למשל על `{-4,-4,-3}` הלולאה מסתיימת בלי להחזיר ערך. "
                     "בבדיקה על 594 מערכים תקינים הגרסה הרשמית נכונה תמיד והגרסה השבורה נכשלת ב-216."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(4, "ב",
     rubric=rub(("הבחנה שהפרש הערכים בין שני תאים שווה להפרש האינדקסים כל עוד אין כפול ביניהם", 4),
                ("הבדיקה `a[mid] - a[low] == mid - low` מכריעה אם הכפול בקטע השמאלי או הימני", 3),
                ("שתי התוצאות מובילות לצמצום התחום ל-`(mid+1,high)` או ל-`(low,mid)`", 1)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לנמק רק \"חיפוש בינארי\" בלי להסביר איך ההשוואה מראה לאיזה צד ללכת.",
               "לבלבל בין שני הצדדים: שוויון ההפרשים אומר שהכפול בצד **ימין**."],
     steps=[
@@ -566,19 +588,19 @@ add(4, "ב",
                          "המערך ממוין ולכן אפשר לחפש את הערך הכפול ישירות", "הערך הכפול הוא תמיד באמצע המערך",
                          "סכום האיברים ידוע מראש"), "correctId": "a",
          "explain": "כל איבר גדול ב-1 מקודמו, ולכן $a[mid]-a[low]=mid-low$ בדיוק כשאין כפול ב-`low..mid`."},
-        {"type": "order", "prompt": "סדרו את שלבי הנימוק.", "lines": PROOF4B,
-         "explain": "קודם התכונה, אחר כך הבדיקה, ואז שני המקרים."},
+        {"type": "order", "prompt": "סדרו את שלבי הנימוק.", "lines": PROOF4B_ORDER,
+         "explain": "קודם התכונה, אחר כך הבדיקה, ואז שני המקרים (הסדר ביניהם חופשי)."},
         {"type": "findbug", "prompt": "בגרסה הבאה של הנימוק משפט אחד שגוי. איזה?", "lines": PROOF4B_BAD, "bugIndex": 3,
          "explain": "אם הקטע `(low,mid)` ללא כפול, ממשיכים ימינה, בקטע `(mid+1,high)`, ולא שמאלה."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(5, "א",
     rubric=rub(("לולאה על `i` מ-1 עד 9 (לא כוללת את 0)", 2),
                ("תנאי הכישלון `count[i] != 1`: ספרה חסרה או חוזרת", 3),
                ("`return 0` מיד כשהתנאי מתקיים", 1),
                ("`return 1` בסוף כשכל הספרות 1..9 מופיעות בדיוק פעם אחת", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לבדוק גם את `count[0]`: חלון חוקי אינו מכיל 0.",
               "להסתפק בבדיקת `count[i] > 1`: חלון עם 0 ובלי 9 עובר בטעות.",
               "לשכוח את `return 1` בסוף הפונקציה."],
@@ -597,14 +619,14 @@ add(5, "א",
         {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b5a, "bugIndex": i5a,
          "explain": "עם `== 1` חלון חוקי נפסל מיד (`count` של כל 1 מחזיר 0, ריצה אמיתית)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(5, "ב",
     rubric=rub(("גבולות הלולאות: `rows < R-2` ו-`cols < C-2` כך שחלון 3x3 נשאר בתוך המטריצה", 6),
                ("איפוס `count` בכל חלון (`initializeCountArray`)", 3),
                ("ספירת 9 התאים של החלון: `i` מ-`rows` עד `rows + 2`, `j` מ-`cols` עד `cols + 2`, ו-`count[mat[i][j]]++`", 6),
                ("החזרת 1 כש-`TestCount` מצליחה, ו-0 אחרי שכל החלונות נבדקו", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["גבול `R` במקום `R-2`: החלון יוצא מהמטריצה.",
               "לא לאפס את `count` בין חלונות, ולצבור ספירות מחלונות קודמים.",
               "להחזיר 0 מיד אחרי החלון הראשון הלא חוקי במקום להמשיך לחלון הבא."],
@@ -616,16 +638,16 @@ add(5, "ב",
          "answer": 2, "tol": 0,
          "explain": "הספרה 5 מופיעה פעמיים (`count[9] = 0`), ולכן `TestCount` מחזירה 0 (ריצה אמיתית: 2 ו-0)."},
         {"type": "fillblank", "prompt": "השלימו את כותרת הלולאה החיצונית.", "code": True, "lines": f5b, "blankIndex": j5b,
-         "options": opts("for(rows=0; rows<R-2; rows++)", "for(rows=0; rows<R-3; rows++)", "for(rows=0; rows<R; rows++)",
-                         "for(rows=0; rows<=R-2; rows++)"), "correctId": "a",
-         "explain": "חלון מתחיל בשורה `rows` ומסתיים ב-`rows + 2`, ולכן `rows` עד `R-3` כולל. `R-3` חותך את החלון האחרון "
-                    "(ריצה אמיתית: חלון בשורות האחרונות לא נמצא)."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `Sudoku`.", "code": True, "lines": S5B,
-         "explain": "לולאות על פינת החלון, איפוס, ספירה, בדיקה, ובסוף `return 0`."},
+         "options": opts("for(rows=0; rows<R-2; rows++)", "for(rows=0; rows<R-3; rows++)", "for(rows=0; rows<R-4; rows++)",
+                         "for(rows=0; rows<R/2; rows++)"), "correctId": "a",
+         "explain": "חלון מתחיל בשורה `rows` ומסתיים ב-`rows + 2`, ולכן `rows` עד `R-3` כולל. כל אחד מהגבולות האחרים "
+                    "(`R-3`, `R-4`, `R/2`) מדלג על שורות התחלה אחרונות ומפספס חלון חוקי (ריצה אמיתית)."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `Sudoku`.", "code": True, "lines": O5B,
+         "explain": "הצהרות, לולאות על פינת החלון, איפוס, ספירה, בדיקה, סגירת הלולאות, ובסוף `return 0`."},
         {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b5b, "bugIndex": i5b,
          "explain": "עם `rows + 1` נספרות רק שתי שורות (6 תאים), ו-`TestCount` לעולם לא מצליחה: על חלון חוקי מוחזר 0 (ריצה אמיתית)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 exam = {
     "examCode": "20A-A",

@@ -32,7 +32,7 @@
    "rubric": [
     {
      "text": "לולאה חיצונית על השורות `i`, ולולאה פנימית שמסכמת את כל השורה",
-     "points": 4
+     "points": 5
     },
     {
      "text": "איפוס `sum = 0` בתחילת כל שורה",
@@ -47,7 +47,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "להשוות את `sum` ל-`M[i][i]` בלי להחסיר את איבר האלכסון מהסכום.",
     "לשכוח לאפס את `sum` בין שורות, ולצבור סכומים מכל השורות.",
@@ -172,7 +172,7 @@
      "explain": "עם `==` מטריצה חוקית נפסלת: על המטריצה הראשונה מוחזר 0 במקום 1 (ריצה אמיתית)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 1,
@@ -188,7 +188,7 @@
    "rubric": [
     {
      "text": "לולאה חיצונית על העמודות `j` ופנימית על השורות `i` שמסכמת את העמודה",
-     "points": 5
+     "points": 4
     },
     {
      "text": "איפוס `sum = 0` בתחילת כל עמודה",
@@ -203,7 +203,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "להפוך את האינדקסים ולסכם שורה במקום עמודה (`M[j][i]`).",
     "לשכוח לאפס את `sum` בין עמודות.",
@@ -323,7 +323,7 @@
      "explain": "בלי להחסיר את האלכסון, המטריצה החוקית נפסלת (מוחזר 0 במקום 1, ריצה אמיתית)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 2,
@@ -357,7 +357,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לבדוק את כל הזוגות בשתי לולאות: לא רקורסיבי ו-$O(n^2)$.",
     "להזיז את המצביע הלא נכון: אם הסכום גדול מדי צריך להקטין את `j`, לא להגדיל את `i`.",
@@ -400,32 +400,27 @@
       {
        "id": "c",
        "type": "text",
-       "value": "return f_2(c, k, i, j + 1);"
+       "value": "return f_2(c, k, i, j - 2);"
       },
       {
        "id": "d",
        "type": "text",
-       "value": "return f_2(c, k, i - 1, j);"
+       "value": "return f_2(c, k, i + 1, j - 1);"
       }
      ],
      "correctId": "a",
-     "explain": "המערך ממוין: כדי להקטין סכום גדול מדי מקטינים את האיבר הימני."
+     "explain": "המערך ממוין: כדי להקטין סכום גדול מדי מקטינים את האיבר הימני. `j - 2` ו-`i + 1, j - 1` מדלגים על זוגות: `j - 2` מחזירה -1 בדוגמה הראשונה במקום 1, ו-`i + 1, j - 1` מחזירה -1 על `k=10` באותו מערך במקום 1 (ריצה אמיתית)."
     },
     {
      "type": "order",
      "prompt": "סדרו את שורות הפונקציה `f_2`.",
      "code": true,
      "lines": [
-      "int f_2(int *c, int k, int i, int j) {",
-      "    if (i == j)",
-      "        return -1;",
-      "    if (c[i] + c[j] == k) return i;",
-      "    if (c[i] + c[j] > k)",
-      "        return f_2(c, k, i, j - 1);",
-      "    return f_2(c, k, i + 1, j);",
-      "}"
+      "int f_2(int *c, int k, int i, int j) {\n    if (i == j)\n        return -1;",
+      "    if (c[i] + c[j] == k) return i;\n    if (c[i] + c[j] > k)\n        return f_2(c, k, i, j - 1);",
+      "    return f_2(c, k, i + 1, j);\n}"
      ],
-     "explain": "מקרה בסיס, התאמה, סכום גדול מדי, ובסוף סכום קטן מדי."
+     "explain": "מקרה בסיס, בלוק שתי הבדיקות (שוויון וסכום גדול מדי, זרות זו לזו), ובסוף סכום קטן מדי."
     },
     {
      "type": "findbug",
@@ -454,7 +449,7 @@
      "explain": "כל קריאה מצמצמת את התחום באחד: $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 3,
@@ -488,10 +483,10 @@
      "points": 5
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לבדוק רק שאין חזרות ולשכוח לבדוק שהאותיות רצופות.",
-    "להשוות לאורך המחרוזת במקום לחפש בלוק רציף: אותיות כמו `a`, `c` נראות תקינות.",
+    "לדרוש שהאותיות יופיעו במחרוזת בסדר עולה (כל אות גדולה ב-1 מקודמתה): `\"cbed\"` חוקית אף שאינה ממוינת, ולכן רק הרצף של הספירות קובע.",
     "מעקב מקסימום ומינימום עם `if`/`else if`: אות שהיא מינימום חדש לא נבדקת כמקסימום (הגרסה השנייה)."
    ],
    "steps": [
@@ -578,26 +573,14 @@
      "prompt": "סדרו את שורות הפונקציה `f_3`.",
      "code": true,
      "lines": [
-      "int f_3(char* str) {",
-      "      int a[26] = { 0 };",
-      "      int i = 0;",
-      "      while (*str) {",
-      "            a[*str - 'a']++;",
-      "            if (a[*str - 'a'] > 1) return 0;",
-      "            str++;",
-      "      }",
-      "      while ((i<26) && (a[i] == 0))",
-      "            i++;",
-      "      while ((i < 26) && (a[i] == 1))",
-      "            i++;",
-      "      while (i < 26) {",
-      "            if (a[i] != 0) return 0;",
-      "            i++;",
-      "      }",
-      "      return 1;",
-      "}"
+      "int f_3(char* str) {\n      int a[26] = { 0 }, i = 0;",
+      "      while (*str) {\n            a[*str - 'a']++;\n            if (a[*str - 'a'] > 1) return 0;\n            str++;\n      }",
+      "      while ((i<26) && (a[i] == 0))\n            i++;",
+      "      while ((i < 26) && (a[i] == 1))\n            i++;",
+      "      while (i < 26) {\n            if (a[i] != 0) return 0;\n            i++;\n      }",
+      "      return 1;\n}"
      ],
-     "explain": "ספירה, דילוג על אפסים, מעבר על אחדים, ובדיקה שהשאר אפס."
+     "explain": "הצהרות, לולאת הספירה, דילוג על אפסים, מעבר על אחדים, ובדיקה שהשאר אפס."
     },
     {
      "type": "findbug",
@@ -636,7 +619,7 @@
      "explain": "סריקה אחת של המחרוזת ועוד 26 תאים: $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 4,
@@ -666,7 +649,7 @@
      "points": 4
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "שמירת כל המספרים במערך: הנחיית השאלה אוסרת.",
     "`>=` במקום `>`: מדפיס גם מספר ששווה למקסימום הקודם.",
@@ -737,19 +720,13 @@
      "prompt": "סדרו את שורות הפונקציה `maxmax`.",
      "code": true,
      "lines": [
-      "int  maxmax(int n) {",
-      "    int max, i, num;",
+      "int  maxmax(int n) {\n    int max, i, num;",
       "    scanf(\"%d\", &max);",
-      "    for (i = 0; i < n - 1; i++) {",
-      "        scanf(\"%d\", &num);",
-      "        if (num > max) {",
-      "            printf(\"%d\", num);",
-      "            max = num;",
-      "        }",
-      "    }",
-      "}"
+      "    for (i = 0; i < n - 1; i++) {\n        scanf(\"%d\", &num);",
+      "        if (num > max) {\n            printf(\"%d\", num);\n            max = num;\n        }",
+      "    }\n}"
      ],
-     "explain": "קליטת הראשון, לולאה, קליטה, תנאי, הדפסה ועדכון."
+     "explain": "הצהרות, קליטת הראשון, כותרת הלולאה עם קליטה, בלוק התנאי (הדפסה ועדכון), וסגירה."
     },
     {
      "type": "findbug",
@@ -772,7 +749,7 @@
      "explain": "עם `>=` על הקלט `2 2 3` מודפס 23 במקום 3 (ריצה אמיתית)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   }
  ]
 }

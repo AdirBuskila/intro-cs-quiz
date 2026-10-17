@@ -224,6 +224,23 @@ def blank(lines, target):
     return [("___" if i == idx[0] else ln) for i, ln in enumerate(lines)], idx[0]
 
 
+def grp(src, sizes, merge=()):
+    """Logical blocks for `order` steps: consecutive code lines grouped by `sizes`, comments stripped,
+    declarations merged via `merge` = [(regex, replacement)]."""
+    import re
+    ls = [re.sub(r"\s*//.*$", "", ln) for ln in lines_of(src)]
+    assert sum(sizes) == len(ls), (sum(sizes), len(ls))
+    out, pos = [], 0
+    for n in sizes:
+        out.append(chr(10).join(ls[pos:pos + n]))
+        pos += n
+    for old, new in merge:
+        hit = [i for i, b in enumerate(out) if re.search(old, b)]
+        assert len(hit) == 1, old
+        out[hit[0]] = re.sub(old, new, out[hit[0]])
+    return out
+
+
 def add(num, **kw):
     for q in questions:
         if q["num"] == num:
@@ -237,15 +254,18 @@ def add(num, **kw):
 # question4_version2 of Q4 (version 1 does not answer the question). ----
 CMP = "if(pSArray[i].numerator * max_result.denominator>max_result.numerator*pSArray[i].denominator)"
 S1 = lines_of(SOL1)
+O1 = grp(SOL1, [4, 2, 7, 3])
 b1, i1 = swap(SOL1, "if (pSArray[i].num > max_result.num)", "if (pSArray[i].num < max_result.num)")
 f1, j1 = blank(S1, CMP)
 S2 = lines_of(SOL2)
 b2, i2 = swap(SOL2, "if (a[0] < a[1])", "if (a[0] <= a[1])")
 f2, j2 = blank(S2, "return 1 + incr_subarray(a + 1, n - 1);")
 S3 = lines_of(SOL3A)
+O3 = grp(SOL3A, [3, 2, 6, 2, 2])
 b3, i3 = swap(SOL3A, "count[(*str) - 'a']=1;", "count[(*str) - 'a']=0;")
 f3, j3 = blank(S3, "if (count[(*str) - 'a'] == 0)")
 S4 = lines_of(SOL4B)
+O4 = grp(SOL4B, [2, 2, 4, 3, 2])
 f4, j4 = blank(S4, "high = mid - 1;")
 
 add(1,
@@ -253,7 +273,7 @@ add(1,
                ("השוואת החלק השלם `num`: איבר עם חלק שלם גדול יותר הופך למקסימום", 6),
                ("כשהחלקים השלמים שווים: השוואת השברים בכפל צולב `numerator * denominator` בלי חילוק", 8),
                ("החזרת המבנה המקסימלי; סריקה אחת בלבד, כלומר $O(n)$", 5)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["להשוות רק את `num` ולהתעלם משברים כשהחלק השלם שווה.",
               "להשוות מונים בלבד (`numerator`) או מכפלות `numerator * denominator`: שתי ההשוואות שגויות בין מכנים שונים.",
               "לחשב שברים עשרוניים עם חילוק שלם (`numerator / denominator` נותן 0)."],
@@ -273,19 +293,19 @@ add(1,
          "correctId": "a",
          "explain": "כפל צולב משווה שברים. `<` בוחר את הקטן יותר (שגוי ב-8830 מ-20000 זוגות אקראיים), "
                     "מונים בלבד שגוי כשהמכנים שונים (950), ומכפלת מונה כפול מכנה שגויה (1533)."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `findBiggest` (בלי שורות ההערה).", "code": True, "lines": S1,
-         "explain": "אתחול, לולאה, השוואת חלק שלם, ובמקרה שוויון כפל צולב."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `findBiggest` (בלי שורות ההערה).", "code": True, "lines": O1,
+         "explain": "אתחול (שתי ההצהרות יחד), כותרת הלולאה, שרשרת ההשוואות (חלק שלם ואז כפל צולב), וסגירה עם ההחזרה."},
         {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b1, "bugIndex": i1,
          "explain": "עם `<` נבחר החלק השלם הקטן יותר: על מערך הדוגמה מוחזר $2\\frac{7}{8}$ במקום $5\\frac{3}{4}$ (ריצה אמיתית: 2 7/8)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(2,
     rubric=rub(("מקרה בסיס: `n == 1` מחזיר `1`", 5),
                ("השוואה ממש בין שני האיברים הראשונים: `a[0] < a[1]`", 8),
                ("כשהרצף ממשיך: `1 + incr_subarray(a + 1, n - 1)`", 8),
                ("אחרת הרצף נעצר ומחזירים `1`", 4)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["להשתמש ב-`<=` במקום `<`: הרצף חייב להיות עולה **ממש**.",
               "לשכוח את מקרה הבסיס ולגשת ל-`a[1]` מעבר לסוף המערך.",
               "להחזיר את הקריאה הרקורסיבית בלי `1 +`, או לקרוא עם `a` במקום `a + 1`."],
@@ -296,14 +316,14 @@ add(2,
          "explain": "חמש הצעדים הראשונים עולים ממש, והזוג `5,5` עוצר את הרצף (ריצה אמיתית: 5)."},
         {"type": "fillblank", "prompt": "השלימו את הענף שבו הרצף ממשיך.", "code": True, "lines": f2, "blankIndex": j2,
          "options": opts("return 1 + incr_subarray(a + 1, n - 1);", "return incr_subarray(a + 1, n - 1);",
-                         "return 1 + incr_subarray(a, n - 1);", "return 1 + incr_subarray(a + 1, n);"), "correctId": "a",
+                         "return 1 + incr_subarray(a, n - 1);", "return 2 + incr_subarray(a + 1, n - 1);"), "correctId": "a",
          "explain": "מוסיפים 1 על האיבר הנוכחי וממשיכים מהאיבר הבא עם מערך קצר באחד."},
         {"type": "order", "prompt": "סדרו את שורות הפונקציה `incr_subarray`.", "code": True, "lines": S2,
          "explain": "מקרה בסיס, בדיקת העלייה, המשך הרצף ואחרת עצירה."},
         {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b2, "bugIndex": i2,
          "explain": "עם `<=` זוג שווה נחשב כעלייה: על `-5,-5,12,10,...` מוחזר 3 במקום 1 (ריצה אמיתית: 3)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(3,
     rubric=rub(("מערך עזר של 26 מונים שמסמן אילו אותיות כבר נראו", 5),
@@ -311,7 +331,7 @@ add(3,
                ("כתיבה לאחור עם מצביע `last` שמתקדם רק כשנשמרת אות, ועדכון המונה", 7),
                ("סגירת המחרוזת עם `'\\0'` בסוף", 4),
                ("זמן $O(n)$ וללא מערך נוסף בגודל המחרוזת", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["חיפוש האות בכל פעם במחרוזת שנבנתה עד כה: זמן $O(n^2)$ ולא $O(n)$.",
               "לשכוח את `'\\0'` בסוף ולהשאיר זנב של אותיות ישנות.",
               "אינדקס `*str - 'A'` עבור אותיות קטנות יוצא מגבולות המערך בגודל 26."],
@@ -322,22 +342,22 @@ add(3,
          "options": opts("if (count[(*str) - 'a'] == 0)", "if (count[(*str) - 'a'] == 1)", "if (count[(*str) - 'a'] != 0)",
                          "if (count[(*str) - 'a'] > 1)"), "correctId": "a",
          "explain": "שומרים אות רק כשהיא טרם נראתה, כלומר המונה שלה 0."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `removeDuplicates`.", "code": True, "lines": S3,
-         "explain": "מצביע כתיבה ומונים, לולאה, בדיקה, סימון וכתיבה, ובסוף `'\\0'`."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `removeDuplicates`.", "code": True, "lines": O3,
+         "explain": "הצהרות, כותרת הלולאה, בלוק ה-`if` (סימון וכתיבה), `str++` וסגירה, ובסוף סימון סוף המחרוזת."},
         {"type": "findbug", "prompt": "שורה אחת שונתה. מצאו אותה.", "code": True, "lines": b3, "bugIndex": i3,
          "explain": "אם המונה נשאר 0 האות לא מסומנת כנראית: `\"aa\"` נשארת `\"aa\"` (ריצה אמיתית)."},
         {"type": "text", "prompt": "מהי סיבוכיות הזמן? (למשל `O(n)`)", "accept": ["O(n)"], "normalize": "complexity",
          "explain": "סריקה אחת עם עבודה קבועה לכל תו: $O(n)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(4,
     rubric=rub(("חיפוש בינארי עם `low`, `high`, `mid` ולולאה `while (low <= high)`", 8),
                ("כש-`a[mid] >= k`: שומרים אותו כמועמד וממשיכים שמאלה (`high = mid - 1`)", 10),
                ("אחרת ממשיכים ימינה (`low = mid + 1`)", 6),
-               ("אתחול `min = a[n-1]` למקרה שכל האיברים קטנים מ-`k`, והחזרת `min`", 3),
+               ("אתחול `min` (למשל `a[n-1]`) והחזרת `min`", 3),
                ("זמן ריצה $O(\\log n)$", 3)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לעבור על המערך בלולאה לינארית: $O(n)$ ולא $O(\\log n)$.",
               "להחזיר את הערך הגדול ביותר שקטן או שווה ל-`k` במקום הקטן ביותר שגדול או שווה ל-`k`.",
               "לא לשמור את המועמד לפני שממשיכים שמאלה ולאבד אותו."],
@@ -351,12 +371,12 @@ add(4,
         {"type": "fillblank", "prompt": "השלימו את הפקודה אחרי ששמרנו מועמד.", "code": True, "lines": f4, "blankIndex": j4,
          "options": opts("high = mid - 1;", "high = mid;", "low = mid + 1;", "low = mid;"), "correctId": "a",
          "explain": "המועמד נשמר ב-`min`, וכדי למצוא קטן ממנו שעדיין גדול או שווה ל-`k` מחפשים משמאלו."},
-        {"type": "order", "prompt": "סדרו את שורות הפונקציה `question4_version2`.", "code": True, "lines": S4,
-         "explain": "אתחול, לולאה, חישוב `mid`, שני הענפים, ובסוף החזרת `min`."},
+        {"type": "order", "prompt": "סדרו את שורות הפונקציה `question4_version2`.", "code": True, "lines": O4,
+         "explain": "אתחול, כותרת הלולאה, חישוב `mid`, הענף של המועמד (שמירה והזזת `high`), הענף השני עם הסגירה, ובסוף `min`."},
         {"type": "text", "prompt": "מהי סיבוכיות הזמן? (למשל `O(n)`)", "accept": ["O(log n)"], "normalize": "complexity",
          "explain": "כל איטרציה חוצה את התחום: $O(\\log n)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 exam = {
     "examCode": "22A-A",

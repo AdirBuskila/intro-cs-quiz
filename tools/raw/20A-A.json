@@ -48,7 +48,7 @@
      "points": 1
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לשכוח את הגורם `(n-1)/n` בקריאה הרקורסיבית ולחבר פשוט את `a[n-1] / n`.",
     "חילוק שלם: כל המשתנים כאן `double`, ולכן `a[n-1] / n` אינו מעוגל."
@@ -83,7 +83,7 @@
      "explain": "$\\frac{12}{5}+2\\cdot\\frac{4}{5}=2.4+1.6=4$ (ריצה אמיתית: 4.0)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 1,
@@ -110,7 +110,7 @@
      "points": 1
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "להשתמש ב-`n = 5` או במערך המלא במקום באיבר ה-4 הראשונים בלבד.",
     "להפעיל את `fun_rec(a, 3)` בלי להכפיל ב-`(n-1)/n = 3/4`."
@@ -138,7 +138,7 @@
      "explain": "$-0.5+2.5=2$ (ריצה אמיתית: 2.0)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 1,
@@ -165,7 +165,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לענות \"סכום\" או \"המקסימום\" רק מתוך הדוגמה, בלי להוכיח לכל $n$.",
     "לא לנמק מדוע הגורם $\\frac{n-1}{n}$ נדרש: הוא הופך ממוצע של $n-1$ איברים לסכומם חלקי $n$."
@@ -235,7 +235,7 @@
      "explain": "הממוצע של 2, 4, 6, 8 הוא 5 (ריצה אמיתית: 5.0)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 2,
@@ -264,7 +264,7 @@
      "points": 3
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לשכוח את מקרה הבסיס של סוף המחרוזת ולהמשיך מעבר ל-`'\\0'`.",
     "לגשת ל-`gematria[*str]` בלי להחסיר `'a'` ולצאת מגבולות המערך.",
@@ -359,7 +359,7 @@
      "explain": "כפל במקום חיבור: מקרה הבסיס מחזיר 0, ולכן הכול מוכפל ב-0 ו-\"exam\" מחזירה 0 (ריצה אמיתית: 0)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 3,
@@ -390,7 +390,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "תנאי עם `||` במקום `&&`: הלולאה ממשיכה אחרי שמערך נגמר וקוראת מחוץ לגבולות.",
     "לקדם את המצביע הלא נכון בהשוואה: במערך ממוין מקדמים את המצביע של האיבר הקטן יותר.",
@@ -442,7 +442,7 @@
       {
        "id": "c",
        "type": "text",
-       "value": "while (i < m)"
+       "value": "while (i < m - 1 && k < n)"
       },
       {
        "id": "d",
@@ -451,7 +451,7 @@
       }
      ],
      "correctId": "a",
-     "explain": "הלולאה נעצרת כשאחד המערכים נגמר; `||` קורא מחוץ לגבולות."
+     "explain": "הלולאה נעצרת כשאחד המערכים נגמר; `||` קורא מחוץ לגבולות, ו-`i < m - 1` מפספס את האיבר האחרון של $B$ (נכשל ב-3648 מ-20000 קלטים אקראיים)."
     },
     {
      "type": "fillblank",
@@ -507,25 +507,13 @@
      "prompt": "סדרו את שורות הפונקציה `partition_B`.",
      "code": true,
      "lines": [
-      "void partition_B(int* A, int n, int* B, int m)",
-      "{",
-      "    int i=0, k = 0, last = -1;",
-      "    while (i < m && k < n)",
-      "    {",
-      "        if (B[ i ] == A[ k ])",
-      "        {",
-      "            swap (B + (++last) , B + (i ++ ));   // last ++; swap (&B[last], &B[i] ) ; i++;",
-      "            k ++ ;",
-      "        }",
-      "        else",
-      "            if (B[ i ] > A[ k ])",
-      "                k++;",
-      "            else",
-      "                i++ ;",
-      "    }",
-      "}"
+      "void partition_B(int* A, int n, int* B, int m)\n{\n    int i=0, k = 0, last = -1;",
+      "    while (i < m && k < n)\n    {",
+      "        if (B[ i ] == A[ k ])\n        {\n            swap (B + (++last) , B + (i ++ ));\n            k ++ ;\n        }",
+      "        else\n            if (B[ i ] > A[ k ])\n                k++;\n            else\n                i++ ;",
+      "    }\n}"
      ],
-     "explain": "אתחול, לולאה, ענף השוויון, ואחר כך ענפי ההשוואה."
+     "explain": "אתחול, כותרת הלולאה, ענף השוויון (`swap` ו-`k++` יחד), ענפי ההשוואה, וסגירה."
     },
     {
      "type": "findbug",
@@ -554,7 +542,7 @@
      "explain": "עם `<` הענפים מתחלפים; בדוגמה $B$ נשאר `-2 5 5 7 8 10 11 12` ללא הבלוק הקדמי (ריצה אמיתית)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 3,
@@ -581,10 +569,10 @@
      "points": 1
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לענות $O(n\\cdot m)$ בגלל הלולאה: אין לולאה מקוננת, כל מצביע רק מתקדם.",
-    "לענות $O(\\max(m,n))$ בלי נימוק: צריך להסביר ששני המצביעים רק מתקדמים."
+    "לספור רק את האיטרציות עם שוויון (עד $n$) ולענות $O(n)$: גם איטרציות בלי שוויון מתקדמות, ו-$B$ יכול להיות גדול בהרבה מ-$A$."
    ],
    "steps": [
     {
@@ -633,7 +621,7 @@
      "explain": "סריקה אחת של כל אחד מהמערכים: $O(m+n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 4,
@@ -663,7 +651,7 @@
      "points": 4
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "חיפוש לינארי על כל המערך: נכון אבל $O(n)$ ולא $O(\\log n)$.",
     "לבדוק את `a[mid]` מול `mid` בלבד (בלי `low`) כשהמערך אינו מתחיל ב-0.",
@@ -756,22 +744,12 @@
      "prompt": "סדרו את שורות הפונקציה `FindDouble`.",
      "code": true,
      "lines": [
-      "int FindDouble(int* a ,  int n)",
-      "{",
-      "    int low = 0, high = n - 1, mid;",
-      "    while (low < high)",
-      "    {",
-      "        mid = (high-low)/2+low;",
-      "        if (a[mid] == a[mid + 1])",
-      "            return a[mid];",
-      "        if(a[mid] - a[low] == mid - low)",
-      "            low = mid + 1;",
-      "        else",
-      "            high = mid;",
-      "    }",
-      "}"
+      "int FindDouble(int* a ,  int n)\n{\n    int low = 0, high = n - 1, mid;",
+      "    while (low < high)\n    {",
+      "        mid = (high-low)/2+low;\n        if (a[mid] == a[mid + 1])\n            return a[mid];\n        if(a[mid] - a[low] == mid - low)\n            low = mid + 1;\n        else\n            high = mid;",
+      "    }\n}"
      ],
-     "explain": "אתחול, לולאה, חישוב `mid`, בדיקת כפול, בדיקת ההפרשים, ובחירת הצד."
+     "explain": "אתחול, כותרת הלולאה, גוף הלולאה (חישוב `mid` ושתי הבדיקות עם הבחירה בצד), וסגירה."
     },
     {
      "type": "findbug",
@@ -797,7 +775,7 @@
      "explain": "עם `high = mid - 1` נאבד את `mid`: למשל על `{-4,-4,-3}` הלולאה מסתיימת בלי להחזיר ערך. בבדיקה על 594 מערכים תקינים הגרסה הרשמית נכונה תמיד והגרסה השבורה נכשלת ב-216."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 4,
@@ -823,7 +801,7 @@
      "points": 1
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לנמק רק \"חיפוש בינארי\" בלי להסביר איך ההשוואה מראה לאיזה צד ללכת.",
     "לבלבל בין שני הצדדים: שוויון ההפרשים אומר שהכפול בצד **ימין**."
@@ -863,11 +841,9 @@
      "lines": [
       "כל איבר במערך גדול ב-1 מהאיבר הקודם, ולכן ההפרש בין האינדקסים שווה להפרש בין הערכים.",
       "לכן הבדיקה `a[mid] - a[low] == mid - low` קובעת אם הערך הכפול נמצא בחלק הימני של `mid` או בחלק השמאלי.",
-      "אם התשובה היא כן, הקטע `(low,mid)` אינו מכיל את האיבר הכפול.",
-      "במקרה כזה ממשיכים בחיפוש בינארי בחלק הימני `(mid+1,high)`.",
-      "אם התשובה היא לא, מתמקדים בחיפוש בינארי בקטע `(low,mid)` של המערך."
+      "אם התשובה היא כן, הקטע `(low,mid)` אינו מכיל את האיבר הכפול. במקרה כזה ממשיכים בחיפוש בינארי בחלק הימני `(mid+1,high)`. אם התשובה היא לא, מתמקדים בחיפוש בינארי בקטע `(low,mid)` של המערך."
      ],
-     "explain": "קודם התכונה, אחר כך הבדיקה, ואז שני המקרים."
+     "explain": "קודם התכונה, אחר כך הבדיקה, ואז שני המקרים (הסדר ביניהם חופשי)."
     },
     {
      "type": "findbug",
@@ -883,7 +859,7 @@
      "explain": "אם הקטע `(low,mid)` ללא כפול, ממשיכים ימינה, בקטע `(mid+1,high)`, ולא שמאלה."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 5,
@@ -914,7 +890,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לבדוק גם את `count[0]`: חלון חוקי אינו מכיל 0.",
     "להסתפק בבדיקת `count[i] > 1`: חלון עם 0 ובלי 9 עובר בטעות.",
@@ -1030,7 +1006,7 @@
      "explain": "עם `== 1` חלון חוקי נפסל מיד (`count` של כל 1 מחזיר 0, ריצה אמיתית)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 5,
@@ -1061,7 +1037,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "גבול `R` במקום `R-2`: החלון יוצא מהמטריצה.",
     "לא לאפס את `count` בין חלונות, ולצבור ספירות מחלונות קודמים.",
@@ -1125,46 +1101,31 @@
       {
        "id": "c",
        "type": "text",
-       "value": "for(rows=0; rows<R; rows++)"
+       "value": "for(rows=0; rows<R-4; rows++)"
       },
       {
        "id": "d",
        "type": "text",
-       "value": "for(rows=0; rows<=R-2; rows++)"
+       "value": "for(rows=0; rows<R/2; rows++)"
       }
      ],
      "correctId": "a",
-     "explain": "חלון מתחיל בשורה `rows` ומסתיים ב-`rows + 2`, ולכן `rows` עד `R-3` כולל. `R-3` חותך את החלון האחרון (ריצה אמיתית: חלון בשורות האחרונות לא נמצא)."
+     "explain": "חלון מתחיל בשורה `rows` ומסתיים ב-`rows + 2`, ולכן `rows` עד `R-3` כולל. כל אחד מהגבולות האחרים (`R-3`, `R-4`, `R/2`) מדלג על שורות התחלה אחרונות ומפספס חלון חוקי (ריצה אמיתית)."
     },
     {
      "type": "order",
      "prompt": "סדרו את שורות הפונקציה `Sudoku`.",
      "code": true,
      "lines": [
-      "int Sudoku(int mat[R][C])    // or: int Sudoku(int mat[][C])",
-      "{",
-      "        int count[10] = { 0 };",
-      "        int rows,cols,i,j;",
-      "        for(rows=0; rows<R-2; rows++)",
-      "        {",
-      "                for (cols = 0; cols<C-2; cols++)",
-      "                {",
+      "int Sudoku(int mat[R][C])\n{\n        int count[10] = { 0 }, rows, cols, i, j;",
+      "        for(rows=0; rows<R-2; rows++)\n        {\n                for (cols = 0; cols<C-2; cols++)\n                {",
       "                        initializeCountArray (count);",
-      "                        for (i = rows; i <= rows + 2; i++)",
-      "                        {",
-      "                                for (j = cols; j <= cols + 2; j++)",
-      "                                {",
-      "                                        count[ mat[i][j] ] ++;",
-      "                                }",
-      "                        }",
-      "                        if (TestCount(count))",
-      "                                return 1;",
-      "                }",
-      "        }",
-      "        return 0;",
-      "}"
+      "                        for (i = rows; i <= rows + 2; i++)\n                        {\n                                for (j = cols; j <= cols + 2; j++)\n                                {\n                                        count[ mat[i][j] ] ++;\n                                }\n                        }",
+      "                        if (TestCount(count))\n                                return 1;",
+      "                }\n        }",
+      "        return 0;\n}"
      ],
-     "explain": "לולאות על פינת החלון, איפוס, ספירה, בדיקה, ובסוף `return 0`."
+     "explain": "הצהרות, לולאות על פינת החלון, איפוס, ספירה, בדיקה, סגירת הלולאות, ובסוף `return 0`."
     },
     {
      "type": "findbug",
@@ -1198,7 +1159,7 @@
      "explain": "עם `rows + 1` נספרות רק שתי שורות (6 תאים), ו-`TestCount` לעולם לא מצליחה: על חלון חוקי מוחזר 0 (ריצה אמיתית)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   }
  ]
 }
