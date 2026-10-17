@@ -1,0 +1,23 @@
+{
+ "examCode": "25A-A",
+ "refuter": "refuter (blind, own derivation before reading claim; check = tools/verify/25A-A/refute_all.c)",
+ "derivations": {
+  "1": "Prefix(i)=suffix(i+1..) iff total even and prefix=total/2; one pass for total, one for prefix. Smallest i. Brute force over 200k random arrays matches official for i<=n-2.",
+  "2": "Key negative: positives and zero are always to the right of the negative block, so go left when arr[mid]>=0 or arr[mid]<key; go right only when arr[mid]<0 and key<arr[mid]. Random-tested 200k arrays x 25 keys, 0 mismatches.",
+  "3": "Base '\0'->0; match -> 1+rec(str+1); else rec(str+1).",
+  "4": "Row pairs i<N/2 over all j, column pairs j<N/2 over all i; each cell touched <=2 times. notPerfect: rows 1, cols 2, total 3."
+ },
+ "transcription": "Pages 2 and 5 checked against PNG: question text, matrices (bold cells) and official answer match.",
+ "questions": {
+  "1": {"solution": "agree", "note": "Official excludes i=size-1 (empty suffix). Strictly by the text, {1,-1} could return 1 (suffix sum 0); the official key returns -1. Differs from i<=n-1 brute on ~5% of random arrays. Not a key error (official), flag for awareness only.",
+   "rubric": "agree (6+6+8+3+3=26)", "pitfalls": "agree",
+   "steps": {"1_choice": "agree (1)", "2_choice": "agree (-1 then 0)", "3_fillblank": "agree (only 'if (sum % 2)' correct, blankIndex 5 real)", "4_order": "agree (matches official line order)", "5_findbug": "agree (bugIndex 7, half_sum = sum; single line changed, fails 3650/20000 random)"}},
+  "2": {"solution": "agree", "rubric": "agree (6+5+8+4+3=26)", "pitfalls": "agree",
+   "steps": {"1_choice": "agree (-21, mid=4)", "2_numeric": "agree (3; mids 4,1,2,3)", "3_fillblank": "agree (left = mid + 1; blankIndex 8)", "4_order": "agree", "5_text": "agree (O(log n))"}},
+  "3": {"solution": "agree", "rubric": "agree (8+8+7+3=26)", "pitfalls": "agree",
+   "steps": {"1_choice": "agree (2)", "2_choice": "agree (0 then 2)", "3_fillblank": "agree (blankIndex 5)", "4_order": "agree", "5_findbug": "agree (bugIndex 5, return 1;)"}},
+  "4": {"solution": "agree", "rubric": "agree (6+7+7+3+4=27)", "pitfalls": "agree",
+   "steps": {"1_numeric": "agree (rows only = 1)", "2_numeric": "agree (cols only = 2)", "3_fillblank": "agree (i < N / 2; blankIndex 4)", "4_order": "agree", "5_findbug": "agree (bugIndex 4, i < N; gives 4 not 3)"}}
+ },
+ "counts": {"agree": 4, "disagree": 0, "unclear": 0}
+}
