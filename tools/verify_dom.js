@@ -199,7 +199,7 @@ console.log("4. dir=ltr in step widgets");
   for (const q of PICKS_U.filter(hasSteps)) {
     openQ(A, q);
     const cards = A.$$(".step-card");
-    const all = () => cards.flatMap(c => [...c.querySelectorAll("code, math")]);
+    const all = () => cards.flatMap(c => [...c.querySelectorAll("code, math")]).filter(e => !e.closest("pre.code-block[dir=ltr]"));
     let b = all().filter(e => e.getAttribute("dir") !== "ltr"); n += all().length;
     q.steps.forEach((st, i) => solve(cards[i], st, false));
     b = b.concat(all().filter(e => e.getAttribute("dir") !== "ltr")); n += all().length;
@@ -509,6 +509,14 @@ else {
     assert(/0%/.test(B.$("#crsSum .big").textContent), "boss all wrong scores 0%");
     assert(B.errors.length === 0, "no errors: " + B.errors.join(" | "));
   }
+}
+
+// fenced code blocks in the built bank must all be dir=ltr
+{
+  const qsrc = fs.readFileSync(path.join(ROOT, "questions.js"), "utf8");
+  const pres = qsrc.match(/<pre class=\\?"code-block\\?"[^>]*>/g) || [];
+  const badPre = pres.filter(p => !/dir=\\?"ltr\\?"/.test(p));
+  assert(badPre.length === 0, `${pres.length} .code-block <pre> in the bank, all dir=ltr`);
 }
 
 console.log(fail ? `\n${fail} FAILED` : "\nall ok");

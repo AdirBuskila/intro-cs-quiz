@@ -677,3 +677,11 @@ bdi.ltr.nw{white-space:nowrap}   /* a short formula never splits across lines */
 /* wide display math scrolls inside its own block: every flex/grid ancestor may shrink below its content */
 .card,.panel,.panel-body,.solution-text,.rev,.rev-body,.step-mount,.step-card,.ctx,.feedback,.crs-lesson,.crs-q{min-width:0;max-width:100%}
 .solution-text .math-block,.rev .math-block,.panel-body .math-block{max-width:100%;overflow-x:auto}
+
+/* fenced code block (``` ... ```): literal, LTR, left-aligned, scrolls sideways inside its own box */
+pre.code-block{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;
+  unicode-bidi:isolate;text-align:left;white-space:pre;overflow-x:auto;max-width:100%;
+  box-sizing:border-box;background:var(--card2);border:1px solid var(--line);border-radius:8px;
+  padding:.6em .85em;margin:.5em 0;font-size:.88em;line-height:1.55;tab-size:4}
+pre.code-block code{font:inherit;white-space:pre;direction:ltr;text-align:left;background:none;
+  border:0;padding:0;border-radius:0}

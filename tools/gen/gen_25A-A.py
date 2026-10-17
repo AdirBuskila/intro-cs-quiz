@@ -33,8 +33,8 @@ def Q(num, kind, topic, question, solution, **kw):
 
 
 def code_lines(src):
-    """Rich-text rendering of a code listing: one `code` span per line, newline-joined."""
-    return "\n".join("`" + ln + "`" if ln.strip() else "" for ln in src.strip("\n").split("\n"))
+    """Rich-text rendering of a code listing: ONE fenced ```c block (literal, indentation kept)."""
+    return "```c\n" + src.strip("\n") + "\n```"
 
 
 SOL1 = r"""int index_half(int* arr, int size)

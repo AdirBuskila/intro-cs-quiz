@@ -77,6 +77,7 @@ variant changes exactly one line; steps never contradict the solution.
 - Inline math `$…$`, display math `$$…$$` — TeX for KaTeX, rendered to MathML at build time.
   **No Hebrew inside `$…$`.** Literal `$` → `\$`.
 - `**bold**`, `` `code` `` (LTR), `\n` = line break.
+- **Fenced code block** (multi-line code: C, MIPS, C++): a line that is exactly three backticks (optionally followed by a short language tag: `c`, `cpp`, `asm`) opens it and a line that is exactly three backticks closes it. The content is literal: HTML-escaped only, no `$` math, no `**`, no backtick parsing, indentation and blank lines preserved. It renders as an LTR, left-aligned `<pre class="code-block">` that scrolls sideways by itself. An unclosed fence fails `validate.py` and the build, naming the item id. Never write multi-line code as one `` `backtick span` `` per line.
 
 ## Derived at build (do NOT put in raw)
 `id`, `partKey`, `examCode`, `examLabel`, `year`, `source`, `topicLabel`, `pointsTotal` (sum of rubric

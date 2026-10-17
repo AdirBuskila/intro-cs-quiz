@@ -63,6 +63,15 @@ const THEMES = ["dark", "light"];
         if (m.scrollWidth > m.clientWidth + 1 && !(ox === "auto" || ox === "scroll")) out.push("wide math without its own horizontal scroll");
         return out;
       }));
+      const badCode = await page.evaluate(() => [...document.querySelectorAll(".code-block")].filter(c => c.offsetParent).flatMap(c => {
+        const r = c.getBoundingClientRect(), cs = getComputedStyle(c), out = [];
+        if (c.getAttribute("dir") !== "ltr" || cs.direction !== "ltr") out.push("code block not LTR");
+        if (cs.textAlign !== "left" && cs.textAlign !== "start") out.push("code block not left-aligned");
+        if (r.right > window.innerWidth + 1 || r.left < -1) out.push(`code block spans ${Math.round(r.left)}..${Math.round(r.right)} of ${window.innerWidth}px`);
+        if (c.scrollWidth > c.clientWidth + 1 && !(cs.overflowX === "auto" || cs.overflowX === "scroll")) out.push("wide code block without its own horizontal scroll");
+        return out;
+      }));
+      if (badCode.length) clipped.push(`${vpName}/${theme}/${name}: ${badCode.join("; ")}`);
       if (bad.length) clipped.push(`${vpName}/${theme}/${name}: ${bad.join("; ")}`);
       const f = `${vpName}-${theme}-${String(++n).padStart(2, "0")}-${name}.png`;
       await page.screenshot({ path: path.join(OUT, f), fullPage: true });
