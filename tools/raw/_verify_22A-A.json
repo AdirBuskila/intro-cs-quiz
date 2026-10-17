@@ -1,0 +1,66 @@
+{
+ "examCode": "22A-A",
+ "refuter": "refuter (own derivation before the claim; checks = tools/verify/22A-A/refute_22A-A.c)",
+ "derivations": {
+  "1": "Single scan keeping the max; compare whole part, tie-break by cross multiplication. Example gives 5 3/4.",
+  "2": "rec: n==1 -> 1; a[0]<a[1] -> 1+rec(a+1,n-1); else 1.",
+  "3": "26 counters, keep first occurrences by a write pointer, terminate with '\\0'. Version 2 of the official solution indexes with 'A' and is out of bounds for lowercase input.",
+  "4": "Binary search for the first element >= mean, saving candidates and moving left; version 1 returns the largest <= x (returns 0 on the example)."
+ },
+ "transcription": "Matches the extracted text; the page images were not needed for these code items.",
+ "questions": {
+  "1": {
+   "solution": "agree",
+   "rubric": "agree (6+6+8+5=25)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_choice": "agree (5 3/4)",
+    "2_numeric": "agree (4 vs 3)",
+    "3_fillblank": "agree (cross-mult '<' wrong 5659/20000, numerators-only wrong 735, numerator*denominator products wrong 1152; key 0 wrong)",
+    "4_order": "disagree: order not forced, `int i;` and `Fraction max_result = pSArray[0];` are independent and can be swapped.",
+    "5_findbug": "agree (bugIndex 6; example returns 2 7/8)"
+   }
+  },
+  "2": {
+   "solution": "agree",
+   "rubric": "agree (5+8+8+4=25)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (3)",
+    "2_numeric": "agree (5)",
+    "3_fillblank": "agree with caveat: b (no 1+) wrong 16622/30000, c (a, n-1) wrong 8190, d (a+1, n) wrong 827 but only via reading past the array (undefined behaviour; recursion does not shrink n)",
+    "4_order": "agree (forced)",
+    "5_findbug": "agree (bugIndex 4; '<=' wrong 3820/30000)"
+   }
+  },
+  "3": {
+   "solution": "agree",
+   "rubric": "agree (5+7+7+4+2=25)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_text": "agree (abc)",
+    "2_fillblank": "agree (==0 correct; ==1, !=0, >1 return the empty string on every input, 20000/20000 wrong)",
+    "3_order": "disagree: order not forced, `char *last=str;` and `int count[26]={0};` are independent declarations, and `count[..]=1;` can sit before or after `*last=*str; last++;`.",
+    "4_findbug": "agree (bugIndex 7, count stays 0 so duplicates survive; 15009/20000 wrong)",
+    "5_text": "agree (O(n))"
+   }
+  },
+  "4": {
+   "solution": "agree",
+   "rubric": "agree on the sum 8+10+6+3+3=30. Nit: the rubric line 'init min = a[n-1] in case all elements are smaller than k' describes a case that cannot occur, because k is the mean and the maximum is always >= the mean (no counterexample in 30000 random arrays); the initialisation is only defensive.",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (3)",
+    "2_choice": "agree (low=mid+1; 3 iterations, result 2)",
+    "3_fillblank": "agree (high=mid-1 correct; high=mid and low=mid hang on 30000/30000, low=mid+1 wrong 18831)",
+    "4_order": "disagree: order not forced, `min = a[mid];` and `high = mid - 1;` are independent and can be swapped.",
+    "5_text": "agree (O(log n))"
+   }
+  }
+ },
+ "counts": {
+  "items_solution_agree": 4,
+  "items_with_step_disagreements": 3,
+  "step_disagreements": 3
+ }
+}

@@ -1,0 +1,131 @@
+{
+ "examCode": "20A-A",
+ "refuter": "refuter (own derivation before the claim; checks = tools/verify/20A-A/refute_20A-A.c)",
+ "derivations": {
+  "1": "fun_rec is the running average: a[n-1]/n + avg(n-1)*(n-1)/n = sum/n. Values -3, 1.5, 3.333, 2, 4; matches 10000 random arrays.",
+  "2": "Recursion on the string: base '\\0' -> 0, else gematria[*s-'a'] + rec(s+1). exam=646.",
+  "3": "Two pointers over sorted A and B; on equality swap B[i] into the front block and advance both, otherwise advance the pointer of the smaller value. Iterations <= m+n; example gives 5 8 10 7 -2 5 11 12.",
+  "4": "Binary search on a[mid]-a[low]==mid-low (no duplicate in the left part); high=mid keeps mid.",
+  "5": "TestCount fails on any count != 1 for digits 1..9; Sudoku scans (R-2)*(C-2) windows resetting count each time."
+ },
+ "transcription": "Question text and printed code checked against the extracted text; no mismatch found. Per-part points are not printed, so rubric splits cannot be checked against the page.",
+ "splits": "Q1 4/4/7 plausible (a,b are 4-5 level hand traces, c is the identification plus proof). Q3 14/6 plausible (b is one claim plus a short justification). Q4 17/8 plausible. Q5 8/17 plausible (3 blanks vs 12 blanks).",
+ "questions": {
+  "1a": {
+   "solution": "agree",
+   "rubric": "agree (2+1+1=4)",
+   "pitfalls": "agree; #2 (integer division) is a non-pitfall since every operand is double, weak but harmless",
+   "steps": {
+    "1_numeric": "agree (1.5)",
+    "2_numeric": "agree (3.3333)",
+    "3_numeric": "agree (2)",
+    "4_numeric": "agree (4)"
+   }
+  },
+  "1b": {
+   "solution": "agree",
+   "rubric": "agree (2+1+1=4)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (-0.5)",
+    "2_numeric": "agree (2.5)",
+    "3_numeric": "agree (2)"
+   }
+  },
+  "1c": {
+   "solution": "agree",
+   "rubric": "agree (3+2+2=7)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_choice": "agree (average; 0 mismatches over 10000 random arrays)",
+    "2_choice": "agree",
+    "3_numeric": "agree (5)"
+   }
+  },
+  "2": {
+   "solution": "agree",
+   "rubric": "agree (4+6+7+3=20)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (646)",
+    "2_numeric": "agree (1600)",
+    "3_fillblank": "agree (b infinite recursion, c reads gematria[*str] out of bounds, d drops the rest of the string)",
+    "4_order": "agree (forced)",
+    "5_findbug": "agree (bugIndex 6, * with base 0 gives 0)"
+   }
+  },
+  "3a": {
+   "solution": "agree",
+   "rubric": "agree (4+5+3+2=14)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (3)",
+    "2_fillblank": "disagree on distractor c `while (i < m)`: output is identical to the key on 20000 random inputs (0 wrong). A false match against A[n..] only swaps inside the back block (last+1 >= inter), so the front block is never corrupted; it is wrong only through undefined behaviour (reading A out of bounds), not observable without a sanitizer. Other distractors fail for real: `||` 5916/20000 wrong (swaps B[last] with an out-of-range B[i]), `i<n&&k<m` 5679/20000 wrong (n=1,m=5 leaves B unchanged). The `||` failure also relies on padding contents.",
+    "3_fillblank": "agree (k++ is the only correct one; i++ 6824/20000 wrong, k-- 5510 wrong, last++ never terminates on 15630/20000)",
+    "4_order": "disagree: order not forced, `swap(B+(++last),B+(i++));` and `k++;` commute (swap uses neither k nor A); reordered version wrong=0 of 20000. Merge them into one line or drop the order step.",
+    "5_findbug": "agree (bugIndex 11, '<' wrong 9705/20000; on the example B stays -2 5 5 7 8 10 11 12)"
+   }
+  },
+  "3b": {
+   "solution": "agree",
+   "rubric": "agree (3+2+1=6)",
+   "pitfalls": "agree on #1; #2 weak: O(max(m,n)) equals O(m+n) asymptotically, the real fault is only the missing justification",
+   "steps": {
+    "1_numeric": "agree (10 iterations; never more than m+n over 100000 random pairs)",
+    "2_choice": "agree",
+    "3_text": "agree (O(m+n))"
+   }
+  },
+  "4a": {
+   "solution": "agree",
+   "rubric": "agree (4+4+5+4=17)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (mid=6, a[6]==a[7]==3)",
+    "2_choice": "agree (a[mid]-a[low]=3 != 4 so high=mid)",
+    "3_fillblank": "agree (high=mid correct on all 264 valid arrays; high=mid-1 wrong 96 (e.g. -4,-4,-3 falls off without returning), low=mid and low=mid+1 wrong 164 each)",
+    "4_order": "disagree: order not forced, the `if (a[mid]==a[mid+1]) return` pair and the `if(diff) low=..; else high=..` pair commute: swapped version correct on all 264 arrays.",
+    "5_findbug": "agree (bugIndex 11; failure rate 96/264 = 36.4%, same ratio as the author's 216/594)"
+   }
+  },
+  "4b": {
+   "solution": "agree",
+   "rubric": "agree (4+3+1=8)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_choice": "agree",
+    "2_order": "disagree: order not forced, the `if equal -> right half` sentences and the `if not equal -> left half` sentence are independent branches and can be read in either order; only 'property, test, then the two cases' is forced.",
+    "3_findbug": "agree (bugIndex 3)"
+   }
+  },
+  "5a": {
+   "solution": "agree",
+   "rubric": "agree (2+3+1+2=8)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_choice": "agree (1)",
+    "2_numeric": "agree (0)",
+    "3_fillblank": "agree (over all 3^9 count vectors: ==1 wrong 513, >1 wrong 511 (e.g. all zeros), i!=1 wrong only on the all-ones vector, key correct on all)",
+    "4_order": "agree (forced)",
+    "5_findbug": "agree (bugIndex 4)"
+   }
+  },
+  "5b": {
+   "solution": "agree",
+   "rubric": "agree (6+3+6+2=17)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (12)",
+    "2_numeric": "agree (2)",
+    "3_fillblank": "agree with caveat: R-3 is wrong in a defined way (12424/40000, misses the last window). `rows<R` and `rows<=R-2` are wrong only through reading rows past the matrix (8124 and 8110 wrong on padded storage), i.e. undefined behaviour, not a defined wrong result.",
+    "4_order": "disagree: order not forced, `int count[10] = {0};` and `int rows,cols,i,j;` are independent declarations and can be swapped.",
+    "5_findbug": "agree (bugIndex 9, rows+1 wrong on 21935/40000 and always rejects a valid window)"
+   }
+  }
+ },
+ "counts": {
+  "items_solution_agree": 10,
+  "items_with_step_disagreements": 5,
+  "step_disagreements": 5
+ }
+}

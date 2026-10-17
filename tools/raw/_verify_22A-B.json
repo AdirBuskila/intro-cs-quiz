@@ -1,0 +1,80 @@
+{
+ "examCode": "22A-B",
+ "refuter": "refuter (own derivation before the claim; checks = tools/verify/22A-B/refute_22A-B.c)",
+ "derivations": {
+  "1": "Row/column sum minus the diagonal equals the diagonal; both examples verified (1 and 0).",
+  "2": "Two-pointer recursion on a sorted range: i==j -> -1, equal -> i, too big -> j-1, else i+1. Example needs 3 calls.",
+  "3": "Counters; reject repeats; letters must form one contiguous block (skip zeros, run of ones, then zeros). Version 2 of the official solution is wrong for \"ca\".",
+  "4": "Keep running max, print each strictly larger value; prints 6 and 7 for the example (no separator, so 67)."
+ },
+ "transcription": "Page 1 PNG checked: the matrices and the printed f_1 match the stored text.",
+ "splits": "Q1 12/13: parts a and b are the same problem transposed, so a 13 vs 12 split is odd; an even split or 12/13 only if the official marking says so. Not a correctness error (sums are 25).",
+ "questions": {
+  "1a": {
+   "solution": "agree",
+   "rubric": "agree (4+2+4+2=12)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (7)",
+    "2_choice": "agree (1 then 0)",
+    "3_fillblank": "agree (all three distractors return 0 on the valid first matrix)",
+    "4_order": "agree (forced)",
+    "5_findbug": "agree (bugIndex 7)"
+   }
+  },
+  "1b": {
+   "solution": "agree",
+   "rubric": "agree (5+2+4+2=13)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (7)",
+    "2_choice": "agree (1 then 0; second matrix column 1 sums to 4)",
+    "3_fillblank": "agree (M[j][i] and M[i][i] both return 0 on the valid matrix)",
+    "4_order": "agree (forced)",
+    "5_findbug": "agree (bugIndex 7; returns 0 on the valid matrix)"
+   }
+  },
+  "2": {
+   "solution": "agree",
+   "rubric": "agree (6+5+7+5+2=25)",
+   "pitfalls": "agree",
+   "steps": {
+    "1_numeric": "agree (3 calls)",
+    "2_fillblank": "agree with caveat: i+1 wrong 833/30000 (defined), j+1 and i-1 never reach i==j (cap hit, out-of-bounds reads) so they are wrong only through undefined behaviour",
+    "3_order": "disagree: order not forced, the `== k` test and the `> k` test are disjoint, so `if (c[i]+c[j] > k) return f(..j-1); if (== k) return i;` is equivalent (0 wrong in 30000).",
+    "4_findbug": "agree (bugIndex 4; example 1 returns -1)",
+    "5_text": "agree (O(n))"
+   }
+  },
+  "3": {
+   "solution": "agree",
+   "rubric": "agree (5+6+4+5+5=25)",
+   "pitfalls": "unclear on #2: 'compare to the string length instead of looking for a contiguous block' is not a mistake as worded, because checking max-min+1 == length on a duplicate-free string is a correct solution; #1 and #3 are real (version 2 returns 1 for \"ca\", confirmed)",
+   "steps": {
+    "1_choice": "agree (0 then 1)",
+    "2_fillblank": "agree (exhaustive over a..e, length<=4: ==0 wrong 79, >1 wrong 79, plain i<26 wrong 126, matching the author's numbers)",
+    "3_order": "disagree: order not forced, `int a[26] = {0};` and `int i = 0;` are independent declarations and can be swapped.",
+    "4_findbug": "agree (bugIndex 5; '>=1' wrong 79/780)",
+    "5_text": "agree (O(n))"
+   }
+  },
+  "4": {
+   "solution": "agree",
+   "rubric": "agree (8+8+10+4=30); nit: 8 points for reading the first number is generous relative to the rest, not wrong",
+   "pitfalls": "agree",
+   "steps": {
+    "1_text": "agree (67)",
+    "2_numeric": "agree (2)",
+    "3_fillblank": "agree (>= wrong 7602/20000, < wrong 17062, != wrong 15026; '>' correct on all)",
+    "4_order": "disagree: order not forced, `printf(\"%d\", num);` and `max = num;` are independent (printf does not read max) and can be swapped.",
+    "5_findbug": "agree (bugIndex 5; 2 2 3 prints 23)"
+   }
+  }
+ },
+ "counts": {
+  "items_solution_agree": 5,
+  "items_with_step_disagreements": 3,
+  "step_disagreements": 3,
+  "pitfall_unclear": 1
+ }
+}
