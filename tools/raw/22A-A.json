@@ -1,0 +1,54 @@
+{
+ "examCode": "22A-A",
+ "examLabel": "מבוא למדעי המחשב, סמסטר א' תשפ\"ב, מועד א (2022)",
+ "year": 2022,
+ "examDate": "2022",
+ "sourceFile": "22A-A exam and solution pp.1-4",
+ "solutionFile": "22A-A official solution code under each question, pp.1-4",
+ "questions": [
+  {
+   "num": 1,
+   "kind": "code",
+   "topic": "structs",
+   "question": "נגדיר **מבנה** המכיל \"מספר מעורב\" כלומר מספר שלם שאחריו שבר (שערכו קטן מ-1).\nהמבנה יהיה בעל שלושה שדות: מספר (`num`), מונה (`numerator`), ומכנה (`denominator`).\n```c\ntypedef struct {\n    int num, numerator, denominator;\n}Fraction;\n```\nכך לדוגמא המספר $3\\frac{2}{3}$ ירשם 3 בשדה המספר, 2 בשדה המונה ו-3 בשדה המכנה.\nהמספר $\\frac{3}{5}$ ירשם 0 בשדה המספר, 3 בשדה המונה ו-5 בשדה המכנה.\nעליכם לכתוב את הפונקציה המקבלת מערך של מספרים מעורבים (מבנים) **לא שליליים** וגודלו.\nהפונקציה תחזיר מספר מעורב (מבנה) שהוא המספר המעורב **הגדול ביותר** במערך.\nלדוגמא אם המערך מכיל את האיברים הבאים $[2\\frac{3}{4}, 5\\frac{3}{4}, 3\\frac{1}{5}, 2\\frac{7}{8}, 5\\frac{1}{2}]$ הפונקציה תחזיר $5\\frac{3}{4}$ כמספר מעורב (מבנה).\nחישוב הפונקציה צריך להתבצע **בסדר גודל של n**, כאשר n הוא גודל המערך.",
+   "solution": "**פתרון רשמי** (22A-A עמ' 1):\n```c\nFraction findBiggest(Fraction *pSArray, int size)\n{\n    int i;\n    Fraction max_result = pSArray[0];\n\n    for (i = 1; i < size; i++)\n    {\n        if (pSArray[i].num > max_result.num)\n            max_result = pSArray[i];\n        else if (pSArray[i].num == max_result.num)\n        {\n            //if (((double)pSArray[i].numerator / pSArray[i].mechane) >\n            //((double)res.numerator / res.mechane)) - גרסה שנייה\n    if(pSArray[i].numerator * max_result.denominator>max_result.numerator*pSArray[i].denominator)\n                max_result = pSArray[i];\n        }\n    }\n\n    return max_result;\n}\n```\nסורקים פעם אחת ושומרים את המקסימום עד כה. קודם משווים את החלק השלם; כשהחלקים השלמים שווים משווים את השברים בכפל צולב כדי להימנע משברים עשרוניים. סריקה אחת, כלומר $O(n)$.",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "points": 25
+  },
+  {
+   "num": 2,
+   "kind": "code",
+   "topic": "recursion",
+   "question": "כתבו פונקציה **רקורסיבית** שמקבלת מערך `a` של מספרים שלמים וגודלו `n`.\nעל הפונקציה להחזיר את הגודל של תת-הסדרה רציפה **עולה ממש** ($a_i < a_{i+1}$) הכי ארוכה שמתחילה במקום הראשון במערך (מ-$a_0$).\nעבור מערך בגודל 1 על הפונקציה להחזיר 1.\nלדוגמא:\nעבור המערך `-5,-2,12,12,25,34,40` על הפונקציה להחזיר 3 (3 האיברים הראשונים הם תת-סדרה רציפה עולה ממש הכי ארוכה שמתחילה ב-`-5`).\nעבור המערך `-5,-5,12,10,25,34,40` על הפונקציה להחזיר 1 (כי `-5 = -5`).\nעבור המערך `12,10,25,34,40` על הפונקציה להחזיר 1.",
+   "solution": "**פתרון רשמי** (22A-A עמ' 2):\n```c\nint incr_subarray(int * a, int n)\n{\n    if (n == 1)\n        return 1;\n    if (a[0] < a[1])\n        return 1 + incr_subarray(a + 1, n - 1);\n    else\n        return 1;\n}\n```\nמקרה בסיס: מערך בגודל 1 מחזיר 1. אם `a[0] < a[1]` הרצף ממשיך ומוסיפים 1 לתשובה של שאר המערך (`a + 1`, `n - 1`); אחרת הרצף נעצר ומחזירים 1.",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "points": 25
+  },
+  {
+   "num": 3,
+   "kind": "code",
+   "topic": "strings",
+   "question": "כתבו פונקציה `void removeDuplicates (char *str)` שמקבלת מחרוזת של אותיות קטנות באנגלית בשם `str`.\nהפונקציה צריכה להשאיר במחרוזת את כל האותיות שמופיעות בה בפעם הראשונה, ולמחוק את כל האותיות שחוזרות על עצמן (להוציא אותן מהמחרוזת).\nהניחו שהקלט תקין.\nלדוגמא, הפונקציה הופכת את המחרוזת \"**bla**blab**h**\" למחרוזת \"**blah**\".\nחישוב הפונקציה צריך להתבצע **בסדר גודל של n**, כאשר n הוא אורך המחרוזת.\nהפונקציה יכולה להשתמש במערך עזר.",
+   "solution": "**פתרון רשמי** (22A-A עמ' 3), גרסה ראשונה:\n```c\nvoid removeDuplicates(char *str) {\n\n    char *last=str;\n\n    int count[26] = { 0 };\n\n    while (*str)\n    {\n        if (count[(*str) - 'a'] == 0)\n        {\n            count[(*str) - 'a']=1;\n            *last = *str;\n            last++;\n        }\n        str++;\n    }\n\n    *last = '\\0';\n}\n```\n**גרסה שנייה** (כפי שמופיעה בפתרון הרשמי):\n```c\nvoid removeDuplicates(char *s) {\n\n    int i, newLast;\n\n    int count[26] = { 0 };\n\n    for (i = 0, newLast = 0; s[i]; i++)\n        if (count[s[i] - 'A']++ == 0)\n            s[newLast++] = s[i];\n\n    s[newLast] = '\\0';\n}\n```\nמערך עזר של 26 מונים מסמן אילו אותיות כבר נראו. סורקים את המחרוזת פעם אחת וכותבים לאחור רק אות שנראית לראשונה, ובסוף שמים `'\\0'`. סריקה אחת, כלומר $O(n)$.\n**הערה:** בגרסה השנייה האינדקס הוא `s[i] - 'A'` ולא `s[i] - 'a'`; עבור אותיות קטנות זה אינדקס 32 ומעלה במערך בגודל 26, כלומר גישה מחוץ לגבולות. הגרסה הראשונה תקינה.",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "points": 25
+  },
+  {
+   "num": 4,
+   "kind": "code",
+   "topic": "binary_search",
+   "question": "נתון מערך `a` - מערך **ממוין** בסדר עולה של מספרים שלמים ונתון הממוצע שלהם `k` שהוא מספר מסוג **double**.\nכתבו פונקציה **יעילה** שמקבלת את המערך הממוין `a`, גודלו `n` וממוצע `k`, ומחזירה את המספר הקטן ביותר במערך שגדול או שווה לממוצע.\nלדוגמא:\nעבור המערך `a = {-5, -2, -1, 0, 2, 4, 4, 9}` הפונקציה תחזיר **2** (הממוצע הוא 1.375)\nעל הפונקציה לרוץ בסדר גודל של $\\log n$.",
+   "solution": "**פתרון רשמי** (22A-A עמ' 4), שתי פונקציות כפי שהן מופיעות:\n```c\nint question4_version1(int arr[], int n, double x) {\n    int low = 0, high = n - 1, mid, max=arr[0];\n    while (low <= high) {\n        mid = (low + high) / 2;\n        if (arr[mid] <= x) {\n            max = arr[mid];\n            low = mid + 1;\n        }\n        else\n            high = mid - 1;\n    }\n    return max;\n}\n```\n```c\nint question4_version2(int a[], int n, double k) {\n    int low = 0, high = n - 1, mid, min = a[n-1];\n    while (low <= high) {\n        mid = (low + high) / 2;\n        if (a[mid] >= k) {\n            min = a[mid];\n            high = mid - 1;\n\n        }\n        else\n            low = mid + 1;\n    }\n    return min;\n}\n```\n`question4_version2` היא חיפוש בינארי על הערך הקטן ביותר שגדול או שווה ל-`k`: כשנמצא `a[mid] >= k` שומרים אותו וממשיכים שמאלה, אחרת ימינה. זמן ריצה $O(\\log n)$.\n**הערה:** `question4_version1` מחזירה את הערך הגדול ביותר שקטן או שווה ל-`x` (בדוגמה של השאלה היא מחזירה 0 ולא 2), ולכן אינה פותרת את השאלה הזו; `question4_version2` תואמת לשאלה ולדוגמה.",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "med",
+   "points": 30
+  }
+ ]
+}

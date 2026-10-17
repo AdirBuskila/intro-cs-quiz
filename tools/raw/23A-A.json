@@ -1,0 +1,63 @@
+{
+ "examCode": "23A-A",
+ "examLabel": "מבוא למדעי המחשב, סמסטר א' תשפ\"ג, מועד א (26.01.2023)",
+ "year": 2023,
+ "examDate": "26.01.2023",
+ "sourceFile": "23A-A solutions booklet pp.1-6",
+ "solutionFile": "23A-A official solutions in the answer boxes, pp.2-6",
+ "contexts": {
+  "c4": {
+   "kind": "image",
+   "title": "שאלה 4: דוגמה לעמק",
+   "image": "images/exams/23A-A-c4.png",
+   "caption": "מטריצת גבהים של עמק (255 = החומה)"
+  }
+ },
+ "questions": [
+  {
+   "num": 1,
+   "kind": "code",
+   "topic": "arrays",
+   "question": "נתון מערך **ממוין** בסדר עולה בגודל `2n` של מספרים שלמים. ידוע שבמערך ישנם `n` זוגות של איברים כך שסכום האיברים בכל הזוגות שווה זה לזה.\nלמשל, בהינתן `n=3`, מערך לדוגמא שיעמוד בתנאי השאלה הוא המערך `1,2,3,7,8,9` שמכיל שלושה זוגות שסכום כל זוג שווה ל-10: `(1,9),(2,8),(3,7)`.\nיש לכתוב את הפונקציה `void sortpairs(int* a, int size)` שמסדרת איברים במערך כך שהמערך יכיל לזוגות של מספרים עם אותו סכום זה אחר זה. אין חשיבות לסדר של הזוגות או האברים בזוגות.\nלמשל, הפונקציה `sortpairs` עבור המערך בדוגמא לעיל, יכולה לשנות את המערך למערך הבא: `1,9,2,8,3,7` או לחלופין למערך `2,8,7,3,1,9` או למערך `3,7,1,9,2,8` וכו.\nאין להשתמש במערך עזר.\nעל הפונקציה לרוץ בסדר גודל של **n**.\nכתבו את הקוד של הפונקציה **ונמקו בקצרה** את נכונות הפתרון.",
+   "solution": "**פתרון רשמי** (23A-A עמ' 2). הנימוק:\nידוע שהמערך בגודל זוגי ממוין ובו כל האיברים אפשר לחלק לזוגות כך שסכום האיברים בכל הזוגות שווה זה לזה. מזה נובע שהזוגות האלה תופסים מקומות 0 ו-`size-1`, 1 ו-`size-2`, וכללי: כל זוג תופס מקומות `(i, size-1-i)`. לכן אם נחליף בין מקום 1 ו-`size-1` נקבל כבר **שני** זוגות מסודרים בקצוות של המערך: בשני מקומות ראשונים ובשני מקומות אחרונים. לכן אחרי ההחלפה הראשונה נשאר לסדר מערך ממקום 2 עד `size-3`. כך על ידי `size/4` החלפות נסדר כל המערך.\n**פתרון:**\n```c\nvoid sortpairs(int* a, int size)\n{\n    int i;\n    for (i = 1; i < size/2 ; i += 2)\n        swap(a + i, a + size - i);\n}\n```\n**אותו רעיון בצורה אחרת:**\n```c\nvoid sortpairs(int* a, int size)\n{\n    int low = 1, high = size - 1;\n    while (low < high-1 ) {\n        swap(a + low, a + high);\n        low += 2;\n        high -= 2;\n    }\n}\n```\n**רעיון אחר:**\n```c\nvoid sortpairs_2(int* a, int size)\n{\n    int i,sum=a[0]+a[size-1];\n    for (i = 0; i < size-1; i += 2) {\n        a[i + 1] = sum-a[i];\n    }\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "points": 26
+  },
+  {
+   "num": 2,
+   "kind": "code",
+   "topic": "strings",
+   "question": "כתבו את הפונקציה `void squeeze (char *str)` המקבלת כפרמטר מחרוזת של אותיות קטנות באנגלית ומשנה את המחרוזת כך שתכיל את כל התווים המופיעים בדיוק **שלוש פעמים** במחרוזת המקורית.\nעל המחרוזת שמתקבלת להכיל מופע אחד בלבד של התווים הללו (המופיעים בדיוק שלוש פעמים) ועל סדר התווים במחרוזת שמתקבלת להיות לפי סדר המופע הראשון של כל תו במחרוזת המקורית.\nמותר להשתמש במערך עזר אחד לכל היותר.\nעל זמן הריצה של הפונקציה להיות בסדר גודל של **n**, כאשר n מייצג את מספר האותיות במחרוזת המקורית.\nלדוגמא:\nהמחרוזת `dbcabafacbcbdd` תשתנה על ידי הפונקציה למחרוזת `dca`\nשימו לב שהפונקציה מכניסה תו סוף מחרוזת (`'\\0'`) מימין לסדרת התווים `dca` ואין חשיבות לתווים שנמצאים מימין לתו סוף המחרוזת.",
+   "solution": "**פתרון רשמי** (23A-A עמ' 3), עם אינדקסים:\n```c\nvoid squeeze(char* str)\n{\n    int i, pos = 0;\n    int count[26] = { 0 };\n    int len = strlen(str);\n    for (i = 0; i < len; ++i)\n        count[str[i] - 'a']++;\n    for (i = 0; i < len; ++i){\n        if (count[str[i] - 'a'] == 3)\n        {\n            str[pos++] = str[i];\n            count[str[i] - 'a'] = 0;\n        }\n    }\n    str[pos] = '\\0';\n}\n```\n**פתרון עם מצביעים:**\n```c\nvoid squeeze(char* str)\n{\n    int count[26] = { 0 };\n    char* temp = str;\n    while (*temp)\n        count[*temp++ - 'a']++;\n    temp = str;\n    while (*temp)\n        if (count[*temp++ - 'a'] == 3)\n        {\n            *str = *(temp - 1);\n            count[*str++ - 'a'] = 0;\n        }\n    *str = '\\0';\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "points": 26
+  },
+  {
+   "num": 3,
+   "kind": "code",
+   "topic": "sorting_merge",
+   "question": "נתון מערך **ממוין** בסדר עולה של מספרים שלמים, גודלו ומספר הנמצא במערך.\nיש לכתוב את הפונקציה `int* distsort(int* a, int n, int num)` המחזירה מערך ממוין **חדש** בו המספרים ממוינים לפי המרחק שלהם מהמספר `num` הנתון במערך.\nאם ישנם שני מספרים במרחק זהה מהמספר הנתון, הקטן מבניהם יופיע ראשון.\nמרחק בין שני מספרים x,y מוגדר כערך מוחלט של ההפרש ביניהם: $|x-y|$.\nדוגמאות:\nעבור המערך הממוין `1,2,5,7,10` והערך 5 התוצאה תהיה `5,7,2,1,10`.\nעבור המערך הממוין `1,2,5,7,10` והערך 7 התוצאה תהיה `7,5,10,2,1`.\nעבור המערך `1,2,3` והערך 2 התוצאה תהיה `2,1,3`.\nאין להשתמש במערך עזר נוסף מלבד המערך החדש שהפונקציה יוצרת ומחזירה.\nעל זמן הריצה של הפונקציה להיות בסדר גודל של **n**.",
+   "solution": "**פתרון רשמי** (23A-A עמ' 4-5), פתרון רגיל (הפונקציה `binary_search` היא פונקציית עזר שמחזירה את האינדקס של `num` במערך):\n```c\nint* distsort_2(int* a, int n, int num)\n{\n    int idx_num = binary_search(a, n, num);\n    int idx_smaller = idx_num - 1, idx_larger = idx_num + 1, new_pos = 1;\n    int* new_sort = (int*)malloc(n * sizeof(int));\n    assert(new_sort);\n    new_sort[0] = num;\n    while (0 <= idx_smaller && idx_larger < n) {\n        if (a[idx_larger] - num < num - a[idx_smaller]) {\n            new_sort[new_pos++] = a[idx_larger++];\n        }\n        else\n            new_sort[new_pos++] = a[idx_smaller--];\n    }\n    while (0 <= idx_smaller) {\n        new_sort[new_pos++] = a[idx_smaller--];\n    }\n    while (idx_larger < n) {\n        new_sort[new_pos++] = a[idx_larger++];\n    }\n    return new_sort;\n}\n```\n**פתרון יותר יעיל ואלגנטי** (אין צורך בחיפוש מקום של `num` במערך, מתחיל למלא מערך חדש מהסוף):\n```c\nint* distsort(int* a, int n, int num)\n{\n    int first = 0, last = n - 1, new_position = n - 1;\n    int* new_sort = (int*)malloc(n * sizeof(int));\n    assert(new_sort);\n    while (first <= last) {\n        if (a[last] - num >= num - a[first]) {\n            new_sort[new_position--] = a[last--];\n        }\n        else\n            new_sort[new_position--] = a[first++];\n    }\n    return new_sort;\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "points": 27
+  },
+  {
+   "num": 4,
+   "kind": "code",
+   "topic": "recursion",
+   "question": "העמק הקסום מורכב מאזורים רבועים בגבהים שונים, הגבהים הם מספרים בטווח 1-100 והעמק כולו מוקף בחומה בגובה 255 מטרים. העמק הקסום מיוצג על ידי מטריצה של גבהים וכל אזור מיוצג כתא במטריצה.\nלדוגמא: (הטבלה בתמונה)\nלעיתים מגיע ענן ומתמקם בנקודה מסוימת בעמק מעל אחד האזורים.\nיום אחד, הגיע הענן לנקודה מסוימת בעמק (מעל אזור מסוים) והחיל להוריד גשם מגובה נתון `h`, הגשם מציף את כל האזורים שנמוכים מהענן ושאליהם המים יכולים לזרום עד הגובה של הענן. המים יכולים לזרום מאזור לאזור אחר רק אם יש להם צלע משותפת (לא באלכסון) וגובהו של האזור האחר נמוך מגובהו של הענן.\nהשאלה היא, כמה מים ימטיר הענן עד להצפה מלאה של החלק הניתן להצפה.\nכתבו פונקציה **רקורסיבית** `int waterfill(int Valley[R][C], int CloudR, int CloudC, int CloudH)` המחשבת את כמות המים שיתקבלו עד הצפה מלאה.\n`R,C` מוגדרים על ידי `#define`.\nמספר הנחיות:\n1. העננים אף פעם לא מגיעים לקצות העמק.\n2. אם ענן נמוך מגיע לאזור שלא נמוך ממנו התשובה תהיה 0.\n3. העננים מגיעים בגבהים שלמים בין 1-150 בלבד.",
+   "solution": "**פתרון רשמי** (23A-A עמ' 6):\n```c\nint waterfill(int valley[R][C], int cloudR, int cloudC, int cloudH) {\n    if (cloudH <= valley[cloudR][cloudC])\n        return 0;\n    int fill = cloudH - valley[cloudR][cloudC];\n    valley[cloudR][cloudC] = 255; //Mark not to return\n    return fill +\n        waterfill(valley, cloudR - 1, cloudC, cloudH) +\n        waterfill(valley, cloudR + 1, cloudC, cloudH) +\n        waterfill(valley, cloudR, cloudC - 1, cloudH) +\n        waterfill(valley, cloudR, cloudC + 1, cloudH);\n}\n```\n**פתרון מתוחכם ללא משתנה עזר:**\n```c\nint waterfill2(int valley[R][C], int cloudR, int cloudC, int cloudH) {\n    if (cloudH <= valley[cloudR][cloudC])\n        return 0;\n    valley[cloudR][cloudC] += 255; //Mark not to return\n\n    return 255 + cloudH - valley[cloudR][cloudC] +\n        waterfill2(valley, cloudR - 1, cloudC, cloudH) +\n        waterfill2(valley, cloudR + 1, cloudC, cloudH) +\n        waterfill2(valley, cloudR, cloudC - 1, cloudH) +\n        waterfill2(valley, cloudR, cloudC + 1, cloudH);\n}\n```",
+   "solutionSource": "official-pdf",
+   "official": true,
+   "confidence": "high",
+   "points": 26,
+   "contextId": "c4"
+  }
+ ]
+}
