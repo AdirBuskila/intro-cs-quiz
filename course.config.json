@@ -59,7 +59,86 @@
       "מבנים"
     ]
   ],
-  "briefs": [],
+  "briefs": [
+    [
+      "01 - basics_io.md",
+      "basics_io",
+      "basics_io",
+      "topic"
+    ],
+    [
+      "02 - conditionals_loops.md",
+      "conditionals_loops",
+      "conditionals_loops",
+      "topic"
+    ],
+    [
+      "03 - functions.md",
+      "functions",
+      "functions",
+      "topic"
+    ],
+    [
+      "04 - recursion.md",
+      "recursion",
+      "recursion",
+      "topic"
+    ],
+    [
+      "05 - arrays.md",
+      "arrays",
+      "arrays",
+      "topic"
+    ],
+    [
+      "06 - pointers_memory.md",
+      "pointers_memory",
+      "pointers_memory",
+      "topic"
+    ],
+    [
+      "07 - strings.md",
+      "strings",
+      "strings",
+      "topic"
+    ],
+    [
+      "08 - binary_search.md",
+      "binary_search",
+      "binary_search",
+      "topic"
+    ],
+    [
+      "09 - sorting_merge.md",
+      "sorting_merge",
+      "sorting_merge",
+      "topic"
+    ],
+    [
+      "10 - matrices.md",
+      "matrices",
+      "matrices",
+      "topic"
+    ],
+    [
+      "11 - number_theory.md",
+      "number_theory",
+      "number_theory",
+      "topic"
+    ],
+    [
+      "12 - complexity.md",
+      "complexity",
+      "complexity",
+      "topic"
+    ],
+    [
+      "13 - structs.md",
+      "structs",
+      "structs",
+      "topic"
+    ]
+  ],
   "needHelp": [
     {
       "id": "recursion",
