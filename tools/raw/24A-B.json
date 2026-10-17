@@ -15,7 +15,146 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint *valueNotInArray(int *arr, int n, int *newSize)\n{\n   int i, k = 0, count = 0;\n   int *seen = (int*)calloc(n + 1, sizeof(int));\n   int *res;\n   for (i = 0; i < n; i++)\n      seen[arr[i]] = 1;\n   for (i = 0; i <= n; i++)\n      if (!seen[i])\n         count++;\n   res = (int*)malloc(count * sizeof(int));\n   for (i = 0; i <= n; i++)\n      if (!seen[i])\n         res[k++] = i;\n   free(seen);\n   *newSize = count;\n   return res;\n}\n```\nמערך עזר `seen` בגודל `n+1` מסמן אילו ערכים בין `0` ל-`n` הופיעו ב-`arr`. סריקה שנייה סופרת כמה ערכים לא סומנו, מקצים מערך בדיוק בגודל הזה, וסריקה שלישית ממלאת אותו בסדר עולה. הגודל מועבר דרך `*newSize`.\nב-`n` איברים יש לכל היותר `n` ערכים שונים מתוך `n+1` הערכים האפשריים, ולכן תמיד חסר לפחות ערך אחד והמערך המוחזר אינו ריק.\nשלוש סריקות לינאריות: $O(n)$.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מערך עזר `seen` בגודל `n+1`, כי הערכים בתחום 0 עד `n`",
+     "points": 5
+    },
+    {
+     "text": "סימון הערכים שהופיעו ב-`arr`: `seen[arr[i]] = 1`",
+     "points": 5
+    },
+    {
+     "text": "ספירת הערכים שלא סומנו וקביעת גודל מערך התוצאה בדיוק לפיה",
+     "points": 6
+    },
+    {
+     "text": "מילוי מערך התוצאה בסדר עולה בסריקה נוספת",
+     "points": 6
+    },
+    {
+     "text": "העברת הגודל דרך `*newSize`, החזרת המערך ושחרור `seen`",
+     "points": 3
+    },
+    {
+     "text": "זמן $O(n)$: שלוש סריקות לינאריות",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "מערך עזר בגודל `n` במקום `n+1`: הערך `n` יוצא מגבולות המערך.",
+    "להקצות את מערך התוצאה בגודל `n+1` בלי לספור, ואז להעביר גודל שגוי.",
+    "לשכוח להעביר את הגודל דרך `*newSize` או לשחרר את מערך העזר."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מה ערך `*newSize` אחרי הקריאה עם `arr = {0,1,1,0,3,5}` ו-`n = 6`?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "הערכים $0..6$ שלא הופיעו הם 2, 4 ו-6: שלושה (ריצה אמיתית: 3)."
+    },
+    {
+     "type": "choice",
+     "prompt": "איזה מערך מוחזר עבור `arr = {1,1}` ו-`n = 2`?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`0, 2`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`1, 2`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`0, 1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`0, 1, 2`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "בתחום $0..2$ רק 1 הופיע, ולכן חסרים 0 ו-2 בסדר עולה (ריצה אמיתית: 0, 2)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את השורה שסופרת את הערכים החסרים.",
+     "code": true,
+     "lines": [
+      "int *valueNotInArray(int *arr, int n, int *newSize)",
+      "{",
+      "   int i, k = 0, count = 0, *res, *seen = (int*)calloc(n + 1, sizeof(int));",
+      "   for (i = 0; i < n; i++) seen[arr[i]] = 1;",
+      "   ___",
+      "   res = (int*)malloc(count * sizeof(int));",
+      "   for (i = 0; i <= n; i++) if (!seen[i]) res[k++] = i;",
+      "   free(seen);",
+      "   *newSize = count;",
+      "   return res;",
+      "}"
+     ],
+     "blankIndex": 4,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "for (i = 0; i <= n; i++) if (!seen[i]) count++;"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "for (i = 0; i < n; i++) if (!seen[i]) count++;"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "for (i = 0; i <= n; i++) if (seen[i]) count++;"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "for (i = 0; i <= n; i++) count++;"
+      }
+     ],
+     "correctId": "a",
+     "explain": "סופרים את הערכים $0..n$ שלא סומנו. `i < n` מפספס את הערך `n`, `seen[i]` בלי שלילה סופר את הערכים שהופיעו, והאחרונה סופרת הכול (ריצה אמיתית: כולן נותנות גודל שגוי)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `valueNotInArray`.",
+     "code": true,
+     "lines": [
+      "int *valueNotInArray(int *arr, int n, int *newSize)",
+      "{",
+      "   int i, k = 0, count = 0, *res, *seen = (int*)calloc(n + 1, sizeof(int));",
+      "   for (i = 0; i < n; i++) seen[arr[i]] = 1;",
+      "   for (i = 0; i <= n; i++) if (!seen[i]) count++; res = (int*)malloc(count * sizeof(int));",
+      "   for (i = 0; i <= n; i++) if (!seen[i]) res[k++] = i;",
+      "   free(seen); *newSize = count;",
+      "   return res;",
+      "}"
+     ],
+     "explain": "הקצאת `seen`, סימון, ספירה והקצאת התוצאה, מילוי, שחרור והעברת הגודל, והחזרה (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "שלוש סריקות לינאריות: $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 2,
@@ -26,7 +165,115 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint find_two_digits(char *number)\n{\n   int count[100] = {0};\n   int i, best = 0;\n   for (i = 0; number[i] != '\\0' && number[i + 1] != '\\0'; i++)\n      count[(number[i] - '0') * 10 + (number[i + 1] - '0')]++;\n   for (i = 1; i < 100; i++)\n      if (count[i] > count[best])\n         best = i;\n   return best;\n}\n```\nמערך מונים `count` בגודל 100: כל זוג ספרות סמוכות הוא המספר `10*d1+d2` (כולל אפס מקדים, כך ש-`\"01\"` נספר כ-1). סריקה אחת של המחרוזת ממלאת את המונים. אחר כך עוברים על 100 המונים בסדר עולה ומחליפים את המועמד רק כשהמונה גדול **ממש**, כך שבמקרה של שוויון נשאר המספר הקטן.\nזמן $O(n)$: סריקה אחת של המחרוזת, והמעבר על 100 המונים הוא מספר קבוע של צעדים.\n(מחרוזת עם פחות משתי ספרות מחזירה `0`; השאלה לא מגדירה את המקרה הזה.)",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מערך מונים `count` בגודל 100, אחד לכל מספר דו-ספרתי כולל אלה שמתחילים ב-0",
+     "points": 5
+    },
+    {
+     "text": "סריקה אחת: כל זוג ספרות סמוכות הוא האינדקס `10*d1 + d2`, והמונה שלו גדל",
+     "points": 7
+    },
+    {
+     "text": "מעבר שני על 100 המונים ובחירת המונה המקסימלי",
+     "points": 6
+    },
+    {
+     "text": "שימוש בהשוואה חזקה `>` כך שבתיקו נשאר המספר הקטן",
+     "points": 5
+    },
+    {
+     "text": "זמן $O(n)$ כי 100 קבוע",
+     "points": 3
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לספור רק מספרים שלא מתחילים ב-0, אף ש-`\"01\"` נחשב מספר דו-ספרתי.",
+    "להשתמש ב-`>=` בבחירת המקסימום: בתיקו נבחר המספר הגדול ולא הקטן.",
+    "לספור זוגות שאינם חופפים ולפספס זוגות סמוכים, כמו `21` בתוך `\"121\"`."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `find_two_digits(\"0001\")`?",
+     "answer": 0,
+     "tol": 0,
+     "explain": "הזוגות הם `00`, `00`, `01`. המספר `00` (כלומר 0) מופיע פעמיים ו-`01` פעם אחת, לכן 0 (ריצה אמיתית: 0)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `find_two_digits(\"426144\")`?",
+     "answer": 14,
+     "tol": 0,
+     "explain": "הזוגות 42, 26, 61, 14, 44 מופיעים פעם אחת כל אחד, ובתיקו מחזירים את הקטן: 14 (ריצה אמיתית: 14)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הלולאה שבוחרת את המספר הנבחר.",
+     "code": true,
+     "lines": [
+      "int find_two_digits(char *number)",
+      "{",
+      "   int count[100] = {0}; int i, best = 0;",
+      "   for (i = 0; number[i] != '\\0' && number[i + 1] != '\\0'; i++) count[(number[i] - '0') * 10 + (number[i + 1] - '0')]++;",
+      "   ___",
+      "   return best;",
+      "}"
+     ],
+     "blankIndex": 4,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "for (i = 1; i < 100; i++) if (count[i] > count[best]) best = i;"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "for (i = 1; i < 100; i++) if (count[i] >= count[best]) best = i;"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "for (i = 1; i < 100; i++) if (count[i] < count[best]) best = i;"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "for (i = 1; i < 100; i++) if (count[i] > best) best = i;"
+      }
+     ],
+     "correctId": "a",
+     "explain": "`>` מחליף מועמד רק כשהמונה גדול ממש, ולכן בתיקו נשאר הקטן. `>=` בוחר את הגדול, `<` בוחר מונה קטן, והאחרונה משווה מונה לאינדקס (ריצה אמיתית: כולן נכשלות)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `find_two_digits`.",
+     "code": true,
+     "lines": [
+      "int find_two_digits(char *number)",
+      "{",
+      "   int count[100] = {0}; int i, best = 0;",
+      "   for (i = 0; number[i] != '\\0' && number[i + 1] != '\\0'; i++) count[(number[i] - '0') * 10 + (number[i + 1] - '0')]++;",
+      "   for (i = 1; i < 100; i++) if (count[i] > count[best]) best = i;",
+      "   return best;",
+      "}"
+     ],
+     "explain": "הגדרת המונים, מילוים בסריקת המחרוזת, בחירת המקסימום, והחזרה (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "סריקה אחת של המחרוזת ועוד מעבר על 100 מונים (קבוע): $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 3,
@@ -37,7 +284,106 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint is_zero(int* pos, int n, int* neg, int m)\n{\n   if (n == 0 || m == 0)\n      return 0;\n   if (pos[0] + neg[m - 1] == 0)\n      return 1;\n   if (pos[0] < -neg[m - 1])\n      return is_zero(pos + 1, n - 1, neg, m);\n   return is_zero(pos, n, neg, m - 1);\n}\n```\nמשווים את האיבר הקטן ב-`pos` (`pos[0]`) עם הערך המוחלט הקטן ב-`neg`, שהוא `-neg[m-1]` (האיבר האחרון, כי `neg` ממוין בסדר עולה).\nאם הסכום `0` מחזירים `1`. אם `pos[0]` קטן יותר, הוא לא יתאפס עם אף איבר של `neg` (כל השאר בערך מוחלט גדול יותר), ולכן ממשיכים בלעדיו (`pos + 1`, `n - 1`). אחרת `neg[m-1]` לא יתאפס עם אף איבר של `pos`, וממשיכים בלעדיו (`m - 1`).\nמקרה בסיס: אחד המערכים ריק, מחזירים `0`. בכל קריאה אחד המערכים קטן באחד, לכן יש לכל היותר $n+m$ קריאות: $O(n+m)$.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מקרה בסיס: אחד המערכים ריק, ומחזירים `0`",
+     "points": 5
+    },
+    {
+     "text": "השוואת `pos[0]` (הקטן ב-`pos`) עם `-neg[m-1]` (הערך המוחלט הקטן ב-`neg`), והחזרת `1` כשהסכום 0",
+     "points": 6
+    },
+    {
+     "text": "אם `pos[0]` קטן יותר: ממשיכים בלעדיו (`pos + 1`, `n - 1`)",
+     "points": 6
+    },
+    {
+     "text": "אחרת ממשיכים בלי `neg[m-1]` (`m - 1`)",
+     "points": 6
+    },
+    {
+     "text": "רקורסיה בלבד וקריאה אחת בכל מקרה, כלומר $O(n+m)$",
+     "points": 3
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "שתי לולאות מקוננות על כל הזוגות: לא רקורסיבי, וגם $O(nm)$.",
+    "להשוות את `pos[0]` ל-`neg[0]` במקום ל-`neg[m-1]`: `neg[0]` הוא בעל הערך המוחלט הגדול ביותר.",
+    "לשכוח את מקרה הבסיס של מערך ריק, ולקרוא לאיבר שאינו קיים."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "כמה קריאות ל-`is_zero` מתבצעות בסך הכול (כולל הראשונה) עבור `pos = {1,4,8,11}` ו-`neg = {-20,-15,-11,-3,-2}`?",
+     "answer": 6,
+     "tol": 0,
+     "explain": "מקדמים את `pos` (1), מקצרים את `neg` פעמיים (ל-3 ול-11), מקדמים את `pos` פעמיים ובקריאה השישית $11+(-11)=0$ ומחזירים 1 (ריצה אמיתית: 6)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "וכמה קריאות מתבצעות עבור `pos = {1,4,8,11}` ו-`neg = {-20,-15,-12,-3,-2}`?",
+     "answer": 7,
+     "tol": 0,
+     "explain": "אותו מסלול, אבל `11 + (-12)` אינו 0 ו-`pos` נגמר: הקריאה השביעית מקבלת `n = 0` ומחזירה 0 (ריצה אמיתית: 7)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את התנאי שקובע איזה מערך מקצרים.",
+     "code": true,
+     "lines": [
+      "int is_zero(int* pos, int n, int* neg, int m)",
+      "{",
+      "   if (n == 0 || m == 0) return 0;",
+      "   if (pos[0] + neg[m - 1] == 0) return 1;",
+      "   ___",
+      "      return is_zero(pos + 1, n - 1, neg, m);",
+      "   return is_zero(pos, n, neg, m - 1);",
+      "}"
+     ],
+     "blankIndex": 4,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "if (pos[0] < -neg[m - 1])"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "if (pos[0] > -neg[m - 1])"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "if (pos[0] < neg[m - 1])"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "if (pos[n - 1] < -neg[0])"
+      }
+     ],
+     "correctId": "a",
+     "explain": "כש-`pos[0]` קטן מהערך המוחלט הקטן ב-`neg`, הוא קטן מכולם ולא יתאפס, ולכן מוותרים עליו. האחרות הפוכות או משוות איברים לא רלוונטיים (ריצה אמיתית: כולן נכשלות)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `is_zero`.",
+     "code": true,
+     "lines": [
+      "int is_zero(int* pos, int n, int* neg, int m)",
+      "{",
+      "   if (n == 0 || m == 0) return 0;",
+      "   if (pos[0] + neg[m - 1] == 0) return 1; if (pos[0] < -neg[m - 1]) return is_zero(pos + 1, n - 1, neg, m);",
+      "   return is_zero(pos, n, neg, m - 1);",
+      "}"
+     ],
+     "explain": "בסיס, אחר כך בלוק אחד של בדיקת סכום אפס וקיצור `pos`, ובסוף קיצור `neg` (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 4,
@@ -48,7 +394,141 @@
    "solution": "**פתרון הפותר** (אין פתרון רשמי למועד זה):\n```c\nint number_returns(int* arr, int size)\n{\n   int i, run = 1, best = 1;\n   if (size == 0)\n      return 0;\n   merge_sort(arr, 0, size - 1);\n   for (i = 1; i < size; i++)\n   {\n      if (arr[i] == arr[i - 1])\n         run++;\n      else\n         run = 1;\n      if (run > best)\n         best = run;\n   }\n   return best;\n}\n```\nממיינים את המערך (מותר לשנות אותו) עם `merge_sort` בזמן $O(n\\log n)$. אחרי המיון כל המופעים של אותו ערך צמודים, ולכן סריקה אחת סופרת את אורך כל רצף של ערכים שווים ושומרת את הארוך ביותר, בזמן $O(n)$.\nסה\"כ $O(n\\log n)$. במערך ריק מוחזר `0`.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מיון המערך עם `merge_sort` כך שמופעי אותו ערך צמודים",
+     "points": 7
+    },
+    {
+     "text": "סריקה שסופרת את אורך הרצף הנוכחי: `run++` כשהערך שווה לקודם",
+     "points": 7
+    },
+    {
+     "text": "איפוס `run = 1` כשהערך משתנה",
+     "points": 4
+    },
+    {
+     "text": "שמירת הרצף הארוך ביותר ב-`best`",
+     "points": 4
+    },
+    {
+     "text": "מערך ריק מחזיר `0`",
+     "points": 2
+    },
+    {
+     "text": "זמן $O(n\\log n)$",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "שתי לולאות מקוננות שסופרות לכל איבר את מופעיו: $O(n^2)$ ולא $O(n\\log n)$.",
+    "לשכוח לאפס את אורך הרצף כשהערך משתנה, ולצבור מופעים של ערכים שונים.",
+    "לא למיין לפני הספירה: מופעי אותו ערך אינם צמודים, והרצף מתפספס."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `number_returns` עבור `{5,5,1,5,1,5}`?",
+     "answer": 4,
+     "tol": 0,
+     "explain": "אחרי המיון `{1,1,5,5,5,5}`, והרצף הארוך ביותר הוא ארבע חמישיות (ריצה אמיתית: 4)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `number_returns` עבור `{2,9,2,9,2}`?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "אחרי המיון `{2,2,2,9,9}`, והרצף הארוך ביותר הוא שלוש פעמים 2 (ריצה אמיתית: 3)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את הפקודה שרצה כשהערך שונה מהקודם.",
+     "code": true,
+     "lines": [
+      "int number_returns(int* arr, int size)",
+      "{",
+      "   int i, run = 1, best = 1;",
+      "   if (size == 0)",
+      "      return 0;",
+      "   merge_sort(arr, 0, size - 1);",
+      "   for (i = 1; i < size; i++)",
+      "   {",
+      "      if (arr[i] == arr[i - 1])",
+      "         run++;",
+      "      else",
+      "___",
+      "      if (run > best)",
+      "         best = run;",
+      "   }",
+      "   return best;",
+      "}"
+     ],
+     "blankIndex": 11,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "run = 1;"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "run = 0;"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "run--;"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "run = run;"
+      }
+     ],
+     "correctId": "a",
+     "explain": "ערך חדש פותח רצף חדש באורך 1. `run = 0` מפספס איבר אחד בכל רצף, `run--` מקטין, ו-`run = run` ממשיך לצבור מערכים שונים (ריצה אמיתית: כולן נכשלות)."
+    },
+    {
+     "type": "findbug",
+     "prompt": "בגרסה הבאה שורה אחת שונתה והפונקציה סופרת שגוי. מצאו אותה.",
+     "code": true,
+     "lines": [
+      "int number_returns(int* arr, int size)",
+      "{",
+      "   int i, run = 1, best = 1;",
+      "   if (size == 0)",
+      "      return 0;",
+      "   merge_sort(arr, 0, size - 1);",
+      "   for (i = 1; i < size; i++)",
+      "   {",
+      "      if (arr[i] == arr[0])",
+      "         run++;",
+      "      else",
+      "         run = 1;",
+      "      if (run > best)",
+      "         best = run;",
+      "   }",
+      "   return best;",
+      "}"
+     ],
+     "bugIndex": 8,
+     "explain": "השוואה לאיבר הראשון במקום לאיבר הקודם סופרת רק מופעים של `arr[0]`: עבור `{1,2,2}` מתקבל 1 במקום 2 (ריצה אמיתית)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(n log n)",
+      "O(nlogn)"
+     ],
+     "normalize": "complexity",
+     "explain": "המיון $O(n\\log n)$ והסריקה $O(n)$: $O(n\\log n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   }
  ]
 }
