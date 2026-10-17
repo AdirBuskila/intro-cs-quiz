@@ -22,7 +22,104 @@
    "solutionSource": "student-solution",
    "official": false,
    "confidence": "high",
-   "points": 26
+   "points": 26,
+   "rubric": [
+    {
+     "text": "מקרה בסיס: `size == 0` מחזיר `0`",
+     "points": 5
+    },
+    {
+     "text": "בדיקת האיבר האחרון: הפרה כאשר `(arr[size-1] + size)` זוגי, כלומר הזוגיות של הערך שונה מזו של האינדקס",
+     "points": 7
+    },
+    {
+     "text": "הוספת `1` על כל הפרה",
+     "points": 6
+    },
+    {
+     "text": "המשך רקורסיבי עם `size - 1` בשני המקרים",
+     "points": 6
+    },
+    {
+     "text": "רקורסיה בלבד ללא לולאות, והחזרת המספר המצטבר",
+     "points": 2
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לבדוק רק את הזוגיות של הערך ולא את הקשר לאינדקס.",
+    "לבלבל בין `size` לאינדקס האחרון `size-1`: הסכום `arr[size-1] + size` זוגי דווקא כשיש הפרה.",
+    "להחזיר `0` או `1` במקום לצבור את מספר ההפרות."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `check_parity` עבור `arr = {3,4}` ו-`size = 2`?",
+     "answer": 2,
+     "tol": 0,
+     "explain": "באינדקס 0 מופיע 3 (אי-זוגי במקום זוגי) ובאינדקס 1 מופיע 4 (זוגי במקום אי-זוגי): שתי הפרות (ריצה אמיתית: 2)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "כמה קריאות ל-`check_parity` מתבצעות בסך הכול (כולל הראשונה והבסיס) עבור `arr = {8,8,6,5,51,7}` ו-`size = 6`?",
+     "answer": 7,
+     "tol": 0,
+     "explain": "הערכים של `size` לאורך הקריאות: 6, 5, 4, 3, 2, 1, 0: שבע קריאות. סך ההפרות הוא 2 (ריצה אמיתית: 7)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את התנאי שמזהה הפרה באיבר האחרון.",
+     "code": true,
+     "lines": [
+      "int check_parity(int* arr, int size)",
+      "{",
+      "   if (size == 0) return 0;",
+      "   if (___) return 1 + check_parity(arr, size - 1);",
+      "   return check_parity(arr, size - 1);",
+      "}"
+     ],
+     "blankIndex": 3,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "(arr[size - 1] + size) % 2 == 0"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "(arr[size - 1] + size) % 2 == 1"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "arr[size - 1] % 2 == 0"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "(arr[size - 1] + size - 1) % 2 == 0"
+      }
+     ],
+     "correctId": "a",
+     "explain": "האינדקס של האיבר האחרון הוא `size - 1`, והוא תקין כשהערך והאינדקס בעלי אותה זוגיות. לכן הפרה פירושה ש-`arr[size-1] + size` זוגי. האחרות סופרות את התקינים או את הזוגיים בלבד (ריצה אמיתית: כולן נכשלות)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `check_parity`.",
+     "code": true,
+     "lines": [
+      "int check_parity(int* arr, int size)",
+      "{",
+      "   if (size == 0) return 0;",
+      "   if ((arr[size - 1] + size) % 2 == 0) return 1 + check_parity(arr, size - 1);",
+      "   return check_parity(arr, size - 1);",
+      "}"
+     ],
+     "explain": "בסיס, הספירה כשיש הפרה, ובסוף ההמשך כשאין (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 2,
@@ -33,7 +130,141 @@
    "solutionSource": "student-solution",
    "official": false,
    "confidence": "med",
-   "points": 26
+   "points": 26,
+   "rubric": [
+    {
+     "text": "העתקת `arr1` למערך עזר, כדי לא לשנות את `arr1`",
+     "points": 5
+    },
+    {
+     "text": "מיון מערך העזר עם `merge_sort`",
+     "points": 6
+    },
+    {
+     "text": "חיפוש בינארי של כל `arr2[i]` במערך העזר הממוין",
+     "points": 7
+    },
+    {
+     "text": "כתיבת תוצאת החיפוש (`1` או `0`) ל-`arr2[i]`",
+     "points": 4
+    },
+    {
+     "text": "שחרור מערך העזר וזמן $O(size\\log size)$",
+     "points": 4
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "חיפוש לינארי של כל איבר של `arr2` ב-`arr1`: $O(size^2)$ ולא $O(size\\log size)$.",
+    "למיין את `arr1` עצמו: השאלה אוסרת לשנות אותו, ולכן ממיינים העתק.",
+    "לחפש בינארית במערך שלא מוין."
+   ],
+   "steps": [
+    {
+     "type": "choice",
+     "prompt": "מה הפתרון עושה עם `arr1` לפני החיפושים?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "מעתיק אותו למערך עזר וממיין את ההעתק"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "ממיין את `arr1` עצמו"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "ממיין את `arr2` ומחפש בו את ערכי `arr1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "מחפש בו בינארית כמות שהוא, בלי למיין"
+      }
+     ],
+     "correctId": "a",
+     "explain": "השאלה אוסרת לשנות את `arr1`, ולכן ממיינים העתק (ריצה אמיתית: מיון `arr1` עצמו משנה אותו, וחיפוש בינארי בלי מיון נותן תשובות שגויות)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "בדוגמה של השאלה: מהו סכום הערכים ב-`arr2` אחרי הקריאה?",
+     "answer": 4,
+     "tol": 0,
+     "explain": "ארבעה ערכים, `2, 3, -5, 9`, נמצאים ב-`arr1`, ולכן במערך `arr2` ארבעה 1 וחמישה 0 (ריצה אמיתית: 4). הנחת הפתרון: `binary_search` מחזירה 1 אם נמצא ו-0 אחרת."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את גוף הלולאה האחרונה.",
+     "code": true,
+     "lines": [
+      "void search_in_array(int* arr1, int* arr2, int size)",
+      "{",
+      "   int* temp = (int*)malloc(size * sizeof(int)); assert(temp);",
+      "   for (int i = 0; i < size; i++) temp[i] = arr1[i];",
+      "   merge_sort(temp, 0, size - 1);",
+      "   for (int i = 0; i < size; i++)",
+      "      ___",
+      "   free(temp);",
+      "}"
+     ],
+     "blankIndex": 6,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "arr2[i] = binary_search(temp, size, arr2[i]);"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "arr2[i] = binary_search(arr1, size, arr2[i]);"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "arr2[i] = binary_search(temp, size, i);"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "arr2[i] = 1 - binary_search(temp, size, arr2[i]);"
+      }
+     ],
+     "correctId": "a",
+     "explain": "מחפשים את הערך `arr2[i]` במערך העזר הממוין. חיפוש ב-`arr1` שלא ממוין שגוי, חיפוש של האינדקס שגוי, והחסרה מ-1 הופכת את התשובה (ריצה אמיתית: כולן נכשלות)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `search_in_array`.",
+     "code": true,
+     "lines": [
+      "void search_in_array(int* arr1, int* arr2, int size)",
+      "{",
+      "   int* temp = (int*)malloc(size * sizeof(int)); assert(temp);",
+      "   for (int i = 0; i < size; i++) temp[i] = arr1[i];",
+      "   merge_sort(temp, 0, size - 1);",
+      "   for (int i = 0; i < size; i++) arr2[i] = binary_search(temp, size, arr2[i]); free(temp);",
+      "}"
+     ],
+     "explain": "הקצאה, העתקה, מיון, חיפושים עם שחרור (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(size log size)",
+      "O(size log(size))",
+      "O(n log n)",
+      "O(nlogn)"
+     ],
+     "normalize": "complexity",
+     "explain": "מיון $O(size\\log size)$ ועוד `size` חיפושים של $O(\\log size)$ כל אחד: $O(size\\log size)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 3,
@@ -44,7 +275,140 @@
    "solutionSource": "student-solution",
    "official": false,
    "confidence": "high",
-   "points": 26
+   "points": 26,
+   "rubric": [
+    {
+     "text": "מערך מונים `count` בגודל 26, מאופס",
+     "points": 4
+    },
+    {
+     "text": "ספירת מופעי כל אות של `text` בסריקה אחת",
+     "points": 7
+    },
+    {
+     "text": "הקטנת המונה של כל אות של `word`",
+     "points": 7
+    },
+    {
+     "text": "החזרת `0` כשמונה יורד מתחת ל-0, כלומר חסרה אות",
+     "points": 5
+    },
+    {
+     "text": "החזרת `1` בסוף, וזמן $O(n)$",
+     "points": 3
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לבדוק רק שכל אות של `word` מופיעה ב-`text`, בלי לספור: `inciting` דורשת שלוש `i`, ו-`text` מכיל שתיים.",
+    "לחפש לכל אות של `word` בתוך `text`: $O(n^2)$ ולא $O(n)$.",
+    "לא לאפס את מערך המונים: הוא חייב להתחיל באפסים."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "אחרי הלולאה הראשונה עבור `text = \"intelligence\"`: מהו המונה של האות `e`?",
+     "answer": 3,
+     "tol": 0,
+     "explain": "האות `e` מופיעה ב-`intelligence` שלוש פעמים (ריצה אמיתית: 3)."
+    },
+    {
+     "type": "choice",
+     "prompt": "עבור `word = \"inciting\"`: על איזו אות מונה יורד מתחת ל-0 ו-`word_in_text` מחזירה 0?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`i`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`n`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`c`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`g`"
+      }
+     ],
+     "correctId": "a",
+     "explain": "האות `i` מופיעה ב-`text` פעמיים ובמילה שלוש פעמים, ובמופע השלישי המונה הופך ל-1- (ריצה אמיתית: `i`)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את התנאי שבודק אם חסרה אות.",
+     "code": true,
+     "lines": [
+      "int word_in_text(char* text, char* word)",
+      "{",
+      "   int count[26] = {0};",
+      "   while (*text) { count[*text - 'a']++; text++; }",
+      "   while (*word)",
+      "   {",
+      "      if (___) return 0;",
+      "      word++;",
+      "   }",
+      "   return 1;",
+      "}"
+     ],
+     "blankIndex": 6,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "--count[*word - 'a'] < 0"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "count[*word - 'a']-- < 0"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "--count[*word - 'a'] <= 0"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "count[*word - 'a'] < 0"
+      }
+     ],
+     "correctId": "a",
+     "explain": "מקטינים קודם ואז בודקים אם התוצאה שלילית. הקטנה אחרי הבדיקה מאחרת בצעד אחד, `<= 0` פוסל אות אחרונה שקיימת, ובלי הקטנה המונה לא משתנה (ריצה אמיתית: כולן נכשלות)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שורות הפונקציה `word_in_text`.",
+     "code": true,
+     "lines": [
+      "int word_in_text(char* text, char* word)",
+      "{",
+      "   int count[26] = {0};",
+      "   while (*text) { count[*text - 'a']++; text++; }",
+      "   while (*word) { if (--count[*word - 'a'] < 0) return 0; word++; }",
+      "   return 1;",
+      "}"
+     ],
+     "explain": "מערך מונים, ספירת `text`, הקטנה לפי `word`, והחזרת `1` (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)",
+     "accept": [
+      "O(n)"
+     ],
+     "normalize": "complexity",
+     "explain": "שתי סריקות לינאריות ומערך בגודל קבוע: $O(n)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   },
   {
    "num": 4,
@@ -56,7 +420,121 @@
    "solution": "**פתרון הפותר** (המקור היחיד הוא פתרון סטודנט שקיבל 22/27 ושגוי: הלולאה השלישית שלו רצה עד `c` במקום עד `r`, ולכן הוא לא מוצג כאן):\n```c\nint number_squares(int matrix[N][N])\n{\n   int i, j, a, b, all_ones, count = 0;\n   for (i = 0; i + 2 < N; i++)            // (i, j) = top-left corner of a 3x3 square\n      for (j = 0; j + 2 < N; j++)\n      {\n         all_ones = 1;\n         for (a = i; a < i + 3; a++)      // fixed 9 cells per square\n            for (b = j; b < j + 3; b++)\n               if (matrix[a][b] == 0)\n                  all_ones = 0;\n         count += all_ones;\n      }\n   return count;\n}\n```\nעוברים על כל פינה שמאלית-עליונה `(i, j)` של ריבוע $3\\times 3$ שנכנס כולו במטריצה (`i+2<N` וגם `j+2<N`), ובודקים את 9 התאים שלו. אם כולם `1` מוסיפים 1 למונה.\nיש פחות מ-$N^2$ פינות, ולכל אחת מספר קבוע (9) של בדיקות, ולכן הזמן $O(N^2)$. בדוגמה המודפסת מוחזר `4`.",
    "solutionSource": "solved",
    "official": false,
-   "confidence": "high"
+   "confidence": "high",
+   "rubric": [
+    {
+     "text": "מעבר על פינות שמאליות-עליונות אפשריות בלבד: `i + 2 < N` ו-`j + 2 < N`",
+     "points": 6
+    },
+    {
+     "text": "בדיקת תשעת תאי הריבוע $3\\times 3$ מהפינה `(i, j)`",
+     "points": 7
+    },
+    {
+     "text": "דגל `all_ones` שמאותחל ל-1 לפני כל ריבוע ומתאפס כשנמצא `0`",
+     "points": 6
+    },
+    {
+     "text": "הוספת הדגל למונה והחזרתו",
+     "points": 3
+    },
+    {
+     "text": "מספר קבוע של בדיקות לכל פינה, כלומר $O(N^2)$",
+     "points": 5
+    }
+   ],
+   "rubricSource": "ai-draft",
+   "pitfalls": [
+    "לרוץ על כל התאים כפינות (`i < N`): הבדיקה יוצאת מגבולות המטריצה.",
+    "לשכוח לאפס את `all_ones` לפני כל ריבוע, כך שריבוע פגום אחד פוסל את כל הבאים אחריו.",
+    "לבדוק רק את הפינה או את התא האמצעי ולא את כל תשעת התאים."
+   ],
+   "steps": [
+    {
+     "type": "numeric",
+     "prompt": "כמה פינות `(i, j)` של ריבוע $3\\times 3$ בודקת הפונקציה במטריצה `image` מהדוגמה ($N=6$)?",
+     "answer": 16,
+     "tol": 0,
+     "explain": "`i` ו-`j` רצים כל אחד על 0 עד 3, כלומר $4\\cdot4=16$ פינות (ריצה אמיתית: 16)."
+    },
+    {
+     "type": "numeric",
+     "prompt": "מה מחזירה `number_squares` עבור `image`?",
+     "answer": 4,
+     "tol": 0,
+     "explain": "מתוך 16 הפינות, ארבעה ריבועים $3\\times 3$ מכילים רק 1 (ריצה אמיתית: 4)."
+    },
+    {
+     "type": "fillblank",
+     "prompt": "השלימו את כותרת הלולאה החיצונית.",
+     "code": true,
+     "lines": [
+      "int number_squares(int matrix[N][N])",
+      "{",
+      "   int i, j, a, b, all_ones, count = 0;",
+      "   ___",
+      "      for (j = 0; j + 2 < N; j++)",
+      "      {",
+      "         all_ones = 1;",
+      "         for (a = i; a < i + 3; a++)",
+      "            for (b = j; b < j + 3; b++)",
+      "               if (matrix[a][b] == 0)",
+      "                  all_ones = 0;",
+      "         count += all_ones;",
+      "      }",
+      "   return count;",
+      "}"
+     ],
+     "blankIndex": 3,
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "for (i = 0; i + 2 < N; i++)"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "for (i = 0; i + 3 < N; i++)"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "for (i = 0; i < N / 3; i++)"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "for (i = 0; i + 4 < N; i++)"
+      }
+     ],
+     "correctId": "a",
+     "explain": "ריבוע שפינתו בשורה `i` תופס את השורות `i` עד `i + 2`, ולכן `i + 2 < N`. האחרות מפספסות שורות של פינות (ריצה אמיתית: כולן סופרות פחות ריבועים)."
+    },
+    {
+     "type": "order",
+     "prompt": "סדרו את שלוש הפקודות שבגוף הלולאה שבודקת ריבוע $3\\times 3$ אחד (הפינה היא `(i, j)`).",
+     "code": true,
+     "lines": [
+      "all_ones = 1;",
+      "for (a = i; a < i + 3; a++) for (b = j; b < j + 3; b++) if (matrix[a][b] == 0) all_ones = 0;",
+      "count += all_ones;"
+     ],
+     "explain": "קודם מאתחלים את הדגל, אחר כך בודקים את תשעת התאים, ורק אז מוסיפים למונה (ריצה אמיתית: כל החלפה משנה את הפלט)."
+    },
+    {
+     "type": "text",
+     "prompt": "מהו סדר הגודל של זמן הריצה כתלות ב-$N$? (למשל `O(N)`)",
+     "accept": [
+      "O(N^2)",
+      "O(N*N)",
+      "O(N²)"
+     ],
+     "normalize": "complexity",
+     "explain": "פחות מ-$N^2$ פינות ולכל אחת 9 בדיקות: $O(N^2)$."
+    }
+   ],
+   "stepsSource": "ai-draft"
   }
  ]
 }
