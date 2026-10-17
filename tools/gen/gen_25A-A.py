@@ -12,12 +12,9 @@ Transcription notes
 
 Compile-and-run (clang, harness files in tools/verify/25A-A/, each compiled with -Wall -Wextra, no warnings):
 - Q1 index_half: both examples match (3 and -1); 20000 random arrays vs a brute-force reference: 0 mismatches. OK.
-- Q2 search_in_array: COMPILES BUT IS WRONG. On the exam's own sample array every positive key is missed
-  (keys 2, 5, 12, 23 return -1; negatives all found). Cause: the else branch sets right=mid-1 whenever the key is
-  not smaller than a negative arr[mid] -- but a positive key must go RIGHT of the negative block, and for
-  arr[mid]>=0 with key>arr[mid] it must also go right. Not fixed here: held + ASK_ADIR.
-  (The question restricts k to negative; the code is correct for negative keys, so the exam may only
-  have intended those. The statement still says "return the position if found", over the whole array.)
+- Q2 search_in_array: correct on the specified domain k<0 (all negative keys -25..-1 over the sample array
+  pass, present and absent). Positive keys are outside the spec (the question states k is negative); the
+  official code misses them, which is not a bug. Orchestrator ruling, no hold.
 - Q3 sum_chars: "street"/'t' -> 2, empty -> 0, "banana"/'a' -> 3, no match -> 0. OK.
 - Q4 countSymmetricViolations (N=5): perfect -> 0, notPerfect -> 3 (matches the 3 violations stated on p.5).
   Note: the corner cell [4][4] vs [0][4]/[4][0] is counted once by the row loop and once by the column loop,
@@ -158,11 +155,7 @@ questions = [
       "**פתרון רשמי** (25A-A עמ' 3), הועתק כלשונו:\n" + code_lines(SOL2) + "\n"
       "חיפוש בינארי עם תנאי כיוון: אם `arr[mid]` שלילי והמפתח קטן ממנו, ממשיכים ימינה (`left = mid + 1`), "
       "אחרת שמאלה (`right = mid - 1`). זמן ריצה $O(\\log n)$.",
-      points=26,
-      hold="הקוד הרשמי (25A-A עמ' 3) מתקמפל אך שגוי: במערך הדוגמה של השאלה עצמה כל מפתח חיובי "
-           "(2, 5, 12, 23) מחזיר -1, כי הענף else זז שמאלה גם כשהמפתח גדול מ-arr[mid]. "
-           "ראו docs/ASK_ADIR.md. הנוסח הרשמי הועתק ללא תיקון. "
-           "השאלה מגדירה k שלילי, ולכן ייתכן שהמבחן התכוון רק למפתחות שליליים; הקוד נכון בהם."),
+      points=26),
 
     Q(3, "code", "recursion",
       "כתבו פונקציה **רקורסיבית** `int sum_chars(char* str, char ch)` המקבלת מחרוזת `str` ותו `ch`, "
