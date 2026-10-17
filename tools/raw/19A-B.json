@@ -30,7 +30,7 @@
      "points": 5
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לבחור a (הפרש): במקרה $y<0$ הפונקציה מחסירה, אבל התוצאה היא $x+y$ ולא $x-y$.",
     "לשכוח את המקרה $y<0$ ולנמק רק עבור $y>0$.",
@@ -59,7 +59,7 @@
      "explain": "הערכים של y: $-3,-2,-1,0$, ובקריאה האחרונה `y==0` מחזיר `x` (ריצה אמיתית: 4)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 2,
@@ -93,7 +93,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לבדוק רק זוגיות של כל ספרה ולשכוח שבמקום אי-זוגי הספרה צריכה להיות אי-זוגית.",
     "לספור מקומות משמאל: המספור מימין לשמאל, והספרה `n%10` נמצאת במקום 0.",
@@ -190,7 +190,7 @@
      "explain": "בסיס ובדיקת מקום זוגי, הסרת ספרה ובסיס שני, בדיקת מקום אי-זוגי, ובסוף הרקורסיה (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 3,
@@ -225,7 +225,7 @@
      "points": 3
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לספור כל מופע במקום כל ערך שונה: במערך `{1,1}` מתקבל 2 במקום 1.",
     "לא לדלג על ערכים מחוץ לתחום: `seen[9999]` יוצא מגבולות המערך.",
@@ -307,7 +307,7 @@
      "explain": "סריקה אחת של המערך עם עבודה קבועה בכל איבר: $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 3,
@@ -338,7 +338,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לספור גם ערכים מחוץ לתחום, כמו `9999`, כחלק מ-`total`.",
     "להגדיל את `found` בכל מופע של ערך ולא רק במופע הראשון שלו: לכן מסמנים ב-2.",
@@ -428,7 +428,7 @@
      "explain": "שתי סריקות לינאריות: $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 4,
@@ -462,7 +462,7 @@
      "points": 3
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לנסות את כל $n$ הסיבובים ולהשוות כל אחד: $O(n^2)$ ולא $O(n)$.",
     "לשכוח את `% n`: `i + k` יוצא מגבולות `b`.",
@@ -562,7 +562,7 @@
      "explain": "שתי סריקות לינאריות: $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 5,
@@ -596,7 +596,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "למיין את כל המערך מחדש ($O(n\\log n)$) במקום לנצל את שני החלקים הממוינים.",
     "לשכוח להעתיק את שארית החלק שנותר אחרי שהאחר נגמר.",
@@ -691,7 +691,7 @@
      "explain": "כל איבר נבדק ומועתק מספר קבוע של פעמים: $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 6,
@@ -729,11 +729,11 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לבדוק רק שכנים באותה שורה ובאותה עמודה ולשכוח את האלכסונים.",
     "לא להגן על הגבולות: `A[i+1][j-1]` בלי `i+1<N` ו-`j>0` יוצא מהמטריצה.",
-    "לבדוק את כל שמונת השכנים לכל תא: נכון, אבל כל זוג נבדק פעמיים."
+    "להשוות כל תא לתא הבא אחריו ברצף בלבד (`A[i][j]` מול `A[i][j+1]`) ולהסיק שאין שכנים שווים, בלי לבדוק את השורה שמתחת."
    ],
    "steps": [
     {
@@ -847,7 +847,7 @@
      "explain": "מבקרים בכל אחד מ-$N^2$ התאים ובודקים לכל היותר ארבעה שכנים: $O(N^2)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   }
  ]
 }

@@ -229,7 +229,7 @@ add(questions, 1,
                ("הוספת `1` על כל הפרה", 6),
                ("המשך רקורסיבי עם `size - 1` בשני המקרים", 6),
                ("רקורסיה בלבד ללא לולאות, והחזרת המספר המצטבר", 2)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לבדוק רק את הזוגיות של הערך ולא את הקשר לאינדקס.",
               "לבלבל בין `size` לאינדקס האחרון `size-1`: הסכום `arr[size-1] + size` זוגי דווקא כשיש הפרה.",
               "להחזיר `0` או `1` במקום לצבור את מספר ההפרות."],
@@ -246,7 +246,7 @@ add(questions, 1,
         {"type": "order", "prompt": "סדרו את שורות הפונקציה `check_parity`.", "code": True, "lines": L1,
          "explain": "בסיס, הספירה כשיש הפרה, ובסוף ההמשך כשאין (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(questions, 2,
     rubric=rub(("העתקת `arr1` למערך עזר, כדי לא לשנות את `arr1`", 5),
@@ -254,7 +254,7 @@ add(questions, 2,
                ("חיפוש בינארי של כל `arr2[i]` במערך העזר הממוין", 7),
                ("כתיבת תוצאת החיפוש (`1` או `0`) ל-`arr2[i]`", 4),
                ("שחרור מערך העזר וזמן $O(size\\log size)$", 4)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["חיפוש לינארי של כל איבר של `arr2` ב-`arr1`: $O(size^2)$ ולא $O(size\\log size)$.",
               "למיין את `arr1` עצמו: השאלה אוסרת לשנות אותו, ולכן ממיינים העתק.",
               "לחפש בינארית במערך שלא מוין."],
@@ -276,7 +276,7 @@ add(questions, 2,
          "accept": ["O(size log size)", "O(size log(size))", "O(n log n)", "O(nlogn)"], "normalize": "complexity",
          "explain": "מיון $O(size\\log size)$ ועוד `size` חיפושים של $O(\\log size)$ כל אחד: $O(size\\log size)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(questions, 3,
     rubric=rub(("מערך מונים `count` בגודל 26, מאופס", 4),
@@ -284,7 +284,7 @@ add(questions, 3,
                ("הקטנת המונה של כל אות של `word`", 7),
                ("החזרת `0` כשמונה יורד מתחת ל-0, כלומר חסרה אות", 5),
                ("החזרת `1` בסוף, וזמן $O(n)$", 3)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לבדוק רק שכל אות של `word` מופיעה ב-`text`, בלי לספור: `inciting` דורשת שלוש `i`, ו-`text` מכיל שתיים.",
               "לחפש לכל אות של `word` בתוך `text`: $O(n^2)$ ולא $O(n)$.",
               "לא לאפס את מערך המונים: הוא חייב להתחיל באפסים."],
@@ -303,7 +303,7 @@ add(questions, 3,
         {"type": "text", "prompt": "מהו סדר הגודל של זמן הריצה? (למשל `O(n)`)", "accept": ["O(n)"], "normalize": "complexity",
          "explain": "שתי סריקות לינאריות ומערך בגודל קבוע: $O(n)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 add(questions, 4,
     rubric=rub(("מעבר על פינות שמאליות-עליונות אפשריות בלבד: `i + 2 < N` ו-`j + 2 < N`", 6),
@@ -311,7 +311,7 @@ add(questions, 4,
                ("דגל `all_ones` שמאותחל ל-1 לפני כל ריבוע ומתאפס כשנמצא `0`", 6),
                ("הוספת הדגל למונה והחזרתו", 3),
                ("מספר קבוע של בדיקות לכל פינה, כלומר $O(N^2)$", 5)),
-    rubricSource="ai-draft",
+    rubricSource="ai-verified",
     pitfalls=["לרוץ על כל התאים כפינות (`i < N`): הבדיקה יוצאת מגבולות המטריצה.",
               "לשכוח לאפס את `all_ones` לפני כל ריבוע, כך שריבוע פגום אחד פוסל את כל הבאים אחריו.",
               "לבדוק רק את הפינה או את התא האמצעי ולא את כל תשעת התאים."],
@@ -329,7 +329,7 @@ add(questions, 4,
         {"type": "text", "prompt": "מהו סדר הגודל של זמן הריצה כתלות ב-$N$? (למשל `O(N)`)", "accept": ["O(N^2)", "O(N*N)", "O(N²)"], "normalize": "complexity",
          "explain": "פחות מ-$N^2$ פינות ולכל אחת 9 בדיקות: $O(N^2)$."},
     ],
-    stepsSource="ai-draft")
+    stepsSource="ai-verified")
 
 check_sums(questions)
 

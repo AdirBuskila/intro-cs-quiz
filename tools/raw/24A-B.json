@@ -42,7 +42,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "מערך עזר בגודל `n` במקום `n+1`: הערך `n` יוצא מגבולות המערך.",
     "להקצות את מערך התוצאה בגודל `n+1` בלי לספור, ואז להעביר גודל שגוי.",
@@ -137,8 +137,7 @@
       "   int i, k = 0, count = 0, *res, *seen = (int*)calloc(n + 1, sizeof(int));",
       "   for (i = 0; i < n; i++) seen[arr[i]] = 1;",
       "   for (i = 0; i <= n; i++) if (!seen[i]) count++; res = (int*)malloc(count * sizeof(int));",
-      "   for (i = 0; i <= n; i++) if (!seen[i]) res[k++] = i;",
-      "   free(seen); *newSize = count;",
+      "   for (i = 0; i <= n; i++) if (!seen[i]) res[k++] = i; free(seen); *newSize = count;",
       "   return res;",
       "}"
      ],
@@ -154,7 +153,7 @@
      "explain": "שלוש סריקות לינאריות: $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 2,
@@ -188,7 +187,7 @@
      "points": 3
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לספור רק מספרים שלא מתחילים ב-0, אף ש-`\"01\"` נחשב מספר דו-ספרתי.",
     "להשתמש ב-`>=` בבחירת המקסימום: בתיקו נבחר המספר הגדול ולא הקטן.",
@@ -273,7 +272,7 @@
      "explain": "סריקה אחת של המחרוזת ועוד מעבר על 100 מונים (קבוע): $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 3,
@@ -307,7 +306,7 @@
      "points": 3
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "שתי לולאות מקוננות על כל הזוגות: לא רקורסיבי, וגם $O(nm)$.",
     "להשוות את `pos[0]` ל-`neg[0]` במקום ל-`neg[m-1]`: `neg[0]` הוא בעל הערך המוחלט הגדול ביותר.",
@@ -383,7 +382,7 @@
      "explain": "בסיס, אחר כך בלוק אחד של בדיקת סכום אפס וקיצור `pos`, ובסוף קיצור `neg` (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 4,
@@ -421,7 +420,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "שתי לולאות מקוננות שסופרות לכל איבר את מופעיו: $O(n^2)$ ולא $O(n\\log n)$.",
     "לשכוח לאפס את אורך הרצף כשהערך משתנה, ולצבור מופעים של ערכים שונים.",
@@ -528,7 +527,7 @@
      "explain": "המיון $O(n\\log n)$ והסריקה $O(n)$: $O(n\\log n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   }
  ]
 }

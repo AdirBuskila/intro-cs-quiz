@@ -45,7 +45,7 @@
      "points": 2
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לבדוק רק את הזוגיות של הערך ולא את הקשר לאינדקס.",
     "לבלבל בין `size` לאינדקס האחרון `size-1`: הסכום `arr[size-1] + size` זוגי דווקא כשיש הפרה.",
@@ -119,7 +119,7 @@
      "explain": "בסיס, הספירה כשיש הפרה, ובסוף ההמשך כשאין (ריצה אמיתית: כל החלפה משנה את הפלט או לא מתקמפלת)."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 2,
@@ -153,7 +153,7 @@
      "points": 4
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "חיפוש לינארי של כל איבר של `arr2` ב-`arr1`: $O(size^2)$ ולא $O(size\\log size)$.",
     "למיין את `arr1` עצמו: השאלה אוסרת לשנות אותו, ולכן ממיינים העתק.",
@@ -264,7 +264,7 @@
      "explain": "מיון $O(size\\log size)$ ועוד `size` חיפושים של $O(\\log size)$ כל אחד: $O(size\\log size)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 3,
@@ -298,7 +298,7 @@
      "points": 3
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לבדוק רק שכל אות של `word` מופיעה ב-`text`, בלי לספור: `inciting` דורשת שלוש `i`, ו-`text` מכיל שתיים.",
     "לחפש לכל אות של `word` בתוך `text`: $O(n^2)$ ולא $O(n)$.",
@@ -408,7 +408,7 @@
      "explain": "שתי סריקות לינאריות ומערך בגודל קבוע: $O(n)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   },
   {
    "num": 4,
@@ -443,7 +443,7 @@
      "points": 5
     }
    ],
-   "rubricSource": "ai-draft",
+   "rubricSource": "ai-verified",
    "pitfalls": [
     "לרוץ על כל התאים כפינות (`i < N`): הבדיקה יוצאת מגבולות המטריצה.",
     "לשכוח לאפס את `all_ones` לפני כל ריבוע, כך שריבוע פגום אחד פוסל את כל הבאים אחריו.",
@@ -534,7 +534,7 @@
      "explain": "פחות מ-$N^2$ פינות ולכל אחת 9 בדיקות: $O(N^2)$."
     }
    ],
-   "stepsSource": "ai-draft"
+   "stepsSource": "ai-verified"
   }
  ]
 }
