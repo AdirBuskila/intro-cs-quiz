@@ -1,0 +1,671 @@
+{
+ "courseId": "array_algos",
+ "levels": [
+  {
+   "id": "C01",
+   "order": 1,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C01-Q1",
+     "question": "מה סדר הגודל של זמן הריצה של הפונקציה, כשהערך `x` **לא** קיים במערך?\n```c\nint find(int* a, int n, int x)\n{\n    int i;\n    for (i = 0; i < n; i++)\n        if (a[i] == x)\n            return i;\n    return -1;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`O(1)`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`O(n)`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`O(n^2)`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`O(log n)`"
+      }
+     ]
+    },
+    {
+     "id": "C01-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה פעמים מתבצעת `count++` בקוד, עבור `n = 30`?\n```c\nint count = 0;\nvoid f(int n)\n{\n    int i;\n    for (i = 0; i < n; i += 3)\n        count++;\n}\n```"
+     }
+    },
+    {
+     "id": "C01-Q3",
+     "step": {
+      "type": "text",
+      "prompt": "מה סדר הגודל של הפונקציה? (למשל `O(n)`)\n```c\nint f(int* a, int n)\n{\n    int i, sum = 0, mx = a[0];\n    for (i = 0; i < n; i++)\n        sum += a[i];\n    for (i = 0; i < n; i++)\n        if (a[i] > mx)\n            mx = a[i];\n    return sum + mx;\n}\n```",
+      "normalize": "complexity"
+     }
+    },
+    {
+     "id": "C01-Q4",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה פעמים מתבצעת `count++` בסך הכול, עבור `n = 40`?\n```c\nint count = 0;\nvoid f(int n)\n{\n    int i;\n    for (i = 0; i < n; i++)\n        count++;\n    for (i = 0; i < n; i += 2)\n        count++;\n}\n```"
+     }
+    },
+    {
+     "id": "C01-Q5",
+     "question": "איזו מהפונקציות הבאות רצה ב-`O(1)`, כלומר מספר הפעולות שלה לא גדל כש-`n` גדל?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`int f(int* a, int n) { return a[0] + a[n-1]; }`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`int f(int* a, int n) { int i, s = 0; for (i = 0; i < n; i++) s += a[i]; return s; }`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`int f(int* a, int n) { int i, c = 0; for (i = 0; i < n; i++) if (a[i] == 0) c++; return c; }`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`int f(int* a, int n) { int i; for (i = 0; i < n; i++) if (a[i] < 0) return 1; return 0; }`"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C02",
+   "order": 2,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C02-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה פעמים מתבצעת `count++`, עבור `n = 10`?\n```c\nint count = 0;\nvoid f(int n)\n{\n    int i, j;\n    for (i = 0; i < n; i++)\n        for (j = 0; j < i; j++)\n            count++;\n}\n```"
+     }
+    },
+    {
+     "id": "C02-Q2",
+     "step": {
+      "type": "text",
+      "prompt": "מה סדר הגודל של הפונקציה מהשאלה הקודמת (לולאה חיצונית עד `n`, פנימית עד `i`)? (למשל `O(n)`)",
+      "normalize": "complexity"
+     }
+    },
+    {
+     "id": "C02-Q3",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה פעמים מתבצעת `count++`, עבור `n = 1024`?\n```c\nint count = 0;\nvoid f(int n)\n{\n    int i;\n    for (i = 1; i < n; i *= 2)\n        count++;\n}\n```"
+     }
+    },
+    {
+     "id": "C02-Q4",
+     "question": "מה סדר הגודל של הפונקציה?\n```c\nvoid f(int* a, int n)\n{\n    int i, j;\n    for (i = 0; i < n; i++)\n        for (j = 0; j < 5; j++)\n            a[i] += j;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`O(n)`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`O(n^2)`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`O(n log n)`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`O(log n)`"
+      }
+     ]
+    },
+    {
+     "id": "C02-Q5",
+     "question": "מה סדר הגודל של הפונקציה?\n```c\nvoid f(int n)\n{\n    int i, j, k;\n    for (i = 0; i < n; i++)\n        for (j = 0; j < n; j++)\n            count++;\n    for (k = 0; k < n; k++)\n        count++;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`O(n)`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`O(n^2)`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`O(n^3)`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`O(n log n)`"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C03",
+   "order": 3,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C03-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "אחרי הרצת הלולאה על המערך `a = {3,1,3,0,1,3}` (`n = 6`), מה הערך של `cnt[3]`?\n```c\nfor (i = 0; i < n; i++)\n    cnt[a[i]]++;\n```"
+     }
+    },
+    {
+     "id": "C03-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "במערך `a = {1,1,5,0,1,1,0}` (`n = 7`, כל הערכים בתחום `0..6`): כמה ערכים שונים מופיעים מספר **אי-זוגי** של פעמים?"
+     }
+    },
+    {
+     "id": "C03-Q3",
+     "step": {
+      "type": "fillblank",
+      "prompt": "הפונקציה סופרת כמה ערכים שונים בתחום `0..n-1` מופיעים במערך. השלימו את השורה החסרה.",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "cnt[a[i]]++"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "cnt[i]++"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "a[cnt[i]]++"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "cnt[i] = a[i]"
+       }
+      ],
+      "lines": [
+       "int count_distinct(int* a, int n)",
+       "{",
+       "    int i, d = 0;",
+       "    int* cnt = (int*)calloc(n, sizeof(int));",
+       "    for (i = 0; i < n; i++)",
+       "        ___;",
+       "    for (i = 0; i < n; i++)",
+       "        if (cnt[i] > 0)",
+       "            d++;",
+       "    free(cnt);",
+       "    return d;",
+       "}"
+      ],
+      "blankIndex": 5
+     }
+    },
+    {
+     "id": "C03-Q4",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר כמה ערכים בתחום `0..n-1` מופיעים במערך **בדיוק פעם אחת**. שורה אחת שגויה. מצאו אותה.",
+      "code": true,
+      "lines": [
+       "int count_once(int* a, int n)",
+       "{",
+       "    int i, once = 0;",
+       "    int* cnt = (int*)calloc(n, sizeof(int));",
+       "    for (i = 0; i < n; i++)",
+       "        cnt[a[i]]++;",
+       "    for (i = 0; i < n; i++)",
+       "        if (cnt[i] >= 1)",
+       "            once++;",
+       "    free(cnt);",
+       "    return once;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C03-Q5",
+     "step": {
+      "type": "text",
+      "prompt": "מה סדר הגודל של זמן הריצה של `count_distinct` מהשאלה הקודמת (שתי לולאות עוקבות ומערך ספירה בגודל `n`)? (למשל `O(n)`)",
+      "normalize": "complexity"
+     }
+    },
+    {
+     "id": "C03-Q6",
+     "step": {
+      "type": "numeric",
+      "prompt": "פתרון נאיבי סופר את `a[i]` בלולאה חדשה על כל המערך, לכל `i`. כמה השוואות `a[j] == a[i]` יתבצעו עבור `n = 50`?"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C04",
+   "order": 4,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C04-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה הפונקציה `pivot` מהשיעור עבור `a = {1,7,3,6,5,6}` (`n = 6`)?"
+     }
+    },
+    {
+     "id": "C04-Q2",
+     "step": {
+      "type": "numeric",
+      "prompt": "בפתרון הנאיבי, בכל `i` שני לולאות מחברות את כל האיברים משמאל ומימין ל-`i` (בסך הכול `n-1` חיבורים לכל `i`). כמה חיבורים מתבצעים בסך הכול עבור `n = 20` כשאין ציר, כך שהלולאה החיצונית רצה עד הסוף?"
+     }
+    },
+    {
+     "id": "C04-Q3",
+     "step": {
+      "type": "text",
+      "prompt": "מה סדר הגודל של `pivot` מהשיעור (מעבר לסכום כולל, ומעבר עם `left`)? (למשל `O(n)`)",
+      "normalize": "complexity"
+     }
+    },
+    {
+     "id": "C04-Q4",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות `pivot`. כל שורה היא בלוק, והסדר ביניהם קובע את התוצאה.",
+      "code": true,
+      "lines": [
+       "{",
+       "    int i, total = 0, left = 0;",
+       "    for (i = 0; i < n; i++) total += a[i];",
+       "    for (i = 0; i < n; i++) {",
+       "        if (left == total - left - a[i]) return i;",
+       "        left += a[i];",
+       "    }",
+       "    return -1;",
+       "}",
+       "int pivot(int* a, int n)"
+      ]
+     }
+    },
+    {
+     "id": "C04-Q5",
+     "step": {
+      "type": "findbug",
+      "prompt": "בגרסה הבאה של `pivot` שורה אחת שגויה, והפונקציה מחזירה אינדקס לא נכון. מצאו אותה.",
+      "code": true,
+      "lines": [
+       "int pivot(int* a, int n)",
+       "{",
+       "    int i, total = 0, left = 0;",
+       "    for (i = 0; i < n; i++) total += a[i];",
+       "    for (i = 0; i < n; i++) {",
+       "        if (left == total - left) return i;",
+       "        left += a[i];",
+       "    }",
+       "    return -1;",
+       "}"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "C05",
+   "order": 5,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C05-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "הפונקציה לחיפוש זוג עם סכום `k` (בשיעור) רצה על `a = {1,3,4,6,9,11}` עם `k = 15`. כמה איטרציות של הלולאה מתבצעות עד שמוחזר 1?"
+     }
+    },
+    {
+     "id": "C05-Q2",
+     "question": "ב-`a = {2,5,8,12,30}` מחפשים זוג עם סכום `k = 14`. בצעד הראשון `s = 2 + 30 = 32`, וזה גדול מ-`k`. מה צריך לעשות?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`hi--`: הערך 30 גדול מדי גם עם הכי קטן"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`lo++`: מדלגים על הערך 2"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "גם `lo++` וגם `hi--` יחד"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "להחזיר 0, כי 32 שונה מ-14"
+      }
+     ]
+    },
+    {
+     "id": "C05-Q3",
+     "step": {
+      "type": "text",
+      "prompt": "מה סדר הגודל של חיפוש הזוג בשני מצביעים במערך בגודל `n`? (למשל `O(n)`)",
+      "normalize": "complexity"
+     }
+    },
+    {
+     "id": "C05-Q4",
+     "step": {
+      "type": "findbug",
+      "prompt": "בבדיקת פלינדרום הבאה שורה אחת שגויה: הפונקציה מחזירה 0 עבור פלינדרום אמיתי כמו `{1,2,1}`. מצאו אותה.",
+      "code": true,
+      "lines": [
+       "int is_pal(int* a, int size)",
+       "{",
+       "    int i;",
+       "    for (i = 0; i < size / 2; i++)",
+       "        if (a[i] != a[size - 2 - i])",
+       "            return 0;",
+       "    return 1;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C05-Q5",
+     "step": {
+      "type": "fillblank",
+      "prompt": "השלימו את תנאי הלולאה כך שהפונקציה תחזיר 1 רק כשיש שני איברים **במקומות שונים** שסכומם `k`.",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "<"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "<="
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": ">"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": ">="
+       }
+      ],
+      "lines": [
+       "int has_pair(int* a, int n, int k)",
+       "{",
+       "    int lo = 0, hi = n - 1;",
+       "    while (lo ___ hi) {",
+       "        int s = a[lo] + a[hi];",
+       "        if (s == k) return 1;",
+       "        if (s < k) lo++;",
+       "        else hi--;",
+       "    }",
+       "    return 0;",
+       "}"
+      ],
+      "blankIndex": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "C06",
+   "order": 6,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C06-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "הפונקציה `common` מהשיעור רצה עם `a = {1,3,5,7}`, `m = 4` ו-`b = {2,3,6,7,8}`, `n = 5`. כמה איטרציות של הלולאה מתבצעות?"
+     }
+    },
+    {
+     "id": "C06-Q2",
+     "step": {
+      "type": "text",
+      "prompt": "מה סדר הגודל של `common` כתלות ב-`m` וב-`n`? (למשל `O(n)`)",
+      "normalize": "complexity"
+     }
+    },
+    {
+     "id": "C06-Q3",
+     "step": {
+      "type": "findbug",
+      "prompt": "בגרסה הבאה של `common` שורה אחת שגויה: עבור `a = {1,3}` ו-`b = {3}` היא מחזירה 0 במקום 1. מצאו אותה.",
+      "code": true,
+      "lines": [
+       "int common(int* a, int m, int* b, int n)",
+       "{",
+       "    int i = 0, j = 0, c = 0;",
+       "    while (i < m && j < n) {",
+       "        if (a[i] == b[j]) { c++; i++; j++; }",
+       "        else if (a[i] < b[j]) j++;",
+       "        else j++;",
+       "    }",
+       "    return c;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C06-Q4",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה `common`.",
+      "code": true,
+      "lines": [
+       "{",
+       "    int i = 0, j = 0, c = 0;",
+       "    while (i < m && j < n) {",
+       "        if (a[i] == b[j]) { c++; i++; j++; }",
+       "        else if (a[i] < b[j]) i++;",
+       "        else j++;",
+       "    }",
+       "    return c;",
+       "}",
+       "int common(int* a, int m, int* b, int n)"
+      ]
+     }
+    },
+    {
+     "id": "C06-Q5",
+     "question": "המערך `a` ממוין בסדר **עולה** ו-`b` ממוין בסדר **יורד**. המצביעים `ia = 0` ו-`ib = n-1`. בהשוואה הנוכחית `a[ia] < b[ib]`. מה נכון לעשות?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`ia++`: `a[ia]` קטן מכל מה שנשאר ב-`b`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`ib--`: `b[ib]` גדול מדי"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`ia++` ו-`ib--` יחד"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "לעצור ולהחזיר שהמערכים שונים"
+      }
+     ]
+    },
+    {
+     "id": "C06-Q6",
+     "step": {
+      "type": "numeric",
+      "prompt": "במערך הממוין `a = {2,3,5,6,9,10,12,13}` (`size = 8`) כל הזוגות `(a[i], a[size-1-i])` בעלי סכום 15. מבצעים `swap(a + 1, a + size - 1)`, כדי להצמיד את `13`, בן הזוג של `2`, למקום שלידו. מה הערך שנמצא עכשיו ב-`a[1]`?"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C07",
+   "order": 7,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C07-Q1",
+     "question": "במערך **ממוין** בגודל `n` צריך לבדוק אם יש זוג שסכומו `k`, בסדר גודל `n` ובלי מערך עזר. איזו שיטה עומדת בדרישות?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "שני מצביעים משני הקצוות"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "לולאה מקוננת על כל הזוגות"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "למיין את המערך ואז לסרוק"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "מערך ספירה באורך `k + 1`"
+      }
+     ]
+    },
+    {
+     "id": "C07-Q2",
+     "step": {
+      "type": "text",
+      "prompt": "מערך לא ממוין בגודל `n` ממיינים במיון מיזוג, ואחר כך סורקים פעם אחת. מה סדר הגודל הכולל? (למשל `O(n)`)",
+      "normalize": "complexity"
+     }
+    },
+    {
+     "id": "C07-Q3",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר 1 אם המערך ממוין בסדר עולה (לא ממש). שורה אחת שגויה, ועבור `{1,2,3,0}` מוחזר 1. מצאו אותה.",
+      "code": true,
+      "lines": [
+       "int is_sorted(int* a, int n)",
+       "{",
+       "    int i;",
+       "    for (i = 1; i < n - 1; i++)",
+       "        if (a[i - 1] > a[i])",
+       "            return 0;",
+       "    return 1;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C07-Q4",
+     "step": {
+      "type": "numeric",
+      "prompt": "מחפשים זוג עם סכום `k = 5000` במערך הממוין `a[i] = i` (`n = 1000`), בשני מצביעים. אין זוג כזה. כמה איטרציות מבצעת הלולאה?"
+     }
+    },
+    {
+     "id": "C07-Q5",
+     "step": {
+      "type": "text",
+      "prompt": "מה סדר הגודל של `count_above`, שסופרת כמה איברים גדולים מהממוצע? (למשל `O(n)`)\n```c\nint sum(int* a, int n)\n{\n    int i, s = 0;\n    for (i = 0; i < n; i++)\n        s += a[i];\n    return s;\n}\n\nint count_above(int* a, int n)\n{\n    int i, c = 0;\n    for (i = 0; i < n; i++)\n        if (a[i] * n > sum(a, n))\n            c++;\n    return c;\n}\n```",
+      "normalize": "complexity"
+     }
+    },
+    {
+     "id": "C07-Q6",
+     "question": "איזה שינוי הופך את `count_above` מהשאלה הקודמת ל-`O(n)` בכל קלט?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "לחשב את `sum(a, n)` פעם אחת לפני הלולאה, לשמור במשתנה ולהשתמש בו בתנאי"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "להגדיר את `sum` כ-`static inline`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "לכתוב את התנאי כ-`a[i] > sum(a, n) / n`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "לקרוא ל-`sum` רק כש-`a[i] > 0`"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C08",
+   "order": 8,
+   "boss": true,
+   "questions": [
+    {
+     "id": "bank:19A-A-Q3a",
+     "bankId": "19A-A-Q3a"
+    },
+    {
+     "id": "bank:19A-A-Q4",
+     "bankId": "19A-A-Q4"
+    },
+    {
+     "id": "bank:20A-A-Q3b",
+     "bankId": "20A-A-Q3b"
+    },
+    {
+     "id": "bank:23A-A-Q1",
+     "bankId": "23A-A-Q1"
+    },
+    {
+     "id": "bank:25A-A-Q1",
+     "bankId": "25A-A-Q1"
+    }
+   ]
+  }
+ ]
+}
