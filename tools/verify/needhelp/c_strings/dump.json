@@ -1,0 +1,1052 @@
+{
+ "courseId": "c_strings",
+ "levels": [
+  {
+   "id": "C01",
+   "order": 1,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C01-Q1",
+     "question": "מה מדפיס הקוד?\n```c\nchar s[] = \"abc\";\nprintf(\"%d %d\", (int)sizeof(s), (int)strlen(s));\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`4 3`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`3 3`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`4 4`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`3 4`"
+      }
+     ]
+    },
+    {
+     "id": "C01-Q2",
+     "step": {
+      "type": "text",
+      "prompt": "מה ידפיס הקוד? (תו אחד)\n```c\nprintf(\"%c\", 'a' + 2);\n```",
+      "normalize": "none"
+     }
+    },
+    {
+     "id": "C01-Q3",
+     "question": "מה מדפיס הקוד?\n```c\nchar s[10] = \"hi\";\nprintf(\"%d %d\", (int)sizeof(s), (int)strlen(s));\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`2 2`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`10 10`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`3 2`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`10 2`"
+      }
+     ]
+    },
+    {
+     "id": "C01-Q4",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nchar s[] = \"banana\";\ns[4] = '\\0';\nprintf(\"%d\", (int)strlen(s));\n```"
+     }
+    },
+    {
+     "id": "C01-Q5",
+     "question": "מה מדפיס הקוד?\n```c\nprintf(\"%d %d\", 'a', (int)sizeof(\"a\"));\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`97 1`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`1 2`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`97 2`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`2 97`"
+      }
+     ]
+    },
+    {
+     "id": "C01-Q6",
+     "step": {
+      "type": "fillblank",
+      "prompt": "המערך `t` מלא מראש באותיות `X`. מה צריך להיכנס במקום ___ כדי שההדפסה תהיה בדיוק `ok`?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "t[2] = '\\0';"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "t[2] = '0';"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "t[3] = '\\0';"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "t[1] = '\\0';"
+       }
+      ],
+      "lines": [
+       "char t[6] = \"XXXXX\";",
+       "t[0] = 'o';",
+       "t[1] = 'k';",
+       "___",
+       "printf(\"%s\", t);"
+      ],
+      "blankIndex": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "C02",
+   "order": 2,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C02-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה מחזירה הקריאה בשורה האחרונה?\n```c\nint countChar(char *s, char c) {\n    int n = 0;\n    for (int i = 0; s[i] != '\\0'; i++)\n        if (s[i] == c)\n            n++;\n    return n;\n}\n\nint main(void) {\n    printf(\"%d\", countChar(\"mississippi\", 's'));\n    return 0;\n}\n```"
+     }
+    },
+    {
+     "id": "C02-Q2",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה שמחשבת אורך מחרוזת בלי `strlen`.",
+      "code": true,
+      "lines": [
+       "    while (s[len] != '\\0')\n        len++;",
+       "    return len;\n}",
+       "int myStrlen(char *s) {\n    int len = 0;"
+      ]
+     }
+    },
+    {
+     "id": "C02-Q3",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה לספור רווחים במחרוזת, אבל שורה אחת שונה והיא מחזירה תוצאה שגויה (למשל על `\"a b c\"`). איזו שורה?",
+      "code": true,
+      "lines": [
+       "int countSpaces(char *s) {",
+       "    int n = 0;",
+       "    for (int i = 0; s[i] != '\\0'; i++)",
+       "        if (s[i] = ' ')",
+       "            n++;",
+       "    return n;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C02-Q4",
+     "question": "מה מדפיס הקוד? (אחרי כל מספר יש רווח)\n```c\nchar s[] = \"abc\";\nfor (int i = 0; i <= (int)strlen(s); i++)\n    printf(\"%d \", s[i]);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`97 98 99`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`97 98 99 0`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`0 97 98 99`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`97 98 99 4`"
+      }
+     ]
+    },
+    {
+     "id": "C02-Q5",
+     "step": {
+      "type": "text",
+      "prompt": "מהי סיבוכיות הזמן של הפונקציה כשאורך המחרוזת הוא n? (למשל `O(n)`)\n```c\nint count(char *s) {\n    int n = 0;\n    for (int i = 0; i < strlen(s); i++)\n        n++;\n    return n;\n}\n```",
+      "normalize": "complexity"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C03",
+   "order": 3,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C03-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nprintf(\"%d\", '7' - '0' + 1);\n```"
+     }
+    },
+    {
+     "id": "C03-Q2",
+     "question": "מה מדפיס הקוד?\n```c\nprintf(\"%c%c\", 'a' + 3, 'z' - 2);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`dy`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`ex`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`cx`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`dx`"
+      }
+     ]
+    },
+    {
+     "id": "C03-Q3",
+     "question": "איזה ביטוי צריך להיות במקום ___ כדי שהפונקציה תחזיר אמת בדיוק עבור תווי ספרה?\n```c\nint isDigit(char c) {\n    return ___;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`c >= '0' && c <= '9'`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`c >= 0 && c <= 9`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`c > '0' && c < '9'`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`c >= '0' || c <= '9'`"
+      }
+     ]
+    },
+    {
+     "id": "C03-Q4",
+     "step": {
+      "type": "fillblank",
+      "prompt": "הפונקציה הופכת כל אות קטנה במחרוזת לגדולה. מה מחליף את ___?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "s[i] - 'a' + 'A'"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "s[i] + 'a' - 'A'"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "s[i] - 'a'"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "s[i] + 'A'"
+       }
+      ],
+      "lines": [
+       "void toUpper(char *s) {",
+       "    for (int i = 0; s[i] != '\\0'; i++)",
+       "        if (s[i] >= 'a' && s[i] <= 'z')",
+       "            s[i] = ___;",
+       "}"
+      ],
+      "blankIndex": 3
+     }
+    },
+    {
+     "id": "C03-Q5",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה שהופכת מחרוזת של ספרות למספר.",
+      "code": true,
+      "lines": [
+       "    for (int i = 0; s[i] != '\\0'; i++)\n        n = n * 10 + (s[i] - '0');",
+       "    return n;\n}",
+       "int toInt(char *s) {\n    int n = 0;"
+      ]
+     }
+    },
+    {
+     "id": "C03-Q6",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר את המספר שמיוצג במחרוזת (`\"472\"` נותן 472), אבל שורה אחת שונה. איזו?",
+      "code": true,
+      "lines": [
+       "int toInt(char *s) {",
+       "    int n = 0;",
+       "    for (int i = 0; s[i] != '\\0'; i++)",
+       "        n = n * 10 + s[i];",
+       "    return n;",
+       "}"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "C04",
+   "order": 4,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C04-Q1",
+     "question": "a ו-b הן מחרוזות. איזה ביטוי הוא אמת (שונה מ-0) בדיוק כשהתוכן שלהן שווה?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`a == b`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`strlen(a) == strlen(b)`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`strcmp(a, b)`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`strcmp(a, b) == 0`"
+      }
+     ]
+    },
+    {
+     "id": "C04-Q2",
+     "question": "מה מדפיס הקוד?\n```c\nchar s[20] = \"ab\";\nstrcpy(s, \"xyz\");\nstrcat(s, \"!\");\nprintf(\"%s %d\", s, (int)strlen(s));\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`xyz 3`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`abxyz! 6`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`xyz! 4`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`xyz! 20`"
+      }
+     ]
+    },
+    {
+     "id": "C04-Q3",
+     "question": "הפונקציה אמורה להחזיר עותק של המחרוזת בזיכרון דינמי. מה צריך להיות במקום ___?\n```c\nchar *copy(char *s) {\n    char *c = (char*)malloc(___);\n    strcpy(c, s);\n    return c;\n}\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`strlen(s)`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`sizeof(s)`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`strlen(s) + 1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`strlen(s) - 1`"
+      }
+     ]
+    },
+    {
+     "id": "C04-Q4",
+     "question": "אחרי ההצהרה על `s` הקוד מבצע `s[0] = 'H';`. באיזו הצהרה השינוי מצליח?",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`char s[] = \"hi\";`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`char *s = \"hi\";`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`const char s[] = \"hi\";`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`const char *s = \"hi\";`"
+      }
+     ]
+    },
+    {
+     "id": "C04-Q5",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה שמחזירה עותק של מחרוזת.",
+      "code": true,
+      "lines": [
+       "    char *c = (char*)malloc(strlen(s) + 1);",
+       "    strcpy(c, s);",
+       "    return c;\n}",
+       "char *dup(char *s) {"
+      ]
+     }
+    },
+    {
+     "id": "C04-Q6",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר עותק עצמאי, כך ששינוי העותק לא ישפיע על המקור. שורה אחת שונתה. איזו?",
+      "code": true,
+      "lines": [
+       "char *dup(char *s) {",
+       "    char *c = (char*)malloc(strlen(s) + 1);",
+       "    c = s;",
+       "    return c;",
+       "}"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "C05",
+   "order": 5,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C05-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "כמה החלפות מבצעת הלולאה?\n```c\nchar s[] = \"abcde\";\nint i = 0, j = (int)strlen(s) - 1, swaps = 0;\nwhile (i < j) {\n    char t = s[i]; s[i] = s[j]; s[j] = t;\n    i++; j--;\n    swaps++;\n}\nprintf(\"%d\", swaps);\n```"
+     }
+    },
+    {
+     "id": "C05-Q2",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה שבודקת פלינדרום.",
+      "code": true,
+      "lines": [
+       "    while (i < j) {\n        if (s[i] != s[j]) return 0;\n        i++; j--;\n    }",
+       "    return 1;\n}",
+       "int isPal(char *s) {\n    int i = 0, j = (int)strlen(s) - 1;"
+      ]
+     }
+    },
+    {
+     "id": "C05-Q3",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר 1 על פלינדרום (למשל `\"abba\"`), אבל שורה אחת שונתה והיא מחזירה 0. איזו?",
+      "code": true,
+      "lines": [
+       "int isPal(char *s) {",
+       "    int i = 0;",
+       "    int j = (int)strlen(s);",
+       "    while (i < j) {",
+       "        if (s[i] != s[j]) return 0;",
+       "        i++; j--;",
+       "    }",
+       "    return 1;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C05-Q4",
+     "question": "ההחלפה בקוד נעשית בלי משתנה זמני. מה מדפיס הקוד?\n```c\nchar s[] = \"abcd\";\nint i = 0, j = 3;\nwhile (i < j) {\n    s[i] = s[j];\n    s[j] = s[i];\n    i++; j--;\n}\nprintf(\"%s\", s);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`dcba`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`dccd`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`abcd`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`dbcd`"
+      }
+     ]
+    },
+    {
+     "id": "C05-Q5",
+     "question": "הפונקציה `isPal` היא זו מהשיעור. מה מדפיס הקוד?\n```c\nprintf(\"%d %d %d %d\", isPal(\"abba\"), isPal(\"abca\"), isPal(\"a\"), isPal(\"\"));\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`1 0 1 0`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`1 0 0 1`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`1 0 1 1`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`0 0 1 1`"
+      }
+     ]
+    },
+    {
+     "id": "C05-Q6",
+     "question": "הלולאה בונה ב-`t` את ההיפוך של `s`. מה צריך להיות במקום ___?\n```c\nchar s[] = \"abc\", t[4];\nint n = (int)strlen(s);\nfor (int i = 0; i < n; i++)\n    t[i] = ___;\nt[n] = '\\0';\nprintf(\"%s\", t);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`s[i]`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`s[n - i]`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`s[n - 1]`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`s[n - 1 - i]`"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C06",
+   "order": 6,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C06-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nchar s[] = \"abracadabra\";\nint cnt[26] = {0};\nfor (int i = 0; s[i] != '\\0'; i++)\n    cnt[s[i] - 'a']++;\nprintf(\"%d\", cnt['a' - 'a']);\n```"
+     }
+    },
+    {
+     "id": "C06-Q2",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה שבודקת אם שתי מחרוזות הן אנגרמות.",
+      "code": true,
+      "lines": [
+       "    for (i = 0; a[i] != '\\0'; i++) cnt[a[i] - 'a']++;\n    for (i = 0; b[i] != '\\0'; i++) cnt[b[i] - 'a']--;",
+       "    for (i = 0; i < 26; i++)\n        if (cnt[i] != 0) return 0;",
+       "    return 1;\n}",
+       "int isAnagram(char *a, char *b) {\n    int cnt[26] = {0}, i;"
+      ]
+     }
+    },
+    {
+     "id": "C06-Q3",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה להחזיר 1 עבור `\"listen\"` ו-`\"silent\"`, אבל שורה אחת שונתה והיא מחזירה 0. איזו?",
+      "code": true,
+      "lines": [
+       "int isAnagram(char *a, char *b) {",
+       "    int cnt[26] = {0}, i;",
+       "    for (i = 0; a[i] != '\\0'; i++)",
+       "        cnt[a[i] - 'a']++;",
+       "    for (i = 0; b[i] != '\\0'; i++)",
+       "        cnt[b[i] - 'a']++;",
+       "    for (i = 0; i < 26; i++)",
+       "        if (cnt[i] != 0) return 0;",
+       "    return 1;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C06-Q4",
+     "question": "מה מדפיס הקוד?\n```c\nchar s[] = \"bbaa\";\nint cnt[26] = {0}, best = 0;\nfor (int i = 0; s[i] != '\\0'; i++)\n    cnt[s[i] - 'a']++;\nfor (int i = 1; i < 26; i++)\n    if (cnt[i] > cnt[best])\n        best = i;\nprintf(\"%c\", 'a' + best);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`b`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`ab`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`a`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`2`"
+      }
+     ]
+    },
+    {
+     "id": "C06-Q5",
+     "step": {
+      "type": "fillblank",
+      "prompt": "הפונקציה מחזירה את התו הראשון שמופיע במחרוזת פעם אחת בלבד, או `'-'` אם אין כזה. מה מחליף את ___?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "cnt[s[i] - 'a'] > 1"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "cnt[i] == 1"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "cnt[s[i] - 'a'] == 1"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "cnt[s[i] - 'a'] == 0"
+       }
+      ],
+      "lines": [
+       "char firstUnique(char *s) {",
+       "    int cnt[26] = {0};",
+       "    for (int i = 0; s[i] != '\\0'; i++)",
+       "        cnt[s[i] - 'a']++;",
+       "    for (int i = 0; s[i] != '\\0'; i++)",
+       "        if (___)",
+       "            return s[i];",
+       "    return '-';",
+       "}"
+      ],
+      "blankIndex": 5
+     }
+    },
+    {
+     "id": "C06-Q6",
+     "step": {
+      "type": "text",
+      "prompt": "מהי סיבוכיות הזמן של `isAnagram` מהשיעור, כשאורך כל אחת מהמחרוזות עד n? (למשל `O(n)`)",
+      "normalize": "complexity"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C07",
+   "order": 7,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C07-Q1",
+     "step": {
+      "type": "numeric",
+      "prompt": "מה ידפיס הקוד?\n```c\nchar s[] = \"abdeg\";\nint cnt[26] = {0};\nfor (int i = 0; s[i + 1] != '\\0'; i++)\n    cnt[abs(s[i] - s[i + 1])]++;\nprintf(\"%d\", cnt[1]);\n```"
+     }
+    },
+    {
+     "id": "C07-Q2",
+     "question": "מה מדפיס הקוד?\n```c\nchar a = '0', b = '7';\nprintf(\"%d\", (a - '0') * 10 + (b - '0'));\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`70`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`535`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`7`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`55`"
+      }
+     ]
+    },
+    {
+     "id": "C07-Q3",
+     "step": {
+      "type": "order",
+      "prompt": "הפונקציה מחזירה את הסכום השכיח ביותר של שתי ספרות צמודות במחרוזת, ובתיקו את הסכום הקטן ביותר. סדרו את שורותיה.",
+      "code": true,
+      "lines": [
+       "    for (i = 0; s[i + 1] != '\\0'; i++)\n        cnt[(s[i] - '0') + (s[i + 1] - '0')]++;",
+       "    for (i = 1; i < 19; i++)\n        if (cnt[i] > cnt[best])\n            best = i;",
+       "    return best;\n}",
+       "int commonSum(char *s) {\n    int cnt[19] = {0}, best = 0, i;"
+      ]
+     }
+    },
+    {
+     "id": "C07-Q4",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה מחזירה את הסכום השכיח ביותר של שתי ספרות צמודות, ובתיקו את הסכום הקטן ביותר. שורה אחת שונתה, ועל `\"1928374\"` היא מחזירה 11 במקום 10. איזו?",
+      "code": true,
+      "lines": [
+       "int commonSum(char *s) {",
+       "    int cnt[19] = {0}, best = 0, i;",
+       "    for (i = 0; s[i + 1] != '\\0'; i++)",
+       "        cnt[(s[i] - '0') + (s[i + 1] - '0')]++;",
+       "    for (i = 1; i < 19; i++)",
+       "        if (cnt[i] >= cnt[best])",
+       "            best = i;",
+       "    return best;",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C07-Q5",
+     "question": "מה מדפיס הקוד?\n```c\nchar s[] = \"3412\";\nint cnt[100] = {0}, best = 0;\nfor (int i = 0; s[i + 1] != '\\0'; i++)\n    cnt[(s[i] - '0') * 10 + (s[i + 1] - '0')]++;\nfor (int i = 1; i < 100; i++)\n    if (cnt[i] > cnt[best])\n        best = i;\nprintf(\"%d\", best);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`34`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`41`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`0`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`12`"
+      }
+     ]
+    },
+    {
+     "id": "C07-Q6",
+     "step": {
+      "type": "text",
+      "prompt": "מהי סיבוכיות הזמן של `commonSum` כשאורך המחרוזת הוא n? (למשל `O(n)`)",
+      "normalize": "complexity"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C08",
+   "order": 8,
+   "boss": false,
+   "questions": [
+    {
+     "id": "C08-Q1",
+     "question": "הפונקציה מוחקת רווחים, אבל המתכנת שכח את השורה האחרונה (`s[w] = '\\0'`). מה מדפיס הקוד?\n```c\nchar s[] = \"a b  c\";\nint w = 0;\nfor (int i = 0; s[i] != '\\0'; i++)\n    if (s[i] != ' ')\n        s[w++] = s[i];\nprintf(\"%s\", s);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`abc`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`a b  c`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`abc  c`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`a b c`"
+      }
+     ]
+    },
+    {
+     "id": "C08-Q2",
+     "step": {
+      "type": "order",
+      "prompt": "סדרו את שורות הפונקציה שמוחקת רווחים מהמחרוזת.",
+      "code": true,
+      "lines": [
+       "    for (i = 0; s[i] != '\\0'; i++) {\n        if (s[i] != ' ') {\n            s[w] = s[i];\n            w++;\n        }\n    }",
+       "    s[w] = '\\0';\n}",
+       "void removeSpaces(char *s) {\n    int i, w = 0;"
+      ]
+     }
+    },
+    {
+     "id": "C08-Q3",
+     "step": {
+      "type": "findbug",
+      "prompt": "הפונקציה אמורה למחוק רווחים (`\"a b c\"` נהיה `\"abc\"`), אבל שורה אחת שונתה. איזו?",
+      "code": true,
+      "lines": [
+       "void removeSpaces(char *s) {",
+       "    int i, w = 0;",
+       "    for (i = 0; s[i] != '\\0'; i++) {",
+       "        if (s[i] != ' ') {",
+       "            s[i] = s[w];",
+       "            w++;",
+       "        }",
+       "    }",
+       "    s[w] = '\\0';",
+       "}"
+      ]
+     }
+    },
+    {
+     "id": "C08-Q4",
+     "step": {
+      "type": "fillblank",
+      "prompt": "הפונקציה מקצרת כל רצף של אותו תו לתו אחד (`\"aabccc\"` נהיה `\"abc\"`). מה מחליף את ___?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "w == 0 || s[i] == s[w - 1]"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "s[i] != s[w]"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "w == 0 || s[i] != s[0]"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "w == 0 || s[i] != s[w - 1]"
+       }
+      ],
+      "lines": [
+       "void collapse(char *s) {",
+       "    int w = 0;",
+       "    for (int i = 0; s[i] != '\\0'; i++)",
+       "        if (___)",
+       "            s[w++] = s[i];",
+       "    s[w] = '\\0';",
+       "}"
+      ],
+      "blankIndex": 3
+     }
+    },
+    {
+     "id": "C08-Q5",
+     "question": "מה מדפיס הקוד?\n```c\nchar s[] = \"xaxbx\";\nchar *r = s, *w = s;\nwhile (*r) {\n    if (*r != 'x')\n        *w++ = *r;\n    r++;\n}\n*w = '\\0';\nprintf(\"%s\", s);\n```",
+     "options": [
+      {
+       "id": "a",
+       "type": "text",
+       "value": "`xaxbx`"
+      },
+      {
+       "id": "b",
+       "type": "text",
+       "value": "`abxbx`"
+      },
+      {
+       "id": "c",
+       "type": "text",
+       "value": "`a`"
+      },
+      {
+       "id": "d",
+       "type": "text",
+       "value": "`ab`"
+      }
+     ]
+    },
+    {
+     "id": "C08-Q6",
+     "step": {
+      "type": "fillblank",
+      "prompt": "הפונקציה משאירה כל אות שמופיעה יותר מפעם אחת במחרוזת, פעם אחת, בסדר ההופעה הראשונה (`\"abcabdd\"` נהיה `\"abd\"`). מה מחליף את ___?",
+      "code": true,
+      "options": [
+       {
+        "id": "a",
+        "type": "text",
+        "value": "cnt[s[i] - 'a']--;"
+       },
+       {
+        "id": "b",
+        "type": "text",
+        "value": "cnt[s[i] - 'a'] = 0;"
+       },
+       {
+        "id": "c",
+        "type": "text",
+        "value": "cnt[s[i] - 'a']++;"
+       },
+       {
+        "id": "d",
+        "type": "text",
+        "value": "cnt[s[i] - 'a'] = 2;"
+       }
+      ],
+      "lines": [
+       "void keepRepeated(char *s) {",
+       "    int cnt[26] = {0}, w = 0;",
+       "    for (int i = 0; s[i] != '\\0'; i++)",
+       "        cnt[s[i] - 'a']++;",
+       "    for (int i = 0; s[i] != '\\0'; i++)",
+       "        if (cnt[s[i] - 'a'] > 1) {",
+       "            s[w++] = s[i];",
+       "            ___",
+       "        }",
+       "    s[w] = '\\0';",
+       "}"
+      ],
+      "blankIndex": 7
+     }
+    }
+   ]
+  },
+  {
+   "id": "C09",
+   "order": 9,
+   "boss": true,
+   "questions": [
+    {
+     "id": "bank:22A-A-Q3",
+     "bankId": "22A-A-Q3"
+    },
+    {
+     "id": "bank:22A-B-Q3",
+     "bankId": "22A-B-Q3"
+    },
+    {
+     "id": "bank:23A-A-Q2",
+     "bankId": "23A-A-Q2"
+    },
+    {
+     "id": "bank:24A-A-Q2",
+     "bankId": "24A-A-Q2"
+    },
+    {
+     "id": "bank:24A-B-Q2",
+     "bankId": "24A-B-Q2"
+    }
+   ]
+  }
+ ]
+}
