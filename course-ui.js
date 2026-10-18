@@ -96,6 +96,7 @@
     return out;
   }
   window.crsIsolate = isolate;
+  const goalHtml = g => isolate(esc(g || "").replace(/`([^`]+)`/g, "<code>$1</code>"));
   function lessonHtml(L){
     const les = L.lesson || {};
     let h = isolate(String(les.html || "").replace(/<table>/g, '<div class="tbl-wrap"><table>').replace(/<\/table>/g, "</table></div>"));
@@ -125,7 +126,7 @@
       return `<button class="${cls}" data-id="${esc(L.id)}" type="button">
         <span class="num">שלב ${L.order}${L.boss ? " · מבחן גמר" : ""}</span>
         <span class="ttl">${esc(L.icon || "")} ${esc(L.title)}</span>
-        <span class="gl">${esc(L.goal || "")}</span>
+        <span class="gl">${goalHtml(L.goal)}</span>
         <span class="st">${status}</span></button>`;
     }).join("");
     $("#crsMap").querySelectorAll(".crs-lvl").forEach(b => b.onclick = () => openLesson(LV.find(L => L.id === b.dataset.id)));
@@ -140,7 +141,7 @@
     $("#crsLesson").innerHTML =
       `<div class="q-head"><span class="chip">שלב ${L.order} מתוך ${C.levels.length}</span>` +
       `<span class="chip soft">${L.questions.length} שאלות${nReal(L) ? ` · ${nReal(L)} מהמבחנים` : ""}</span></div>` +
-      `<h2 class="learn-h">${esc(L.icon || "")} ${esc(L.title)}</h2><p class="sub crs-goal">${esc(L.goal || "")}</p>` +
+      `<h2 class="learn-h">${esc(L.icon || "")} ${esc(L.title)}</h2><p class="sub crs-goal">${goalHtml(L.goal)}</p>` +
       `<div class="lesson-body">${lessonHtml(L)}</div>` +
       (NOTE[L.source] ? `<div class="crs-note">${NOTE[L.source]}</div>` : "");
     view("crsLessonView");

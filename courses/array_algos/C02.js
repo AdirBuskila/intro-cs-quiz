@@ -1,7 +1,7 @@
 /* array_algos, level 2 - nested loops, halving loops, adding vs multiplying */
 const CB = (...l) => ["```c", ...l, "```"].join("\n");
 COURSE_LEVEL("array_algos", {
-  id: "C02", order: 2, icon: "🪆", title: "לולאות מקוננות ולולאות שמחצות",
+  id: "C02", order: 2, icon: "🧮", title: "לולאות מקוננות ולולאות שמחצות",
   goal: "לחשב סדר גודל של לולאה בתוך לולאה, של לולאה שמכפילה את המונה, ושל שילוב ביניהן.",
   source: "ai-verified",
   lesson: { html: String.raw`

@@ -2,7 +2,12 @@
 
 Open questions for Adir. One entry per item; the orchestrator moves it to Resolved when answered.
 
-## Open
+## Open - summary (all items are already shipped and refuter-verified; each only needs a keep/hold decision)
+1. 19A-A Q5 and Q6, 24A-B Q1-Q4, 19A-B Q1-Q6, 25A-B Q4: no usable official key, or the key has a typo. Shipped as `solved` + `official:false` with a visible label and a Hebrew note. Keep, or hold?
+2. 20A-A Q5, 22A-A Q3/Q4, 22A-B Q3: official solution kept verbatim, with a note about a flawed alternative version or a printed-skeleton mismatch. Keep, or hold?
+3. Nothing else blocks ship. Phase 7 needs: the deck redesign check, then your OK to go public.
+
+Details (entries below say "pending refuter"; the refuter pass is done, see tools/raw/_verify_*.json):
 
 ### 19A-A Q5 - resolved by solver, pending refuter (was: official key does not compile)
 19A-A p.4 Q5: the key `is_sum(int* a, int* b, int n)` uses `d` in `binary_search(b, n, d-a[i])` but has no `d` parameter (clang: undeclared identifier). Adding `d` makes it correct (100000 random cases), but the key as printed is wrong. Decide: ship with `d` added (labelled fix) or let the solver write it.
