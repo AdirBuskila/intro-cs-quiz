@@ -1,0 +1,7 @@
+{
+ "course": "recursion",
+ "verdict": "agree",
+ "disagreements": [],
+ "fixes": [],
+ "notes": "all agree; harness refute_all.c (clang) reproduces every numeric/trace key; distractors fail observably; lessons cover each ask"
+}

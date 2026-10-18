@@ -1,0 +1,7 @@
+{
+ "course": "matrices",
+ "verdict": "agree",
+ "disagreements": [],
+ "fixes": [],
+ "notes": "all agree incl. C06-Q4 bug at loop bound line 3; harness refute_all.c"
+}

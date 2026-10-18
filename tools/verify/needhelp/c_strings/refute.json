@@ -1,0 +1,9 @@
+{
+ "course": "c_strings",
+ "verdict": "agree",
+ "disagreements": [],
+ "fixes": [
+  "all agree incl. keepRepeated cnt-- distractor failing on \"aaab\", collapse variants; fix: lesson C04 now explains const (was untaught for C04-Q4 options c/d)"
+ ],
+ "notes": "all agree incl. keepRepeated cnt-- distractor failing on \"aaab\", collapse variants; fix: lesson C04 now explains const (was untaught for C04-Q4 options c/d)"
+}

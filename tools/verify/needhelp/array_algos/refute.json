@@ -1,0 +1,7 @@
+{
+ "course": "array_algos",
+ "verdict": "agree",
+ "disagreements": [],
+ "fixes": [],
+ "notes": "all agree; harness refute_all.c; no defects"
+}

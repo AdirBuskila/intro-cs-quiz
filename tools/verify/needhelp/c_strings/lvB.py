@@ -28,7 +28,7 @@ if (strcmp(s, "xyz") == 0) { /* equal */ }</pre>
 }</pre>
 <div class="lesson-ex">דוגמה: אם <code>s</code> היא <code>"hello"</code>, <code>strlen(s)</code> הוא 5 ויש להקצות 6 בתים. עם <code>malloc(strlen(s))</code> ההעתקה כותבת את ה-<code>'\0'</code> בבית אחד אחרי סוף הזיכרון שהוקצה, כלומר מחוץ לו.</div>
 <h3>מערך או מצביע</h3>
-<p><code>char s[] = "hi";</code> יוצר מערך משלכם ואפשר לשנות אותו (<code>s[0] = 'H'</code>). <code>char *p = "hi";</code> מצביע על טקסט קבוע של התוכנית, ושינוי שלו קורס בזמן ריצה.</p>
+<p><code>char s[] = "hi";</code> יוצר מערך משלכם ואפשר לשנות אותו (<code>s[0] = 'H'</code>). <code>char *p = "hi";</code> מצביע על טקסט קבוע של התוכנית, ושינוי שלו קורס בזמן ריצה. המילה <code>const</code> לפני סוג הנתונים (<code>const char s[]</code>, <code>const char *p</code>) אומרת שאסור לשנות את התווים, והקומפיילר דוחה כל כתיבה אליהם כבר בקומפילציה.</p>
 <div class="lesson-trap">⚠️ <code>malloc(strlen(s))</code> חסר בית אחד. <code>sizeof(s)</code> כשהמשתנה הוא מצביע נותן את גודל המצביע ולא את אורך המחרוזת.</div>
 """
 
