@@ -97,7 +97,7 @@ window.OPEN_BANK = {
    "proof",
    "code"
   ],
-  "built": "2026-10-18T12:51:10Z",
+  "built": "2026-10-18T18:13:27Z",
   "exams": [
    {
     "examCode": "19A-A",
@@ -8140,9 +8140,9 @@ window.OPEN_BANK = {
       }
      ],
      "correctId": "a",
-     "explain": "סופרים את הערכים $0..n$ שלא סומנו. `i < n` מפספס את הערך `n`, `seen[i]` בלי שלילה סופר את הערכים שהופיעו, והאחרונה סופרת הכול (ריצה אמיתית: כולן נותנות גודל שגוי).",
+     "explain": "סופרים את הערכים $0..n$ שלא סומנו. `i < n` מפספס את הערך `n`, `seen[i]` בלי שלילה סופר את הערכים שהופיעו, והאפשרות `count++` בלי תנאי סופרת הכול (ריצה אמיתית: כולן נותנות גודל שגוי).",
      "promptHtml": "השלימו את השורה שסופרת את הערכים החסרים.",
-     "explainHtml": "סופרים את הערכים <span class=\"math-inline\"><math dir=\"ltr\" xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>0..</mn><mi>n</mi></mrow><annotation encoding=\"application/x-tex\">0..n</annotation></semantics></math></span> שלא סומנו. <code class=\"tok\" dir=\"ltr\">i &lt; n</code> מפספס את הערך <code class=\"tok\" dir=\"ltr\">n</code>, <code class=\"tok\" dir=\"ltr\">seen[i]</code> בלי שלילה סופר את הערכים שהופיעו, והאחרונה סופרת הכול (ריצה אמיתית: כולן נותנות גודל שגוי).",
+     "explainHtml": "סופרים את הערכים <span class=\"math-inline\"><math dir=\"ltr\" xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>0..</mn><mi>n</mi></mrow><annotation encoding=\"application/x-tex\">0..n</annotation></semantics></math></span> שלא סומנו. <code class=\"tok\" dir=\"ltr\">i &lt; n</code> מפספס את הערך <code class=\"tok\" dir=\"ltr\">n</code>, <code class=\"tok\" dir=\"ltr\">seen[i]</code> בלי שלילה סופר את הערכים שהופיעו, והאפשרות <code class=\"tok\" dir=\"ltr\">count++</code> בלי תנאי סופרת הכול (ריצה אמיתית: כולן נותנות גודל שגוי).",
      "linesHtml": [
       "int *valueNotInArray(int *arr, int n, int *newSize)",
       "{",
@@ -8317,9 +8317,9 @@ window.OPEN_BANK = {
       }
      ],
      "correctId": "a",
-     "explain": "`>` מחליף מועמד רק כשהמונה גדול ממש, ולכן בתיקו נשאר הקטן. `>=` בוחר את הגדול, `<` בוחר מונה קטן, והאחרונה משווה מונה לאינדקס (ריצה אמיתית: כולן נכשלות).",
+     "explain": "`>` מחליף מועמד רק כשהמונה גדול ממש, ולכן בתיקו נשאר הקטן. `>=` בוחר את הגדול, `<` בוחר מונה קטן, והאפשרות `count[i] > best` משווה מונה לאינדקס (ריצה אמיתית: כולן נכשלות).",
      "promptHtml": "השלימו את הלולאה שבוחרת את המספר הנבחר.",
-     "explainHtml": "<code class=\"tok\" dir=\"ltr\">&gt;</code> מחליף מועמד רק כשהמונה גדול ממש, ולכן בתיקו נשאר הקטן. <code class=\"tok\" dir=\"ltr\">&gt;=</code> בוחר את הגדול, <code class=\"tok\" dir=\"ltr\">&lt;</code> בוחר מונה קטן, והאחרונה משווה מונה לאינדקס (ריצה אמיתית: כולן נכשלות).",
+     "explainHtml": "<code class=\"tok\" dir=\"ltr\">&gt;</code> מחליף מועמד רק כשהמונה גדול ממש, ולכן בתיקו נשאר הקטן. <code class=\"tok\" dir=\"ltr\">&gt;=</code> בוחר את הגדול, <code class=\"tok\" dir=\"ltr\">&lt;</code> בוחר מונה קטן, והאפשרות <code class=\"tok\" dir=\"ltr\">count[i] &gt; best</code> משווה מונה לאינדקס (ריצה אמיתית: כולן נכשלות).",
      "linesHtml": [
       "int find_two_digits(char *number)",
       "{",
