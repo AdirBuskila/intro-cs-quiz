@@ -111,12 +111,13 @@ while (*s) {        /* *s is 0 exactly at the terminator */
       "type": "text",
       "prompt": "מהי סיבוכיות הזמן של הפונקציה כשאורך המחרוזת הוא n? (למשל `O(n)`)\n```c\nint count(char *s) {\n    int n = 0;\n    for (int i = 0; i < strlen(s); i++)\n        n++;\n    return n;\n}\n```",
       "accept": [
+        "O(n²)",
         "O(n^2)"
       ],
       "normalize": "complexity",
       "explain": "בכל בדיקת תנאי `strlen(s)` עוברת על כל המחרוזת, n צעדים. הבדיקה נעשית כ-n פעמים, ולכן סך הכל כ-$n \\cdot n$ צעדים: $O(n^2)$. פתרון: לחשב את האורך פעם אחת לפני הלולאה, או לבדוק `s[i] != '\\0'`."
     },
-    "recap": "strlen בתנאי לולאה = O(n^2)"
+    "recap": "strlen בתנאי לולאה = O(n²)"
   }
 ],
 });

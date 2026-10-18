@@ -68,7 +68,7 @@ COURSE_LEVEL("array_algos", {
     { id: "C07-Q5",
       step: { type: "text",
         prompt: "מה סדר הגודל של `count_above`, שסופרת כמה איברים גדולים מהממוצע? (למשל `O(n)`)\n" + CB("int sum(int* a, int n)", "{", "    int i, s = 0;", "    for (i = 0; i < n; i++)", "        s += a[i];", "    return s;", "}", "", "int count_above(int* a, int n)", "{", "    int i, c = 0;", "    for (i = 0; i < n; i++)", "        if (a[i] * n > sum(a, n))", "            c++;", "    return c;", "}"),
-        accept: ["O(n^2)"], normalize: "complexity",
+        accept: ["O(n²)", "O(n^2)"], normalize: "complexity",
         explain: "`sum` עוברת על $n$ איברים והיא נקראת $n$ פעמים: $n\\cdot n=n^2$ (נמדד: 1000000 חיבורים עבור $n=1000$ ו-4000000 עבור $n=2000$). זו לולאה חבויה." },
       recap: "קריאה לפונקציה עם לולאה בתוך לולאה = $n^2$." },
     { id: "C07-Q6",
