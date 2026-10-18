@@ -51,52 +51,8 @@
   const recommendedIn = c => c.levels.find(L => !passedIn(c, L));
   const levelName = L => `שלב ${L.order} · ${L.title}`;
 
-  /* ---------- bidi: isolate Latin/number runs inside Hebrew (ported from machine-learning-quiz c034e8f) ----------
-     The page is RTL, so "(2, 5) ו-(7, 1)" or "|7−2| = 5" inside Hebrew gets its parentheses and operands
-     reordered. Every maximal non-Hebrew run that holds a digit or a Latin letter is wrapped in an LTR
-     isolate. A run may span inline tags (<b>3</b>) as long as they open and close inside it; text inside
-     code / MathML / formulas / existing isolates is left alone. */
-  const INLINE = /^<\/?(b|strong|i|em|u|sub|sup|code)\b[^>]*>$/i;
-  const SKIP = /^<(code|bdi|pre|math)\b|class="[^"]*\b(lesson-formula|qref|math-inline|math-block|opt-ltr)\b|\bdir="ltr"/i;
-  const START = /[A-Za-z0-9(\[|√‖Σ∑−ŷȳα-ωΔΣθ]/, END = /[A-Za-z0-9)\]|²³‖%∞'"₀-₉ᵢⱼₙₖŷȳ̄α-ω]/;
-  const isTag = p => p[0] === "<", chr = p => (isTag(p) || p[0] === "&" && p.length > 1) ? "" : p;
-  function isolate(html){
-    const toks = String(html).match(/<[^>]+>|[^<]+/g) || [];
-    let out = "", run = [], skip = 0;
-    const flush = () => {
-      if(!run.length) return;
-      const s = run.join("");
-      const parts = s.match(/<[^>]+>|&[#\w]+;|[^<]/g);   // a tag or an entity (&gt;) is one unit
-      let a = 0, b = parts.length - 1;
-      while(a <= b && !START.test(chr(parts[a]))) a++;
-      while(b >= a && !END.test(chr(parts[b]))) b--;
-      while(a > 0 && isTag(parts[a - 1]) && !/^<\//.test(parts[a - 1])) a--;     // pull in tags hugging the core: <b>3</b>
-      while(b < parts.length - 1 && /^<\//.test(parts[b + 1])) b++;
-      const core = parts.slice(a, b + 1), st = [];
-      let ok = a <= b && /[A-Za-z0-9]/.test(core.join(""));
-      for(const t of core){ if(!isTag(t) || !ok) continue;
-        const m = t.match(/^<(\/?)(\w+)/); if(m[1]){ if(st.pop() !== m[2].toLowerCase()) ok = false; } else st.push(m[2].toLowerCase()); }
-      if(ok && st.length) ok = false;
-      out += ok ? parts.slice(0, a).join("") + `<bdi class="ltr${core.join("").replace(/<[^>]+>/g, "").length <= 22 ? " nw" : ""}" dir="ltr">${core.join("")}</bdi>` + parts.slice(b + 1).join("") : s;
-      run = [];
-    };
-    for(const t of toks){
-      if(t[0] === "<"){
-        if(skip){ out += t; if(/^<\//.test(t)) skip--; else if(!/\/>$|^<(br|img|hr|wbr)\b/i.test(t)) skip++; continue; }
-        if(SKIP.test(t)){ flush(); out += t; if(!/^<(br|img)\b/i.test(t)) skip = 1; continue; }
-        if(INLINE.test(t)){ run.push(t); continue; }
-        flush(); out += t; continue;
-      }
-      if(skip){ out += t; continue; }
-      for(const piece of t.match(/[֐-׿]+|[^֐-׿]+/g)){          // Hebrew text ends a run
-        if(/[֐-׿]/.test(piece)){ flush(); out += piece; } else run.push(piece);
-      }
-    }
-    flush();
-    return out;
-  }
-  window.crsIsolate = isolate;
-  const goalHtml = g => isolate(esc(g || "").replace(/`([^`]+)`/g, "<code>$1</code>"));
+  /* bidi: Latin labels / formulas / runs inside Hebrew are isolated by Bidi (normalize.js, loaded before this file) */
+  const isolate = window.Bidi.render;
   function lessonHtml(L){
     const les = L.lesson || {};
     let h = isolate(String(les.html || "").replace(/<table>/g, '<div class="tbl-wrap"><table>').replace(/<\/table>/g, "</table></div>"));
@@ -126,7 +82,7 @@
       return `<button class="${cls}" data-id="${esc(L.id)}" type="button">
         <span class="num">שלב ${L.order}${L.boss ? " · מבחן גמר" : ""}</span>
         <span class="ttl">${esc(L.icon || "")} ${esc(L.title)}</span>
-        <span class="gl">${goalHtml(L.goal)}</span>
+        <span class="gl">${esc(L.goal || "")}</span>
         <span class="st">${status}</span></button>`;
     }).join("");
     $("#crsMap").querySelectorAll(".crs-lvl").forEach(b => b.onclick = () => openLesson(LV.find(L => L.id === b.dataset.id)));
@@ -141,7 +97,7 @@
     $("#crsLesson").innerHTML =
       `<div class="q-head"><span class="chip">שלב ${L.order} מתוך ${C.levels.length}</span>` +
       `<span class="chip soft">${L.questions.length} שאלות${nReal(L) ? ` · ${nReal(L)} מהמבחנים` : ""}</span></div>` +
-      `<h2 class="learn-h">${esc(L.icon || "")} ${esc(L.title)}</h2><p class="sub crs-goal">${goalHtml(L.goal)}</p>` +
+      `<h2 class="learn-h">${esc(L.icon || "")} ${esc(L.title)}</h2><p class="sub crs-goal">${esc(L.goal || "")}</p>` +
       `<div class="lesson-body">${lessonHtml(L)}</div>` +
       (NOTE[L.source] ? `<div class="crs-note">${NOTE[L.source]}</div>` : "");
     view("crsLessonView");
@@ -181,7 +137,7 @@
     nb.focus({ preventScroll: true });
   }
   const solutionPanel = (q, open) => (q.solutionHtml || q.solution)
-    ? `<details class="panel crs-sol"${open ? " open" : ""}><summary><span class="sum-t">פתרון מלא</span></summary><div class="panel-body"><div class="solution-text">${q.solutionHtml || esc(q.solution)}</div>${srcNote(q)}</div></details>` : "";
+    ? `<details class="panel crs-sol"${open ? " open" : ""}><summary><span class="sum-t">פתרון מלא</span></summary><div class="panel-body"><div class="solution-text">${isolate(q.solutionHtml || esc(q.solution))}</div>${srcNote(q)}</div></details>` : "";
 
   function renderQuestion(){
     const it = S.items[S.i], q = it.q, n = S.items.length;
